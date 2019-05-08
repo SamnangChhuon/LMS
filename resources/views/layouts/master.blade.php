@@ -13,7 +13,7 @@
   <link rel="icon" href="{{ asset('/img/logo.png') }}" type="image/png" sizes="16x16">
   <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
 </head>
-<body class="hold-transition sidebar-mini sidebar-collapse">
+<body class="hold-transition sidebar-mini sidebar-open">
 <div class="wrapper" id="app">
 
   <!-- Navbar -->

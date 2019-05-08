@@ -60,7 +60,7 @@
                             <div class="card-header bg-white py-3">
                                 <h3 class="card-title m-0">Product Details</h3>
                                 <div class="card-tools">
-                                    <router-link :to="{name: 'addNewProductPage', params: {id: customer.id}}" class="btn btn-info text-white"><i class="fa fa-plus"></i> Add product</router-link>
+                                    <router-link :to="{name: 'addNewProductPage', param: {id: customer.id}}" class="btn btn-info text-white"><i class="fa fa-plus"></i> Add product</router-link>
                                 </div>
                             </div>
                             <div class="card-body p-2">
@@ -87,144 +87,75 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <!-- Legal Documents Tab -->
                     <div class="tab-pane fade" id="legalDocumentsTab">
-                        <div class="row">
-                            <div class="col-md-4">
-
-                                <div class="card">
-                                    <div class="card-header bg-white p-2 pl-3">
-                                        <h3 class="card-title m-0"><small>Key Fields</small></h3>
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body box-profile">
-                                        <ul class="list-group">
-                                            <li class="list-group-item no-border pt-0 pl-0">
-                                                <span class="text-muted">Business Phone</span> <span class="float-right">{{ customer.businessphone }}</span>
-                                            </li>
-                                            <li class="list-group-item no-border pt-0 pl-0">
-                                                <span class="text-muted">Personal Phone</span> <span class="float-right">{{ customer.personalphone }}</span>
-                                            </li>
-                                            <li class="list-group-item no-border pt-0 pl-0 pb-0">
-                                                <span class="text-muted">Email</span> <span class="float-right">{{ customer.email }}</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                        <div class="card">
+                            <div class="card-header bg-white py-3">
+                                <h3 class="card-title m-0">Legal Documents</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#addImage"><i class="fa fa-plus"></i> Add Files</button>
                                 </div>
-
-                                <div class="card">
-                                    <div class="card-header bg-white p-2 pl-3">
-                                        <h3 class="card-title m-0"><small>Documents</small></h3>
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i>
-                                        </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body box-profile">
-                                        <blockquote class="blockquote">
-                                            <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                                            <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-                                        </blockquote>
-                                    </div>
-                                    <div class="card-footer bg-white">
-                                        <div class="fa-pull-right">
-                                            <a href="#" class="btn btn-light"><i class="fas fa-plus"></i> Add document</a>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
-                            <div class="col-md-8">
-                                <div class="card card-info card-outline">
-                                    <div class="card-header bg-white p-2 pl-3">
-                                        <h3 class="card-title m-0"><small><i class="fas fa-project-diagram"></i> Products</small></h3>
-                                        <div class="card-tools fa-pull-right">
-                                            <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body" style="display: block;">
-                                        The body of the card
-                                    </div>
-                                    <div class="card-footer clearfix">
-                                        <router-link :to="{name: 'addNewProductPage'}" class="btn btn-info float-right text-white"><i class="fa fa-plus"></i> Add product</router-link>
-                                    </div>
-                                </div>
+                            <div class="card-body p-2">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Thumb</th>
+                                                    <th>Name</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-if="!formImage.file.length">
+                                                    <td colspan="7">
+                                                        <div class="text-center p-5">
+                                                            <h4>Drop files anywhere to upload<br/>or</h4>
+                                                            <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#addImage"><i class="fa fa-plus"></i> Select Files</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr v-for="(file, index) in formImage.file" :key="file.id">
+                                                    <td>{{index + 1}}</td>
+                                                    <td>
+                                                        <img v-if="file.file" :src="file.file" width="40" height="auto" />
+                                                        <span v-else>No Image</span>
+                                                    </td>
+                                                    <td>
+                                                        <img v-if="file.file" :src="file.file" width="40" height="auto" />
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button">
+                                                            Action
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <!-- <a :class="{'dropdown-item': true, disabled: file.active || file.success || file.error === 'compressing'}" href="#" @click.prevent="file.active || file.success || file.error === 'compressing' ? false :  onEditFileShow(file)">Edit</a>
+                                                                <a :class="{'dropdown-item': true, disabled: !file.active}" href="#" @click.prevent="file.active ? $refs.upload.update(file, {error: 'cancel'}) : false">Cancel</a>
 
-                                <div class="card card-info card-outline">
-                                    <div class="card-header bg-white p-2 pl-3">
-                                        <h3 class="card-title m-0"><small><i class="fas fa-clipboard-list"></i> Task Listing</small></h3>
+                                                                <a class="dropdown-item" href="#" v-if="file.active" @click.prevent="$refs.upload.update(file, {active: false})">Abort</a>
+                                                                <a class="dropdown-item" href="#" v-else-if="file.error && file.error !== 'compressing' && $refs.upload.features.html5" @click.prevent="$refs.upload.update(file, {active: true, error: '', progress: '0.00'})">Retry upload</a>
+                                                                <a :class="{'dropdown-item': true, disabled: file.success || file.error === 'compressing'}" href="#" v-else @click.prevent="file.success || file.error === 'compressing' ? false : $refs.upload.update(file, {active: true})">Upload</a> -->
 
-                                        <div class="card-tools fa-pull-right">
-                                            <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="todo-list ui-sortable">
-                                            <li>
-                                                <span class="handle ui-sortable-handle">
-                                                <i class="fa fa-ellipsis-v"></i>
-                                                <i class="fa fa-ellipsis-v"></i>
-                                                </span>
-                                                <input type="checkbox" value="" name="">
-                                                <span class="text">Let theme shine like a star</span>
-                                                <small class="badge badge-warning"><i class="fa fa-clock-o"></i> 1 day</small>
-                                                <div class="tools">
-                                                <i class="fa fa-edit"></i>
-                                                <i class="fa fa-trash-o"></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <span class="handle ui-sortable-handle">
-                                                <i class="fa fa-ellipsis-v"></i>
-                                                <i class="fa fa-ellipsis-v"></i>
-                                                </span>
-                                                <input type="checkbox" value="" name="">
-                                                <span class="text">Let theme shine like a star</span>
-                                                <small class="badge badge-success"><i class="fa fa-clock-o"></i> 3 days</small>
-                                                <div class="tools">
-                                                <i class="fa fa-edit"></i>
-                                                <i class="fa fa-trash-o"></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <span class="handle ui-sortable-handle">
-                                                <i class="fa fa-ellipsis-v"></i>
-                                                <i class="fa fa-ellipsis-v"></i>
-                                                </span>
-                                                <input type="checkbox" value="" name="">
-                                                <span class="text">Check your messages and notifications</span>
-                                                <small class="badge badge-primary"><i class="fa fa-clock-o"></i> 1 week</small>
-                                                <div class="tools">
-                                                <i class="fa fa-edit"></i>
-                                                <i class="fa fa-trash-o"></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <span class="handle ui-sortable-handle">
-                                                <i class="fa fa-ellipsis-v"></i>
-                                                <i class="fa fa-ellipsis-v"></i>
-                                                </span>
-                                                <input type="checkbox" value="" name="">
-                                                <span class="text">Let theme shine like a star</span>
-                                                <small class="badge badge-secondary"><i class="fa fa-clock-o"></i> 1 month</small>
-                                                <div class="tools">
-                                                <i class="fa fa-edit"></i>
-                                                <i class="fa fa-trash-o"></i>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="card-footer clearfix">
-                                        <button type="button" class="btn btn-info float-right text-white"><i class="fa fa-plus"></i> Add task</button>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="#" @click.prevent="$refs.upload.remove(file)">Remove</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                            
+                            <div class="card-footer">
+
+                            </div>
                         </div>
                     </div>
 
@@ -560,13 +491,79 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="addImage" tabindex="-1" role="dialog" aria-labelledby="addImage" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add New Files</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul v-if="formImage.file.length" class="p-0" style="list-style-type:none;">
+                            <li v-for="(img, index) in formImage.file" :key="img.id">
+                            <button @click="removeInputFile(index)" class="btn btn-tool"><i class="fas fa-times"></i></button>
+                            <span>{{img.name}}</span> -
+                            <span>{{img.size | formatSize}}</span> -
+                            <span v-if="img.error">{{img.error}}</span>
+                            <span v-else-if="img.success">success</span>
+                            <span v-else-if="img.active">active</span>
+                            <span v-else-if="img.active">active</span>
+                            <span v-else></span>
+                            </li>
+                        </ul>
+                        <ul v-else style="list-style-type:none;padding:0;">
+                            <li>
+                                <div class="text-center p-5">
+                                    <h4>Drop files anywhere to upload<br/>or</h4>
+                                    <label for="file" class="btn btn-lg btn-primary">Select Files</label>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
+                                <h3>Drop files to upload</h3>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                            <file-upload
+                            class="btn btn-primary float-left"
+                            post-action="/upload/post"
+                            :multiple="true"
+                            :drop="true"
+                            :drop-directory="true"
+                            v-model="formImage.file"
+                            ref="upload">
+                            <i class="fa fa-plus"></i>
+                            Select files
+                            </file-upload>
+                        <div class="float-right">
+                            <button type="button" class="btn btn-success" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
+                                <i class="fa fa-arrow-up" aria-hidden="true"></i> Upload
+                            </button>
+                            <button type="button" class="btn btn-danger"  v-else @click.prevent="$refs.upload.active = false">
+                                <i class="fa fa-stop" aria-hidden="true"></i> Stop Upload
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 
 <script>
+    import FileUpload from 'vue-upload-component'
 
     export default {
+        components: {
+            FileUpload,
+        },
+
         data() {
             return {
                 editMode: false,
@@ -596,9 +593,17 @@
                     country: '',
                     remarkaddress: ''
                 }),
+                formImage: new Form({
+                    cid: this.$route.params.id,
+                    file: [],
+                })
             }
         },
         methods: {
+            removeInputFile(index) {
+                this.formImage.file.splice(index, 1);
+            },
+
             loadCustomer(id = this.$route.params.id) {
                 axios.get("/api/customer/" + id )
                 .then((response) => {

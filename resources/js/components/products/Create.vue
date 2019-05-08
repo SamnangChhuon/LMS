@@ -97,7 +97,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="image">Image</label>
+                                                <label for="image">File <small>(.pdf, .doc, .png, .jpg, .jpeg)</small></label>
                                                 <div class="input-group">
                                                     <file-upload
                                                     class="btn btn-primary"
@@ -106,11 +106,11 @@
                                                     accept="image/png,image/gif,image/jpeg,image/webp"
                                                     :multiple="true"
                                                     :size="1024 * 1024 * 10"
-                                                    v-model="formImage.files"
+                                                    v-model="formImage.file"
                                                     @input-filter="inputFilter"
                                                     @input-file="inputFile"
                                                     ref="upload">
-                                                    <i class="fa fa-plus"></i> Upload
+                                                    <i class="fa fa-plus"></i> Select File
                                                     </file-upload>
                                                 </div>
                                             </div>
@@ -132,14 +132,14 @@
                                         <div class="col-md-12">
                                             <label for="" class="text-danger">Note: Existing attachments (images/files) will be replaced.</label>
                                             <ul class="p-0" style="list-style-type:none;">
-                                                <li v-for="(file, index) in formImage.files" :key="file.id">
+                                                <li v-for="(img, index) in formImage.file" :key="img.id">
                                                 <button @click="removeInputFile(index)" class="btn btn-tool"><i class="fas fa-times"></i></button>
-                                                <span>{{file.name}}</span> -
-                                                <span>{{file.size | formatSize}}</span> -
-                                                <span v-if="file.error">{{file.error}}</span>
-                                                <span v-else-if="file.success">success</span>
-                                                <span v-else-if="file.active">active</span>
-                                                <span v-else-if="file.active">active</span>
+                                                <span>{{img.name}}</span> -
+                                                <span>{{img.size | formatSize}}</span> -
+                                                <span v-if="img.error">{{img.error}}</span>
+                                                <span v-else-if="img.success">success</span>
+                                                <span v-else-if="img.active">active</span>
+                                                <span v-else-if="img.active">active</span>
                                                 <span v-else></span>
                                                 </li>
                                             </ul>
