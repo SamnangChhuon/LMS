@@ -13,7 +13,7 @@
   <link rel="icon" href="{{ asset('/img/logo.png') }}" type="image/png" sizes="16x16">
   <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
 </head>
-<body class="hold-transition sidebar-mini sidebar-open">
+<body class="hold-transition sidebar-mini">
 <div class="wrapper" id="app">
 
   <!-- Navbar -->
@@ -113,12 +113,12 @@
               <p>Income & Expense</p>
             </router-link>
           </li>
-          {{-- <li class="nav-item">
+          <li class="nav-item">
             <router-link :to="{name: 'Repayment'}" class="nav-link">
               <i class="nav-icon fas fa-clipboard-check"></i>
               <p>Repayment</p>
             </router-link>
-          </li> --}}
+          </li>
 
           @can('isAdmin')
           <li class="nav-item has-treeview">
@@ -133,12 +133,12 @@
                   <p>Users</p>
                 </router-link>
               </li>
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Inactive Page</p>
                 </a>
-              </li>
+              </li> --}}
             </ul>
           </li>
           <li class="nav-item">

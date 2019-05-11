@@ -7,6 +7,7 @@ use LandMS\Http\Controllers\Controller;
 use LandMS\Customer;
 use Carbon\Carbon;
 // use Illuminate\Support\Facades\Input;
+use Storage;
 
 class CustomerController extends Controller
 {
@@ -54,6 +55,7 @@ class CustomerController extends Controller
             if (empty($request['type'])) {
                 $request['type'] = 'active';
             }
+            // Storage::makeDirectory('customers/images');
             Customer::create($request->all());
             return response()->json(['success' => 'Customer\'s added in successfully.']);
         }

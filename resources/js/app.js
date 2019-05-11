@@ -76,6 +76,7 @@ let routes = [
             breadcrumb: 'Customer'
         } 
     },
+    // Customer > View
     { 
         path: '/customer/:id', 
         name: 'Viewcustomer',
@@ -84,15 +85,7 @@ let routes = [
             breadcrumb: 'Show Customer'
         } 
     },
-    // Product
-    // { 
-    //     path: '/products', 
-    //     name: 'Products',
-    //     component: require('./components/products/Products.vue').default, 
-    //     meta: {
-    //         breadcrumb: 'Products'
-    //     } 
-    // },
+    // Customer > View > Add Product
     { 
         path: '/customer/:id/add/product', 
         name: 'addNewProductPage',
@@ -108,6 +101,15 @@ let routes = [
         component: require('./components/promotion/Promotion.vue').default, 
         meta: {
             breadcrumb: 'Promotion'
+        } 
+    },
+    // Repayment
+    { 
+        path: '/repayment', 
+        name: 'Repayment',
+        component: require('./components/repayment/Repayment.vue').default, 
+        meta: {
+            breadcrumb: 'Repayment'
         } 
     },
     // Income

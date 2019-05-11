@@ -41,7 +41,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="name">Product Code</label>
+                                                <label for="code">Product Code</label>
                                                 <input v-model="formProduct.code" type="text" name="code" class="form-control"
                                                 :class="{ 'is-invalid': formProduct.errors.has('code')}">
                                                 <has-error :form="formProduct" field="code"></has-error>
@@ -210,7 +210,7 @@
                                         <table class="table table-hover table-sm">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th>ID</th>
+                                                    <th>No.</th>
                                                     <th>Product Type</th>
                                                     <th>Modified Time</th>
                                                     <th>Modify</th>
