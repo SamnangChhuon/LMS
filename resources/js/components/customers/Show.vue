@@ -19,10 +19,38 @@
                     <div class="row">
                         <div class="col-md-6">
                            <div class="widget-user-header bg-info-active">
-                                <div class="widget-user-image">
+                               <div v-show="!edit" class="widget-user-image">
+                                   <file-upload
+                                    extensions="gif,jpg,jpeg,png,webp"
+                                    accept="image/png,image/gif,image/jpeg,image/webp"
+                                    name="file"
+                                    class="btn btn-primary"
+                                    post-action="/upload/post"
+                                    v-model="formFile.file"
+                                    @input-filter="inputFilter"
+                                    @input-file="inputFile"
+                                    ref="upload">
+                                        <img :src="formFile.file.length ? formFile.file[0].url : '/img/user/none/male_user.png'"
+                                            v-if="customer.sex === 'male'" class="img-circle elevation-2" alt="User Avatar">
+                                        <img :src="formFile.file.length ? formFile.file[0].url : '/img/user/none/female_user.png'"
+                                            v-else-if="customer.sex === 'female'" class="img-circle elevation-2" alt="User Avatar">
+                                    </file-upload>
+
+                                    <div class="avatar-edit" v-show="formFile.file.length && edit">
+                                        <div class="avatar-edit-image" v-if="formFile.file.length">
+                                            <img ref="editImage" :src="formFile.file[0].url" />
+                                        </div>
+                                        <div class="text-center p-4">
+                                            <button type="button" class="btn btn-secondary" @click.prevent="$refs.upload.clear">Cancel</button>
+                                            <button type="submit" class="btn btn-primary" @click.prevent="editSave">Save</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- <div class="widget-user-image">
                                     <img v-if="customer.sex === 'male'" class="img-circle elevation-2" src="/img/user/none/male_user.png" alt="User Avatar">
                                     <img v-else-if="customer.sex === 'female'" class="img-circle elevation-2" src="/img/user/none/female_user.png" alt="User Avatar">
-                                </div>
+                                </div> -->
                                 <h3 class="widget-user-username">{{ customer.firstname + ' ' + customer.lastname }}</h3>
                                 <h5 class="widget-user-desc">CID {{ customer.id }}</h5>
                             </div>
@@ -111,7 +139,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-if="!formImage.file.length">
+                                                <tr v-if="!formFile.file.length">
                                                     <td colspan="7">
                                                         <div class="text-center p-5">
                                                             <h4>Drop files anywhere to upload<br/>or</h4>
@@ -119,7 +147,7 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr v-for="(file, index) in formImage.file" :key="file.id">
+                                                <tr v-for="(file, index) in formFile.file" :key="file.id">
                                                     <td>{{index + 1}}</td>
                                                     <td>
                                                         <img v-if="file.file" :src="file.file" width="40" height="auto" />
@@ -502,8 +530,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <ul v-if="formImage.file.length" class="p-0" style="list-style-type:none;">
-                            <li v-for="(img, index) in formImage.file" :key="img.id">
+                        <ul v-if="formFile.file.length" class="p-0" style="list-style-type:none;">
+                            <li v-for="(img, index) in formFile.file" :key="img.id">
                             <button @click="removeInputFile(index)" class="btn btn-tool"><i class="fas fa-times"></i></button>
                             <span>{{img.name}}</span> -
                             <span>{{img.size | formatSize}}</span> -
@@ -535,7 +563,7 @@
                             :multiple="true"
                             :drop="true"
                             :drop-directory="true"
-                            v-model="formImage.file"
+                            v-model="formFile.file"
                             ref="upload">
                             <i class="fa fa-plus"></i>
                             Select files
@@ -558,6 +586,7 @@
 
 <script>
     import FileUpload from 'vue-upload-component'
+    import Cropper from 'cropperjs'
 
     export default {
         components: {
@@ -593,15 +622,85 @@
                     country: '',
                     remarkaddress: ''
                 }),
-                formImage: new Form({
+
+                cropper: false,
+                edit: false,
+                formFile: new Form({
                     cid: this.$route.params.id,
                     file: [],
                 })
             }
         },
+        watch: {
+            edit(value) {
+                if (value) {
+                    this.$nextTick(function () {
+                    if (!this.$refs.editImage) {
+                        return
+                    }
+                    let cropper = new Cropper(this.$refs.editImage, {
+                        aspectRatio: 1 / 1,
+                        viewMode: 1,
+                    })
+                    this.cropper = cropper
+                    })
+                } else {
+                    if (this.cropper) {
+                    this.cropper.destroy()
+                    this.cropper = false
+                    }
+                }
+            }
+        },
+
         methods: {
+            editSave() {
+                this.edit = false
+                let oldFile = this.files[0]
+                let binStr = atob(this.cropper.getCroppedCanvas().toDataURL(oldFile.type).split(',')[1])
+                let arr = new Uint8Array(binStr.length)
+                for (let i = 0; i < binStr.length; i++) {
+                    arr[i] = binStr.charCodeAt(i)
+                }
+                let file = new File([arr], oldFile.name, { type: oldFile.type })
+                this.$refs.upload.update(oldFile.id, {
+                    file,
+                    type: file.type,
+                    size: file.size,
+                    active: true,
+                })
+            },
+            alert(message) {
+                alert(message)
+            },
+            inputFile(newFile, oldFile, prevent) {
+            if (newFile && !oldFile) {
+                this.$nextTick(function () {
+                this.edit = true
+                })
+            }
+            if (!newFile && oldFile) {
+                this.edit = false
+            }
+            },
+            inputFilter(newFile, oldFile, prevent) {
+                if (newFile && !oldFile) {
+                    if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
+                    this.alert('Your choice is not a picture')
+                    return prevent()
+                    }
+                }
+                if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
+                    newFile.url = ''
+                    let URL = window.URL || window.webkitURL
+                    if (URL && URL.createObjectURL) {
+                    newFile.url = URL.createObjectURL(newFile.file)
+                    }
+                }
+            },
+        
             removeInputFile(index) {
-                this.formImage.file.splice(index, 1);
+                this.formFile.file.splice(index, 1);
             },
 
             loadCustomer(id = this.$route.params.id) {

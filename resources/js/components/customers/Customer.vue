@@ -12,22 +12,6 @@
                     </div>
 
                     <div class="card-body table-responsive p-0">
-                        <vuetable
-                        api-url="http://127.0.0.1:8000/api/customer"
-                        :fields="fields"
-                        :sort-order="sortOrder"
-                        pagination-path=""
-                        @vuetable:pagination-data="onPaginationData">
-                             <!-- <template slot="actions" scope="props">
-    <div class="table-button-container">
-        <button class="ui button" @click="editRow(props.rowData)"><i class="fa fa-edit"></i> Edit</button>&nbsp;&nbsp;
-        <button class="ui basic red button" @click="deleteRow(props.rowData)"><i class="fa fa-remove"></i> Delete</button>&nbsp;&nbsp;
-    </div>
-</template> -->
-                        </vuetable>
-                        <vuetable-pagination ref="pagination"
-      @vuetable-pagination:change-page="onChangePage"
-    ></vuetable-pagination>
                         <table class="table table-hover">
                             <tbody>
                                 <tr>
@@ -272,63 +256,9 @@
                     country: '',
                     remarkaddress: ''
                 }),
-                fields: [
-                    {
-                        name: 'id',
-                        title: 'CID',
-                        sortField: 'id'
-                    },
-                    {
-                        name: 'firstname',
-                        title: 'First Name',
-                        sortField: 'firstname'
-                    },
-                    {
-                        name: 'lastname',
-                        title: 'Last Name',
-                        sortField: 'lastname'
-                    },
-                    {
-                        name: 'type',
-                        title: 'Type',
-                        sortField: 'type'
-                    },
-                    {
-                        name: 'businessphone',
-                        title: 'Business Phone',
-                        sortField: 'businessphone'
-                    },
-                    {
-                        name: 'personalphone',
-                        title: 'Personal Phone',
-                        sortField: 'personalphone'
-                    },
-                    {
-                        name: 'created_at',
-                        title: 'Register At',
-                        sortField: 'created_at'
-                    },
-                    '__slot:actions'
-                ],
-                sortOrder: [
-                    {field: 'name', direction: 'asc'}
-                ]
             }
         },
         methods: {
-            onPaginationData (paginationData) {
-                this.$refs.pagination.setPaginationData(paginationData)
-            },
-            onChangePage (page) {
-                this.$refs.vuetable.changePage(page)
-            },
-            editRow(rowData){
-                alert("You clicked edit on"+ JSON.stringify(rowData))
-            },
-            deleteRow(rowData){
-                alert("You clicked delete on"+ JSON.stringify(rowData))
-            },
-
             collapseToggle: function(){
                 $('#contactInformation').removeClass('show');
                 $('#addressInformation').removeClass('show');
@@ -339,9 +269,11 @@
                         this.customers = response.data;
                     });
             },
+
             loadCustomers() {
                 axios.get("api/customer").then(({ data }) => (this.customers = data));
             },
+
             createCustomer() {
                 this.$Progress.start();
                 this.form.post('api/customer')
@@ -370,8 +302,14 @@
                         this.$Progress.finish();
                     }
                 })
-                .catch(() => {
+                .catch((error) => {
                     this.$Progress.fail();
+                    Swal.fire({
+                        title: 'Data error!!!',
+                        text: error,
+                        type: 'error',
+                        confirmButtonText: 'Close',
+                    });
                 });
             },
             editCustomer(customer) {
@@ -450,6 +388,7 @@
         },
         created() {
             this.loadCustomers();
+            
             Fire.$on('reloadData', () => {
                 this.loadCustomers();
             }); // using event AfterCreate
@@ -458,21 +397,3 @@
         }
     }
 </script>
-
-<style>
-    #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        color: #2c3e50;
-        }
-
-        .orange.glyphicon {
-        color: orange;
-        }
-
-        th.sortable {
-        color: #ec971f;
-}
-
-</style>

@@ -71,7 +71,7 @@ let routes = [
     { 
         path: '/customer', 
         name: 'Customers',
-        component: require('./components/Customer.vue').default, 
+        component: require('./components/customers/Customer.vue').default, 
         meta: {
             breadcrumb: 'Customer'
         } 

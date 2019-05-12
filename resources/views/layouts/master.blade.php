@@ -210,6 +210,7 @@
   </script>
 @endauth
 
+<script src="{{ asset('/js/cropper.js') }}"></script>
 <script src="{{ asset('/js/app.js') }}"></script>
 
 </body>

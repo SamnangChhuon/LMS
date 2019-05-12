@@ -55,9 +55,11 @@ class CustomerController extends Controller
             if (empty($request['type'])) {
                 $request['type'] = 'active';
             }
-            // Storage::makeDirectory('customers/images');
-            Customer::create($request->all());
-            return response()->json(['success' => 'Customer\'s added in successfully.']);
+            if(Customer::create($request->all())){
+                return response()->json(['success' => 'Customer\'s added in successfully.']);
+            } else {
+                return response()->json(['error' => 'Data can not insert.']);
+            }
         }
 
         // if ($first && $last)   {
