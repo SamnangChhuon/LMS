@@ -15,7 +15,7 @@ class CreateTblExpenseTable extends Migration
     {
         Schema::create('tbl_expense', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('cid', 20);
+            $table->bigInteger('cid')->index()->unsigned()->default('0');
             $table->string('exin_typeid', 10);
             $table->string('amount');
             $table->string('date', 10);

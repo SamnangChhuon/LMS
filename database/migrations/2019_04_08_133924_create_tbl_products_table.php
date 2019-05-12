@@ -15,15 +15,13 @@ class CreateTblProductsTable extends Migration
     {
         Schema::create('tbl_products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('cid', 20);
+            $table->bigInteger('cid')->index()->unsigned()->default('0');
             $table->string('name');
             $table->string('code', 25)->nullable();
             $table->text('description')->nullable();
-            $table->string('categoryid', 10)->nullable();
-            $table->string('typeid', 10)->nullable();
+            $table->bigInteger('categoryid')->index()->unsigned()->default('0');
+            $table->bigInteger('typeid')->index()->unsigned()->default('0');
             $table->double('price', 16, 2)->nullable()->unsigned();
-            $table->string('image', 10)->default('no');
-            $table->string('promotion', 10)->default('no');
             $table->string('status', 10)->default('active');
             $table->timestamps();
         });

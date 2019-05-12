@@ -86,7 +86,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="price">Product Price</label>
+                                                <label for="price">Product Price <span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
@@ -335,8 +335,6 @@
                     categoryid: '',
                     typeid: '',
                     price: '',
-                    image: 'no',
-                    promotion: 'no'
                 }),
                 formCate: new Form({
                     id: '',

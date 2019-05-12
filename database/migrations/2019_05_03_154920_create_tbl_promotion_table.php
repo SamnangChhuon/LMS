@@ -15,7 +15,7 @@ class CreateTblPromotionTable extends Migration
     {
         Schema::create('tbl_promotion', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('cid', 20);
+            $table->bigInteger('cid')->index()->unsigned()->default('0');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('valid_from_date', 10);
