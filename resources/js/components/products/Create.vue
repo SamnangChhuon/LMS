@@ -97,7 +97,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="image">File <small>(.pdf, .doc, .png, .jpg, .jpeg)</small></label>
+                                                <label for="image">File Image<small>(.png, .jpg, .jpeg)</small></label>
                                                 <div class="input-group">
                                                     <file-upload
                                                     class="btn btn-primary"
@@ -106,7 +106,7 @@
                                                     accept="image/png,image/gif,image/jpeg,image/webp"
                                                     :multiple="true"
                                                     :size="1024 * 1024 * 10"
-                                                    v-model="formImage.file"
+                                                    v-model="formFile.file"
                                                     @input-filter="inputFilter"
                                                     @input-file="inputFile"
                                                     ref="upload">
@@ -117,7 +117,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group" :class="{ 'is-valid': formProduct.errors.has('promotion') }">
-                                                <label>Do you want to add Promotion ?</label>
+                                                <label>Do you want to add Promotion for this product ?</label>
                                                 <br>
                                                 <p-radio class="p-default p-round mr-4" v-model="formProduct.promotion" name="promotion" value="yes" 
                                                 color="primary-o">Yes</p-radio>
@@ -132,14 +132,14 @@
                                         <div class="col-md-12">
                                             <label for="" class="text-danger">Note: Existing attachments (images/files) will be replaced.</label>
                                             <ul class="p-0" style="list-style-type:none;">
-                                                <li v-for="(img, index) in formImage.file" :key="img.id">
+                                                <li v-for="(file, index) in formFile.file" :key="file.id">
                                                 <button @click="removeInputFile(index)" class="btn btn-tool"><i class="fas fa-times"></i></button>
-                                                <span>{{img.name}}</span> -
-                                                <span>{{img.size | formatSize}}</span> -
-                                                <span v-if="img.error">{{img.error}}</span>
-                                                <span v-else-if="img.success">success</span>
-                                                <span v-else-if="img.active">active</span>
-                                                <span v-else-if="img.active">active</span>
+                                                <span>{{file.name}}</span> -
+                                                <span>{{file.size | formatSize}}</span> -
+                                                <span v-if="file.error">{{file.error}}</span>
+                                                <span v-else-if="file.success">success</span>
+                                                <span v-else-if="file.active">active</span>
+                                                <span v-else-if="file.active">active</span>
                                                 <span v-else></span>
                                                 </li>
                                             </ul>
@@ -335,6 +335,7 @@
                     categoryid: '',
                     typeid: '',
                     price: '',
+                    promotion: 'no',
                 }),
                 formCate: new Form({
                     id: '',
@@ -344,15 +345,16 @@
                     id: '',
                     type_name: ''
                 }),
-                formImage: new Form({
+                formFile: new Form({
                     cid: this.$route.params.id,
                     file: [],
                 })
             }
         },
         methods: {
+            // Form File Input
             removeInputFile(index) {
-                this.formImage.files.splice(index, 1);
+                this.formFile.file.splice(index, 1);
             },
             inputFilter(newFile, oldFile, prevent) {
                 if (newFile && !oldFile) {
@@ -365,11 +367,25 @@
                     if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
                         return prevent()
                     }
+                    // Filter large file
+                    let e = newFile.file;
+                    let reader = new FileReader();
+                    if(e['size'] > 2111775){
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: "You are uploading a large file!",
+                        })
+                        return prevent();
+                        console.log('file too big')
+
+                    }                     
                 }
             },
             inputFile(newFile, oldFile) {
                 if (newFile && !oldFile) {
-                    // add
+                    // Filter the file size
+                    
                     console.log('add', newFile)
                 }
                 if (newFile && oldFile) {
@@ -379,30 +395,6 @@
                 if (!newFile && oldFile) {
                     // remove
                     console.log('remove', oldFile)
-                }
-
-                if (newFile && !oldFile) {
-                    // add
-                    console.log('add', newFile)
-                }
-
-                // console.log('uploading');
-                let file = newFile.target.file[0];
-                // console.log(file);
-                let reader = new FileReader();
-
-                if (file['size'] < 2111775 ) {
-                    reader.onloadend = (file) => {
-                        console.log('RESULT', reader.result);
-                        this.formImage.file = reader.result;
-                    }
-                    reader.readAsDataURL(file);
-                } else {
-                    Swal.fire({
-                        type: 'error',
-                        title: 'Oops...',
-                        text: "You are uploading a large file!",
-                    })
                 }
             },
 
@@ -437,18 +429,14 @@
                 this.$Progress.start();
                 this.formProduct.post('/api/product')
                 .then((response) => {
-                    if (response.data.existed) {
+                    if (response.data.error) {
                         this.$Progress.fail();
                         Swal.fire({
-                            title: 'Duplicate Data!!!',
-                            text: 'Product\'s name already existed',
+                            title: 'Insert Error!!!',
+                            text: 'Product\'s can not insert.',
                             type: 'error',
                             confirmButtonText: 'Close',
                         })
-                        $('input[name=name]').addClass('is-invalid');
-                        setTimeout(function () { 
-                            $('input[name=name]').removeClass('is-invalid');
-                        }, 5000);
                     } else {
                         toast.fire({
                             type: 'success',

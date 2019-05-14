@@ -48,23 +48,30 @@ class ProductController extends Controller
     {
         $this->validate($request, [
             'name'  =>  'required|string|max:191',
+            'price' =>  'required|numeric|max:16'
         ]);
 
-        $name = Product::where('name', '=', $request['name'] )->exists();
-
-        if ($name) {
-            return response()->json(['existed' => 'Product\'s name already existed.']);
-        } else {
-            if ($request['image']) {
-                $name = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-                // Put the photo to the folder in "public"
-                \Image::make($request->image)->save(public_path('img/products/').$name);
-    
-                $request->merge(['image' => $name]);
-            }
+        if ($request->cid != '') {
             Product::create($request->all());
             return response()->json(['success' => 'Product\'s added in successfully.']);
+        } else {
+            return response()->json(['error' => 'Product\'s can not insert.']);
         }
+
+        // $name = Product::where('name', '=', $request['name'] )->exists();
+        // if ($name) {
+        //     return response()->json(['existed' => 'Product\'s name already existed.']);
+        // } else {
+        //     if ($request['image']) {
+        //         $name = time() . '.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+        //         // Put the photo to the folder in "public"
+        //         \Image::make($request->image)->save(public_path('img/products/').$name);
+    
+        //         $request->merge(['image' => $name]);
+        //     }
+        //     Product::create($request->all());
+        //     return response()->json(['success' => 'Product\'s added in successfully.']);
+        // }
     }
 
     /**

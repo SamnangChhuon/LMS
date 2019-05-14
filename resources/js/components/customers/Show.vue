@@ -79,7 +79,9 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr></tr>
+                                                <tr>
+
+                                                </tr>
                                             </tbody>
                                             
                                         </table>
@@ -671,6 +673,11 @@ export default {
                     }
                 })
             },
+
+            // Product
+            getProduct(id = this.$route.params.id) {
+                axios.get('/api/product')
+            }
         },
         created() {
             this.loadCustomer();

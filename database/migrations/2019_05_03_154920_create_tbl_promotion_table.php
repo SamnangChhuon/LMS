@@ -23,6 +23,7 @@ class CreateTblPromotionTable extends Migration
             $table->string('pro_discount_type', 10)->nullable();
             $table->string('pro_discount_num', 10)->nullable();
             $table->string('pro_discount_product', 10)->nullable();
+            $table->bigInteger('pro_discount_pid')->index()->unsigned()->default('0');
             $table->string('status', 10)->default('active');
             $table->timestamps();
         });

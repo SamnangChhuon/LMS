@@ -108,14 +108,18 @@
                                                     <div class="form-group">
                                                         <label for="proProduct">Product</label>
                                                         <div class="input-group boxed">
-                                                        <div class="input-group-prepend">
-                                                            <input type="radio" name="proProduct" id="all" value="all" v-model="formPromotion.proProduct" :class="{ 'is-invalid': formPromotion.errors.has('proProduct') }">
-                                                            <label for="all">All</label>
-                                                            <input type="radio" name="proProduct" id="specific" value="specific" v-model="formPromotion.proProduct" :class="{ 'is-invalid': formPromotion.errors.has('proProduct') }">
-                                                            <label for="specific">Specific</label>
-                                                            <has-error :form="formPromotion" field="proProduct"></has-error>
+                                                            <div class="input-group-prepend">
+                                                                <input type="radio" name="proProduct" id="all" value="all" v-model="formPromotion.proProduct" :class="{ 'is-invalid': formPromotion.errors.has('proProduct') }">
+                                                                <label for="all">All</label>
+                                                                <input type="radio" name="proProduct" id="specific" value="specific" v-model="formPromotion.proProduct" :class="{ 'is-invalid': formPromotion.errors.has('proProduct') }">
+                                                                <label for="specific">Specific</label>
+                                                                <has-error :form="formPromotion" field="proProduct"></has-error>
+                                                            </div>
+                                                            <select name="pid" v-model="formPromotion.pid" class="form-control" :class="{ 'is-valid': formPromotion.errors.has('pid') }">
+                                                                <option value="">Select an option</option>
+                                                                <option :value="product.id" v-for="product in proProducts.data" :key="product.id">{{ product.name }}</option>
+                                                            </select>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -154,7 +158,8 @@
                     proType: '',
                     proNumber: '',
                     proProduct: '',
-                })
+                }),
+                proProducts: {},
             }
         },
         methods: {
@@ -234,6 +239,13 @@
                     this.$Progress.fail();
                 });
             },
-        }
+
+            loadProduct(){
+                axios.get("/api/product").then(({ data }) => (this.proProducts = data));
+            }
+        },
+        created() {
+            this.loadProduct();
+        },
     }
 </script>

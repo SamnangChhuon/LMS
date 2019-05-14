@@ -5107,6 +5107,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5218,6 +5220,11 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       });
+    },
+    // Product
+    getProduct: function getProduct() {
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.$route.params.id;
+      axios.get('/api/product');
     }
   },
   created: function created() {
@@ -6523,7 +6530,8 @@ __webpack_require__.r(__webpack_exports__);
         description: '',
         categoryid: '',
         typeid: '',
-        price: ''
+        price: '',
+        promotion: 'no'
       }),
       formCate: new Form({
         id: '',
@@ -6533,15 +6541,16 @@ __webpack_require__.r(__webpack_exports__);
         id: '',
         type_name: ''
       }),
-      formImage: new Form({
+      formFile: new Form({
         cid: this.$route.params.id,
         file: []
       })
     };
   },
   methods: {
+    // Form File Input
     removeInputFile: function removeInputFile(index) {
-      this.formImage.files.splice(index, 1);
+      this.formFile.file.splice(index, 1);
     },
     inputFilter: function inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
@@ -6554,14 +6563,26 @@ __webpack_require__.r(__webpack_exports__);
 
         if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
           return prevent();
+        } // Filter large file
+
+
+        var e = newFile.file;
+        var reader = new FileReader();
+
+        if (e['size'] > 2111775) {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: "You are uploading a large file!"
+          });
+          return prevent();
+          console.log('file too big');
         }
       }
     },
     inputFile: function inputFile(newFile, oldFile) {
-      var _this = this;
-
       if (newFile && !oldFile) {
-        // add
+        // Filter the file size
         console.log('add', newFile);
       }
 
@@ -6574,31 +6595,6 @@ __webpack_require__.r(__webpack_exports__);
         // remove
         console.log('remove', oldFile);
       }
-
-      if (newFile && !oldFile) {
-        // add
-        console.log('add', newFile);
-      } // console.log('uploading');
-
-
-      var file = newFile.target.file[0]; // console.log(file);
-
-      var reader = new FileReader();
-
-      if (file['size'] < 2111775) {
-        reader.onloadend = function (file) {
-          console.log('RESULT', reader.result);
-          _this.formImage.file = reader.result;
-        };
-
-        reader.readAsDataURL(file);
-      } else {
-        Swal.fire({
-          type: 'error',
-          title: 'Oops...',
-          text: "You are uploading a large file!"
-        });
-      }
     },
     resetProductForm: function resetProductForm() {
       this.formProduct.reset();
@@ -6609,11 +6605,11 @@ __webpack_require__.r(__webpack_exports__);
       this.url = '';
     },
     loadCustomer: function loadCustomer() {
-      var _this2 = this;
+      var _this = this;
 
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.$route.params.id;
       axios.get("/api/customer/" + id).then(function (response) {
-        _this2.customer = response.data;
+        _this.customer = response.data;
       });
     },
     // loadProductUpdate(id = this.$route.params.id) {
@@ -6630,28 +6626,60 @@ __webpack_require__.r(__webpack_exports__);
     // },
     // Product
     createProduct: function createProduct() {
-      var _this3 = this;
+      var _this2 = this;
 
       this.$Progress.start();
       this.formProduct.post('/api/product').then(function (response) {
-        if (response.data.existed) {
-          _this3.$Progress.fail();
+        if (response.data.error) {
+          _this2.$Progress.fail();
 
           Swal.fire({
-            title: 'Duplicate Data!!!',
-            text: 'Product\'s name already existed',
+            title: 'Insert Error!!!',
+            text: 'Product\'s can not insert.',
             type: 'error',
             confirmButtonText: 'Close'
           });
-          $('input[name=name]').addClass('is-invalid');
-          setTimeout(function () {
-            $('input[name=name]').removeClass('is-invalid');
-          }, 5000);
         } else {
           toast.fire({
             type: 'success',
             title: 'Product added in successfully'
           });
+
+          _this2.$Progress.finish();
+
+          _this2.formProduct.clear();
+
+          _this2.formProduct.reset();
+
+          var input = _this2.$refs.imageProduct;
+          input.type = 'text';
+          input.type = 'file';
+          _this2.url = '';
+        }
+      })["catch"](function () {
+        _this2.$Progress.fail();
+      });
+    },
+    updateProduct: function updateProduct() {
+      var _this3 = this;
+
+      this.$Progress.start();
+      this.formProduct.put('/api/product/' + this.formProduct.id).then(function (response) {
+        if (response.data.existed) {
+          _this3.$Progress.fail();
+
+          Swal.fire({
+            title: 'Duplicate Data!!!',
+            text: 'Product\'s already existed',
+            type: 'error',
+            confirmButtonText: 'Close'
+          });
+          $('input[name=name]').addClass('is-invalid');
+          setTimeout(function () {
+            $('input[name=name]').addClass('is-invalid');
+          }, 4000);
+        } else {
+          Swal.fire('Updated!', 'Product\'s name has been updated.', 'success');
 
           _this3.$Progress.finish();
 
@@ -6668,42 +6696,6 @@ __webpack_require__.r(__webpack_exports__);
         _this3.$Progress.fail();
       });
     },
-    updateProduct: function updateProduct() {
-      var _this4 = this;
-
-      this.$Progress.start();
-      this.formProduct.put('/api/product/' + this.formProduct.id).then(function (response) {
-        if (response.data.existed) {
-          _this4.$Progress.fail();
-
-          Swal.fire({
-            title: 'Duplicate Data!!!',
-            text: 'Product\'s already existed',
-            type: 'error',
-            confirmButtonText: 'Close'
-          });
-          $('input[name=name]').addClass('is-invalid');
-          setTimeout(function () {
-            $('input[name=name]').addClass('is-invalid');
-          }, 4000);
-        } else {
-          Swal.fire('Updated!', 'Product\'s name has been updated.', 'success');
-
-          _this4.$Progress.finish();
-
-          _this4.formProduct.clear();
-
-          _this4.formProduct.reset();
-
-          var input = _this4.$refs.imageProduct;
-          input.type = 'text';
-          input.type = 'file';
-          _this4.url = '';
-        }
-      })["catch"](function () {
-        _this4.$Progress.fail();
-      });
-    },
     // Product Category
     createCategory: function createCategory() {
       this.editModeProductCategory = false;
@@ -6714,12 +6706,12 @@ __webpack_require__.r(__webpack_exports__);
       $('#createProductCategory').modal('show');
     },
     createProductCategory: function createProductCategory() {
-      var _this5 = this;
+      var _this4 = this;
 
       this.$Progress.start();
       this.formCate.post('/api/productCategory').then(function (response) {
         if (response.data.existed) {
-          _this5.$Progress.fail();
+          _this4.$Progress.fail();
 
           Swal.fire({
             title: 'Duplicate Data!!!',
@@ -6739,26 +6731,26 @@ __webpack_require__.r(__webpack_exports__);
             title: 'Category added in successfully'
           });
 
-          _this5.$Progress.finish();
+          _this4.$Progress.finish();
         }
       })["catch"](function () {
-        _this5.$Progress.fail();
+        _this4.$Progress.fail();
       });
     },
     indexProductCategory: function indexProductCategory() {
-      var _this6 = this;
+      var _this5 = this;
 
       axios.get("/api/productCategory").then(function (_ref) {
         var data = _ref.data;
-        return _this6.categories = data;
+        return _this5.categories = data;
       });
     },
     getCategories: function getCategories() {
-      var _this7 = this;
+      var _this6 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('/api/productCategory?page=' + page).then(function (response) {
-        _this7.categories = response.data;
+        _this6.categories = response.data;
       });
     },
     editProductCategory: function editProductCategory(category) {
@@ -6770,12 +6762,12 @@ __webpack_require__.r(__webpack_exports__);
       this.formCate.fill(category); // Pass the data to the modal
     },
     updateProductCategory: function updateProductCategory() {
-      var _this8 = this;
+      var _this7 = this;
 
       this.$Progress.start();
       this.formCate.put('/api/productCategory/' + this.formCate.id).then(function (response) {
         if (response.data.existed) {
-          _this8.$Progress.fail();
+          _this7.$Progress.fail();
 
           Swal.fire({
             title: 'Duplicate Data!!!',
@@ -6792,14 +6784,14 @@ __webpack_require__.r(__webpack_exports__);
           $('#createProductCategory').modal('hide');
           Swal.fire('Updated!', 'Category\'s name has been updated.', 'success');
 
-          _this8.$Progress.finish();
+          _this7.$Progress.finish();
         }
       })["catch"](function () {
-        _this8.$Progress.fail();
+        _this7.$Progress.fail();
       });
     },
     deleteProductCategory: function deleteProductCategory(id) {
-      var _this9 = this;
+      var _this8 = this;
 
       Swal.fire({
         title: 'Are you sure?',
@@ -6812,7 +6804,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         // Send requesst to the server
         if (result.value) {
-          _this9.formCate["delete"]('/api/productCategory/' + id).then(function () {
+          _this8.formCate["delete"]('/api/productCategory/' + id).then(function () {
             Swal.fire('Deleted!', 'Category\'s has been deleted.', 'success');
             Fire.$emit('reloadCategories'); // Register new event "reloadData"
           })["catch"](function () {
@@ -6831,12 +6823,12 @@ __webpack_require__.r(__webpack_exports__);
       $('#createProductType').modal('show');
     },
     createProductType: function createProductType() {
-      var _this10 = this;
+      var _this9 = this;
 
       this.$Progress.start();
       this.formType.post('/api/productType').then(function (response) {
         if (response.data.existed) {
-          _this10.$Progress.fail();
+          _this9.$Progress.fail();
 
           Swal.fire({
             title: 'Duplicate Data!!!',
@@ -6856,26 +6848,26 @@ __webpack_require__.r(__webpack_exports__);
             title: 'Type added in successfully'
           });
 
-          _this10.$Progress.finish();
+          _this9.$Progress.finish();
         }
       })["catch"](function () {
-        _this10.$Progress.fail();
+        _this9.$Progress.fail();
       });
     },
     indexProductType: function indexProductType() {
-      var _this11 = this;
+      var _this10 = this;
 
       axios.get("/api/productType").then(function (_ref2) {
         var data = _ref2.data;
-        return _this11.types = data;
+        return _this10.types = data;
       });
     },
     getTypes: function getTypes() {
-      var _this12 = this;
+      var _this11 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('/api/productType?page=' + page).then(function (response) {
-        _this12.types = response.data;
+        _this11.types = response.data;
       });
     },
     editProductType: function editProductType(type) {
@@ -6887,12 +6879,12 @@ __webpack_require__.r(__webpack_exports__);
       this.formType.fill(type); // Pass the data to the modal
     },
     updateProductType: function updateProductType() {
-      var _this13 = this;
+      var _this12 = this;
 
       this.$Progress.start();
       this.formType.put('/api/productType/' + this.formType.id).then(function (response) {
         if (response.data.existed) {
-          _this13.$Progress.fail();
+          _this12.$Progress.fail();
 
           Swal.fire({
             title: 'Duplicate Data!!!',
@@ -6909,14 +6901,14 @@ __webpack_require__.r(__webpack_exports__);
           $('#createProductType').modal('hide');
           Swal.fire('Updated!', 'Type\'s has been updated.', 'success');
 
-          _this13.$Progress.finish();
+          _this12.$Progress.finish();
         }
       })["catch"](function () {
-        _this13.$Progress.fail();
+        _this12.$Progress.fail();
       });
     },
     deleteProductType: function deleteProductType(id) {
-      var _this14 = this;
+      var _this13 = this;
 
       Swal.fire({
         title: 'Are you sure?',
@@ -6929,7 +6921,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         // Send requesst to the server
         if (result.value) {
-          _this14.formType["delete"]('/api/productType/' + id).then(function () {
+          _this13.formType["delete"]('/api/productType/' + id).then(function () {
             Swal.fire('Deleted!', 'Type\'s has been deleted.', 'success');
             Fire.$emit('reloadTypes'); // Register new event "reloadData"
           })["catch"](function () {
@@ -6940,17 +6932,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this15 = this;
+    var _this14 = this;
 
     this.loadCustomer(); // this.loadProductUpdate();
 
     this.indexProductCategory();
     Fire.$on('reloadCategories', function () {
-      _this15.indexProductCategory();
+      _this14.indexProductCategory();
     });
     this.indexProductType();
     Fire.$on('reloadTypes', function () {
-      _this15.indexProductType();
+      _this14.indexProductType();
     });
   }
 });
@@ -7109,6 +7101,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -7121,7 +7117,8 @@ __webpack_require__.r(__webpack_exports__);
         proType: '',
         proNumber: '',
         proProduct: ''
-      })
+      }),
+      proProducts: {}
     };
   },
   methods: {
@@ -7200,7 +7197,18 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function () {
         _this2.$Progress.fail();
       });
+    },
+    loadProduct: function loadProduct() {
+      var _this3 = this;
+
+      axios.get("/api/product").then(function (_ref) {
+        var data = _ref.data;
+        return _this3.proProducts = data;
+      });
     }
+  },
+  created: function created() {
+    this.loadProduct();
   }
 });
 
@@ -75678,11 +75686,11 @@ var render = function() {
                                     "input-file": _vm.inputFile
                                   },
                                   model: {
-                                    value: _vm.formImage.file,
+                                    value: _vm.formFile.file,
                                     callback: function($$v) {
-                                      _vm.$set(_vm.formImage, "file", $$v)
+                                      _vm.$set(_vm.formFile, "file", $$v)
                                     },
-                                    expression: "formImage.file"
+                                    expression: "formFile.file"
                                   }
                                 },
                                 [
@@ -75711,7 +75719,9 @@ var render = function() {
                           },
                           [
                             _c("label", [
-                              _vm._v("Do you want to add Promotion ?")
+                              _vm._v(
+                                "Do you want to add Promotion for this product ?"
+                              )
                             ]),
                             _vm._v(" "),
                             _c("br"),
@@ -75790,8 +75800,8 @@ var render = function() {
                             staticClass: "p-0",
                             staticStyle: { "list-style-type": "none" }
                           },
-                          _vm._l(_vm.formImage.file, function(img, index) {
-                            return _c("li", { key: img.id }, [
+                          _vm._l(_vm.formFile.file, function(file, index) {
+                            return _c("li", { key: file.id }, [
                               _c(
                                 "button",
                                 {
@@ -75805,23 +75815,23 @@ var render = function() {
                                 [_c("i", { staticClass: "fas fa-times" })]
                               ),
                               _vm._v(" "),
-                              _c("span", [_vm._v(_vm._s(img.name))]),
+                              _c("span", [_vm._v(_vm._s(file.name))]),
                               _vm._v(
                                 " -\n                                            "
                               ),
                               _c("span", [
-                                _vm._v(_vm._s(_vm._f("formatSize")(img.size)))
+                                _vm._v(_vm._s(_vm._f("formatSize")(file.size)))
                               ]),
                               _vm._v(
                                 " -\n                                            "
                               ),
-                              img.error
-                                ? _c("span", [_vm._v(_vm._s(img.error))])
-                                : img.success
+                              file.error
+                                ? _c("span", [_vm._v(_vm._s(file.error))])
+                                : file.success
                                 ? _c("span", [_vm._v("success")])
-                                : img.active
+                                : file.active
                                 ? _c("span", [_vm._v("active")])
-                                : img.active
+                                : file.active
                                 ? _c("span", [_vm._v("active")])
                                 : _c("span")
                             ])
@@ -76507,8 +76517,8 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "image" } }, [
-      _vm._v("File "),
-      _c("small", [_vm._v("(.pdf, .doc, .png, .jpg, .jpeg)")])
+      _vm._v("File Image"),
+      _c("small", [_vm._v("(.png, .jpg, .jpeg)")])
     ])
   },
   function() {
@@ -77232,6 +77242,68 @@ var render = function() {
                                     })
                                   ],
                                   1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.formPromotion.pid,
+                                        expression: "formPromotion.pid"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    class: {
+                                      "is-valid": _vm.formPromotion.errors.has(
+                                        "pid"
+                                      )
+                                    },
+                                    attrs: { name: "pid" },
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          _vm.formPromotion,
+                                          "pid",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("option", { attrs: { value: "" } }, [
+                                      _vm._v("Select an option")
+                                    ]),
+                                    _vm._v(" "),
+                                    _vm._l(_vm.proProducts.data, function(
+                                      product
+                                    ) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: product.id,
+                                          domProps: { value: product.id }
+                                        },
+                                        [_vm._v(_vm._s(product.name))]
+                                      )
+                                    })
+                                  ],
+                                  2
                                 )
                               ])
                             ])
