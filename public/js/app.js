@@ -5109,9 +5109,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      customerProduct: [],
+      productType: '',
       editMode: false,
       customer: {
         firstname: '',
@@ -5146,6 +5158,12 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    // Price for Format
+    formatPrice: function formatPrice(value) {
+      var val = (value / 1).toFixed(2).replace(',', '.');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    // Remove Input File
     removeInputFile: function removeInputFile(index) {
       this.formFile.file.splice(index, 1);
     },
@@ -5221,18 +5239,33 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    // Product
+    // Get Product by Customer ID
     getProduct: function getProduct() {
-      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.$route.params.id;
-      axios.get('/api/product');
+      var _this4 = this;
+
+      var cid = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.$route.params.id;
+      axios.get('/api/product/' + cid).then(function (response) {
+        _this4.customerProduct = response.data;
+      })["catch"](function (error) {
+        return 'Customer have no product.';
+      });
+    },
+    // Get Type Name by typeid
+    getType: function getType(value) {
+      var _this5 = this;
+
+      axios.get('/api/productType/' + value).then(function (response) {
+        _this5.productType = response.data[0].type_name;
+      })["catch"](function (error) {});
     }
   },
   created: function created() {
-    var _this4 = this;
+    var _this6 = this;
 
     this.loadCustomer();
+    this.getProduct();
     Fire.$on('reloadData', function () {
-      _this4.loadCustomer();
+      _this6.loadCustomer();
     }); // using event AfterCreate
   } // mounted() {
   //     console.log('Component mounted.')
@@ -6504,11 +6537,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -6573,11 +6601,24 @@ __webpack_require__.r(__webpack_exports__);
           Swal.fire({
             type: 'error',
             title: 'Oops...',
-            text: "You are uploading a large file!"
+            text: 'You are uploading a large file!\n' + '"' + newFile.name + '"',
+            confirmButtonText: 'Close'
           });
           return prevent();
-          console.log('file too big');
-        }
+        } // Filter Duplicate File
+
+
+        this.formFile.file.forEach(function (element) {
+          if (newFile.file.name === element.name) {
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: 'You are uploading a duplicate file!\n' + '"' + newFile.name + '"',
+              confirmButtonText: 'Close'
+            });
+            return prevent();
+          }
+        });
       }
     },
     inputFile: function inputFile(newFile, oldFile) {
@@ -71299,7 +71340,82 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm._m(1)
+                  _c("div", { staticClass: "card-body p-2" }, [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c("table", { staticClass: "table table-bordered" }, [
+                          _vm._m(1),
+                          _vm._v(" "),
+                          _c(
+                            "tbody",
+                            [
+                              _vm._l(_vm.customerProduct, function(product) {
+                                return _c(
+                                  "tr",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: _vm.customerProduct != "",
+                                        expression: "customerProduct != ''"
+                                      }
+                                    ],
+                                    key: product.id
+                                  },
+                                  [
+                                    _c("td", [
+                                      _vm._v(
+                                        _vm._s(product.name) +
+                                          " / " +
+                                          _vm._s(product.code)
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.getType(product.typeid) != ""
+                                            ? _vm.productType
+                                            : "-"
+                                        )
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "$ " +
+                                          _vm._s(_vm.formatPrice(product.price))
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(product.promotion))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v("000")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v("1111")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v("22222")])
+                                  ]
+                                )
+                              }),
+                              _vm._v(" "),
+                              _vm.customerProduct == ""
+                                ? _c("tr", { staticClass: "text-center" }, [
+                                    _c("td", { attrs: { colspan: "7" } }, [
+                                      _vm._v("No product found.")
+                                    ])
+                                  ])
+                                : _vm._e()
+                            ],
+                            2
+                          )
+                        ])
+                      ])
+                    ])
+                  ])
                 ])
               ]
             ),
@@ -72977,31 +73093,21 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body p-2" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-12" }, [
-          _c("table", { staticClass: "table table-bordered" }, [
-            _c("thead", { staticClass: "thead-light" }, [
-              _c("tr", [
-                _c("th", [_vm._v("Unit")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Unit Type")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Original Price")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Discount")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Net Sale Price")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Paid Amount")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Balance")])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("tbody", [_c("tr")])
-          ])
-        ])
+    return _c("thead", { staticClass: "thead-light" }, [
+      _c("tr", [
+        _c("th", [_vm._v("Unit")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Unit Type")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Original Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Discount")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Net Sale Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Paid Amount")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Balance")])
       ])
     ])
   },
@@ -75784,15 +75890,7 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-12" }, [
-                        _c(
-                          "label",
-                          { staticClass: "text-danger", attrs: { for: "" } },
-                          [
-                            _vm._v(
-                              "Note: Existing attachments (images/files) will be replaced."
-                            )
-                          ]
-                        ),
+                        _vm._m(7),
                         _vm._v(" "),
                         _c(
                           "ul",
@@ -75821,19 +75919,7 @@ var render = function() {
                               ),
                               _c("span", [
                                 _vm._v(_vm._s(_vm._f("formatSize")(file.size)))
-                              ]),
-                              _vm._v(
-                                " -\n                                            "
-                              ),
-                              file.error
-                                ? _c("span", [_vm._v(_vm._s(file.error))])
-                                : file.success
-                                ? _c("span", [_vm._v("success")])
-                                : file.active
-                                ? _c("span", [_vm._v("active")])
-                                : file.active
-                                ? _c("span", [_vm._v("active")])
-                                : _c("span")
+                              ])
                             ])
                           }),
                           0
@@ -75931,7 +76017,7 @@ var render = function() {
                     [
                       _c("table", { staticStyle: { width: "100%" } }, [
                         _c("tr", [
-                          _vm._m(7),
+                          _vm._m(8),
                           _vm._v(" "),
                           _c("td", { staticClass: "fa-pull-right" }, [
                             _c(
@@ -75963,7 +76049,7 @@ var render = function() {
                         "table",
                         { staticClass: "table table-hover table-sm" },
                         [
-                          _vm._m(8),
+                          _vm._m(9),
                           _vm._v(" "),
                           _c(
                             "tbody",
@@ -76040,7 +76126,7 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _vm._m(9),
+                  _vm._m(10),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -76048,7 +76134,7 @@ var render = function() {
                     [
                       _c("table", { staticStyle: { width: "100%" } }, [
                         _c("tr", [
-                          _vm._m(10),
+                          _vm._m(11),
                           _vm._v(" "),
                           _c("td", { staticClass: "fa-pull-right" }, [
                             _c(
@@ -76080,7 +76166,7 @@ var render = function() {
                         "table",
                         { staticClass: "table table-hover table-sm" },
                         [
-                          _vm._m(11),
+                          _vm._m(12),
                           _vm._v(" "),
                           _c(
                             "tbody",
@@ -76172,7 +76258,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(12),
+              _vm._m(13),
               _vm._v(" "),
               _c(
                 "form",
@@ -76195,7 +76281,7 @@ var render = function() {
                       "div",
                       { staticClass: "form-group" },
                       [
-                        _vm._m(13),
+                        _vm._m(14),
                         _vm._v(" "),
                         _c("input", {
                           directives: [
@@ -76315,7 +76401,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(14),
+              _vm._m(15),
               _vm._v(" "),
               _c(
                 "form",
@@ -76338,7 +76424,7 @@ var render = function() {
                       "div",
                       { staticClass: "form-group" },
                       [
-                        _vm._m(15),
+                        _vm._m(16),
                         _vm._v(" "),
                         _c("input", {
                           directives: [
@@ -76518,7 +76604,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "image" } }, [
       _vm._v("File Image"),
-      _c("small", [_vm._v("(.png, .jpg, .jpeg)")])
+      _c("small", [_vm._v("(.png, .jpg, .jpeg, .webp, .gif)")])
     ])
   },
   function() {
@@ -76538,6 +76624,18 @@ var staticRenderFns = [
       },
       [_vm._v("Add Promotion "), _c("i", { staticClass: "fas fa-plus" })]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "text-danger", attrs: { for: "" } }, [
+      _vm._v("Note: "),
+      _c("br"),
+      _vm._v("Existing attachments (images/files) will not allow."),
+      _c("br"),
+      _vm._v(" File can not larger than 2MB.")
+    ])
   },
   function() {
     var _vm = this
@@ -76681,7 +76779,7 @@ var render = function() {
       on: {
         submit: function($event) {
           $event.preventDefault()
-          _vm.editMode ? _vm.updatePromotion() : _vm.createPromotion()
+          _vm.editModePromotion ? _vm.updatePromotion() : _vm.createPromotion()
         },
         keydown: function($event) {
           return _vm.form.onKeydown($event)
@@ -77248,6 +77346,15 @@ var render = function() {
                                   "select",
                                   {
                                     directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value:
+                                          _vm.formPromotion.proProduct ==
+                                          "specific",
+                                        expression:
+                                          "formPromotion.proProduct == 'specific'"
+                                      },
                                       {
                                         name: "model",
                                         rawName: "v-model",

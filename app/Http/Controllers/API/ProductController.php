@@ -82,7 +82,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return Product::find($product);
+        return Product::where('cid', '=', $product['id'] )->get();
     }
 
     /**

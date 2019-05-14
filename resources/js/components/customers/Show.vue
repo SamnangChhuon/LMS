@@ -79,8 +79,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-
+                                                <tr v-show="customerProduct != ''" v-for="product in customerProduct" :key="product.id">
+                                                    <td>{{ product.name }} / {{product.code}}</td>
+                                                    <td>{{ ( getType(product.typeid) != '' ) ? productType : '-' }}</td>
+                                                    <!-- <td>{{ getType(product.typeid)}}{{ productType }}</td> -->
+                                                    <td>$ {{ formatPrice(product.price) }}</td>
+                                                    <td>{{ product.promotion }}</td>
+                                                    <td>000</td>
+                                                    <td>1111</td>
+                                                    <td>22222</td>
+                                                </tr>
+                                                <tr v-if="customerProduct == ''" class="text-center">
+                                                    <td colspan="7">No product found.</td>
                                                 </tr>
                                             </tbody>
                                             
@@ -562,6 +572,8 @@
 export default {
         data() {
             return {
+                customerProduct: [],
+                productType: '',
                 editMode: false,
                 customer: {
                     firstname: '',
@@ -597,6 +609,12 @@ export default {
             }
         },
         methods: {
+            // Price for Format
+            formatPrice(value) {
+                let val = (value/1).toFixed(2).replace(',', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            },
+            // Remove Input File
             removeInputFile(index) {
                 this.formFile.file.splice(index, 1);
             },
@@ -674,13 +692,27 @@ export default {
                 })
             },
 
-            // Product
-            getProduct(id = this.$route.params.id) {
-                axios.get('/api/product')
+            // Get Product by Customer ID
+            getProduct(cid = this.$route.params.id) {
+                axios.get('/api/product/' + cid).then((response) => {
+                    this.customerProduct = response.data;
+                }).catch((error) => {
+                    return 'Customer have no product.'
+                });
+            },
+
+            // Get Type Name by typeid
+            getType(value) {
+                axios.get('/api/productType/' + value).then((response) => {
+                    this.productType = response.data[0].type_name
+                }).catch((error) => {
+                    
+                });
             }
         },
         created() {
             this.loadCustomer();
+            this.getProduct();
             Fire.$on('reloadData', () => {
                 this.loadCustomer();
             }); // using event AfterCreate

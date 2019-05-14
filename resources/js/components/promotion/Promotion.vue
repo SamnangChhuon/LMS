@@ -25,7 +25,7 @@
 </style>
 
 <template>
-    <form @submit.prevent="editMode ? updatePromotion() : createPromotion()" @keydown="form.onKeydown($event)">
+    <form @submit.prevent="editModePromotion ? updatePromotion() : createPromotion()" @keydown="form.onKeydown($event)">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Promotion</h5>
@@ -115,7 +115,7 @@
                                                                 <label for="specific">Specific</label>
                                                                 <has-error :form="formPromotion" field="proProduct"></has-error>
                                                             </div>
-                                                            <select name="pid" v-model="formPromotion.pid" class="form-control" :class="{ 'is-valid': formPromotion.errors.has('pid') }">
+                                                            <select v-show="formPromotion.proProduct == 'specific'" name="pid" v-model="formPromotion.pid" class="form-control" :class="{ 'is-valid': formPromotion.errors.has('pid') }">
                                                                 <option value="">Select an option</option>
                                                                 <option :value="product.id" v-for="product in proProducts.data" :key="product.id">{{ product.name }}</option>
                                                             </select>

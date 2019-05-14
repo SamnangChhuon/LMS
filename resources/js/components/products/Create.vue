@@ -97,7 +97,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="image">File Image<small>(.png, .jpg, .jpeg)</small></label>
+                                                <label for="image">File Image<small>(.png, .jpg, .jpeg, .webp, .gif)</small></label>
                                                 <div class="input-group">
                                                     <file-upload
                                                     class="btn btn-primary"
@@ -130,17 +130,12 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <label for="" class="text-danger">Note: Existing attachments (images/files) will be replaced.</label>
+                                            <label for="" class="text-danger">Note: <br>Existing attachments (images/files) will not allow.<br> File can not larger than 2MB.</label>
                                             <ul class="p-0" style="list-style-type:none;">
                                                 <li v-for="(file, index) in formFile.file" :key="file.id">
                                                 <button @click="removeInputFile(index)" class="btn btn-tool"><i class="fas fa-times"></i></button>
                                                 <span>{{file.name}}</span> -
-                                                <span>{{file.size | formatSize}}</span> -
-                                                <span v-if="file.error">{{file.error}}</span>
-                                                <span v-else-if="file.success">success</span>
-                                                <span v-else-if="file.active">active</span>
-                                                <span v-else-if="file.active">active</span>
-                                                <span v-else></span>
+                                                <span>{{file.size | formatSize}}</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -374,18 +369,29 @@
                         Swal.fire({
                             type: 'error',
                             title: 'Oops...',
-                            text: "You are uploading a large file!",
+                            text: 'You are uploading a large file!\n' + '"' + newFile.name + '"',
+                            confirmButtonText: 'Close'
                         })
                         return prevent();
-                        console.log('file too big')
+                    }
 
-                    }                     
+                    // Filter Duplicate File
+                    this.formFile.file.forEach(element => {
+                        if (newFile.file.name === element.name) {
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Oops...',
+                                text: 'You are uploading a duplicate file!\n' + '"' + newFile.name + '"',
+                                confirmButtonText: 'Close'
+                            })
+                            return prevent();
+                        }
+                    });
                 }
             },
             inputFile(newFile, oldFile) {
                 if (newFile && !oldFile) {
                     // Filter the file size
-                    
                     console.log('add', newFile)
                 }
                 if (newFile && oldFile) {

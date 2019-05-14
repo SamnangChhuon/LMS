@@ -67,7 +67,7 @@ class ProductTypeController extends Controller
      */
     public function show($id)
     {
-        return ProductType::find($id);
+        return ProductType::where('id', '=', $id )->get();
     }
 
     /**
