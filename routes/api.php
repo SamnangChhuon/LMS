@@ -23,9 +23,11 @@ Route::apiResources([
     'product'  =>  'API\ProductController',
     'productCategory'  =>  'API\ProductCategoryController',
     'productType'  =>  'API\ProductTypeController',
+    'file'  =>  'API\FileController'
     ]);
     
 Route::get('profile', 'API\UserController@profile');
 Route::get('findUser', 'API\UserController@search');
 Route::put('profile', 'API\UserController@updateProfile');
+Route::post('inputFile/{cid}', 'API\FileController@storeFileById');
 

@@ -223,10 +223,16 @@ Vue.component(
     require('./components/NotFound.vue').default
 );
 
-Vue.component('vuetable', require('./components/components/Vuetable.vue').default);
-Vue.component('vuetable-pagination', require('./components/components/VueTablePagination.vue').default);
-Vue.component('vuetable-pagination-dropdown', require('./components/components/VueTablePaginationDropDown.vue').default);
-Vue.component('vuetable-pagination-info', require('./components/components/VueTablePaginationInfo.vue').default);
+Vue.component('vuetable', require('./components/components/datatable/Vuetable.vue').default);
+Vue.component('vuetable-pagination', require('./components/components/datatable/VueTablePagination.vue').default);
+Vue.component('vuetable-pagination-dropdown', require('./components/components/datatable/VueTablePaginationDropDown.vue').default);
+Vue.component('vuetable-pagination-info', require('./components/components/datatable/VueTablePaginationInfo.vue').default);
+
+Vue.component('custom-actions', require('./components/components/datatable/CustomActions.vue').default);
+Vue.component('my-detail-row', require('./components/components/datatable/DetailRow.vue').default);
+Vue.component('filter-bar', require('./components/components/datatable/FilterBar.vue').default);
+Vue.component('settings-modal', require('./components/components/datatable/SettingsModal.vue').default);
+
 
 const VueUploadComponent = require('vue-upload-component')
 Vue.component('file-upload', VueUploadComponent)

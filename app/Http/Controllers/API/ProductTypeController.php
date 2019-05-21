@@ -52,10 +52,10 @@ class ProductTypeController extends Controller
 
         $type = ProductType::where('type_name', '=', $request['type_name'] )->exists();
         if ($type) {
-            return response()->json(['existed' => 'Type\'s already existed.']);
+            return response()->json(['existed' => 'Type already existed.']);
         } else {
             ProductType::create($request->all());
-            return response()->json(['success' => 'Type\'s added in successfully.']);
+            return response()->json(['success' => 'Type added in successfully.']);
         }
     }
 
@@ -100,13 +100,13 @@ class ProductTypeController extends Controller
 
         if ($type->type_name == $request['type_name']) {
             $type->update($request->all());
-            return response()->json(['success' => 'Type\'s update in successfully.']);
+            return response()->json(['success' => 'Type update in successfully.']);
         } else {
             if ($typeName) {
-                return response()->json(['existed' => 'Type\'s already existed.']);
+                return response()->json(['existed' => 'Type already existed.']);
             } else {
                 $type->update($request->all());
-                return response()->json(['success' => 'Type\'s update in successfully.']);
+                return response()->json(['success' => 'Type update in successfully.']);
             }
         }
     }

@@ -79,10 +79,9 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-show="customerProduct != ''" v-for="product in customerProduct" :key="product.id">
+                                                <tr v-for="product in customerProduct" :key="product.id">
                                                     <td>{{ product.name }} / {{product.code}}</td>
-                                                    <td>{{ ( getType(product.typeid) != '' ) ? productType : '-' }}</td>
-                                                    <!-- <td>{{ getType(product.typeid)}}{{ productType }}</td> -->
+                                                    <td>{{ getType(product.typeid) }}</td>
                                                     <td>$ {{ formatPrice(product.price) }}</td>
                                                     <td>{{ product.promotion }}</td>
                                                     <td>000</td>
@@ -107,7 +106,7 @@
                             <div class="card-header bg-white py-3">
                                 <h3 class="card-title m-0">Legal Documents</h3>
                                 <div class="card-tools">
-                                    <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#addImage"><i class="fa fa-plus"></i> Add Files</button>
+                                    <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#addImage" @click="addFile()"><i class="fa fa-plus"></i> Add file</button>
                                 </div>
                             </div>
                             <div class="card-body p-2">
@@ -123,44 +122,21 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-if="!formFile.file.length">
+                                                <tr v-if="customerFile == ''">
                                                     <td colspan="7">
                                                         <div class="text-center p-5">
-                                                            <h4>Drop files anywhere to upload<br/>or</h4>
-                                                            <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#addImage"><i class="fa fa-plus"></i> Select Files</button>
+                                                            <h4>Customer have no file or image.</h4>
+                                                            <button type="button" class="btn btn-info text-white" @click="addFile()"><i class="fa fa-plus"></i> Select Files</button>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr v-for="(file, index) in formFile.file" :key="file.id">
+                                                <tr v-for="(file, index) in customerFile" :key="file.id">
                                                     <td>{{index + 1}}</td>
-                                                    <td>
-                                                        <img v-if="file.file" :src="file.file" width="40" height="auto" />
-                                                        <span v-else>No Image</span>
-                                                    </td>
-                                                    <td>
-                                                        <img v-if="file.file" :src="file.file" width="40" height="auto" />
-                                                    </td>
-                                                    <td>
-                                                        <div class="btn-group">
-                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button">
-                                                            Action
-                                                            </button>
-                                                            <div class="dropdown-menu">
-                                                                <!-- <a :class="{'dropdown-item': true, disabled: file.active || file.success || file.error === 'compressing'}" href="#" @click.prevent="file.active || file.success || file.error === 'compressing' ? false :  onEditFileShow(file)">Edit</a>
-                                                                <a :class="{'dropdown-item': true, disabled: !file.active}" href="#" @click.prevent="file.active ? $refs.upload.update(file, {error: 'cancel'}) : false">Cancel</a>
-
-                                                                <a class="dropdown-item" href="#" v-if="file.active" @click.prevent="$refs.upload.update(file, {active: false})">Abort</a>
-                                                                <a class="dropdown-item" href="#" v-else-if="file.error && file.error !== 'compressing' && $refs.upload.features.html5" @click.prevent="$refs.upload.update(file, {active: true, error: '', progress: '0.00'})">Retry upload</a>
-                                                                <a :class="{'dropdown-item': true, disabled: file.success || file.error === 'compressing'}" href="#" v-else @click.prevent="file.success || file.error === 'compressing' ? false : $refs.upload.update(file, {active: true})">Upload</a> -->
-
-                                                                <div class="dropdown-divider"></div>
-                                                                <a class="dropdown-item" href="#" @click.prevent="$refs.upload.remove(file)">Remove</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
+                                                    <td><img v-if="file.file" :src="file.file" width="40" height="auto"></td>
+                                                    <td>{{file.file}}</td>
+                                                    <td></td>
                                                 </tr>
                                             </tbody>
-                                            
                                         </table>
                                     </div>
                                 </div>
@@ -504,8 +480,8 @@
             </div>
         </div>
 
-        <div class="modal fade" id="addImage" tabindex="-1" role="dialog" aria-labelledby="addImage" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+        <div class="modal fade" id="addFile" tabindex="-1" role="dialog" aria-labelledby="addImage" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Add New Files</h4>
@@ -514,51 +490,57 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <ul v-if="formFile.file.length" class="p-0" style="list-style-type:none;">
-                            <li v-for="(img, index) in formFile.file" :key="img.id">
-                            <button @click="removeInputFile(index)" class="btn btn-tool"><i class="fas fa-times"></i></button>
-                            <span>{{img.name}}</span> -
-                            <span>{{img.size | formatSize}}</span> -
-                            <span v-if="img.error">{{img.error}}</span>
-                            <span v-else-if="img.success">success</span>
-                            <span v-else-if="img.active">active</span>
-                            <span v-else-if="img.active">active</span>
-                            <span v-else></span>
+                        <ul style="list-style-type:none;padding:0;">
+                            <li>
+                                <label for="" class="text-danger">Note: <br>- Existing attachments (images/files) will not allow.<br>- File can not larger than 2MB.<br>*** File name will be change to unique name in database.</label>
                             </li>
-                        </ul>
-                        <ul v-else style="list-style-type:none;padding:0;">
                             <li>
                                 <div class="text-center p-5">
                                     <h4>Drop files anywhere to upload<br/>or</h4>
-                                    <label for="file" class="btn btn-lg btn-primary">Select Files</label>
+                                    <file-upload
+                                    class="btn btn-primary"
+                                    extensions="gif,jpg,jpeg,png,webp"
+                                    accept="image/png,image/gif,image/jpeg,image/webp"
+                                    :multiple="true"
+                                    :drop="true"
+                                    :drop-directory="true"
+                                    :size="1024 * 1024 * 10"
+                                    v-model="formFile.file"
+                                    @input-filter="inputFilter"
+                                    @input-file="inputFile"
+                                    ref="file">
+                                        <i class="fa fa-plus"></i> Select files
+                                    </file-upload>
                                 </div>
                             </li>
+                            <!-- <li>
+                                <input type="file" name="file" ref="file" multiple v-on:change="handleFileUpload">
+                            </li> -->
                         </ul>
-
-                        <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
-                                <h3>Drop files to upload</h3>
+                        <table v-if="formFile.file.length" class="table table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th style="width:10px;text-align:center">#</th>
+                                    <th>File Name</th>
+                                    <th>File Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(file, index) in formFile.file" :key="file.id">
+                                    <td><button @click="removeInputFile(index)" class="btn btn-tool"><i class="fas fa-times"></i></button></td>
+                                    <td><span>{{file.name}}</span></td>
+                                    <td><span>{{file.size | formatSize}}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div v-show="$refs.files && $refs.files.dropActive" class="drop-active">
+                            <h3>Drop files to upload</h3>
                         </div>
-                        
                     </div>
                     <div class="modal-footer">
-                            <file-upload
-                            class="btn btn-primary float-left"
-                            post-action="/upload/post"
-                            :multiple="true"
-                            :drop="true"
-                            :drop-directory="true"
-                            v-model="formFile.file"
-                            ref="upload">
-                            <i class="fa fa-plus"></i>
-                            Select files
-                            </file-upload>
+                        <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">Close</button>
                         <div class="float-right">
-                            <button type="button" class="btn btn-success" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
-                                <i class="fa fa-arrow-up" aria-hidden="true"></i> Upload
-                            </button>
-                            <button type="button" class="btn btn-danger"  v-else @click.prevent="$refs.upload.active = false">
-                                <i class="fa fa-stop" aria-hidden="true"></i> Stop Upload
-                            </button>
+                            <button class="btn btn-success" @click.prevent="handleFileUpload" type="submit">Upload File</button>
                         </div>
                     </div>
                 </div>
@@ -573,6 +555,7 @@ export default {
         data() {
             return {
                 customerProduct: [],
+                customerFile: [],
                 productType: '',
                 editMode: false,
                 customer: {
@@ -602,6 +585,7 @@ export default {
                     remarkaddress: ''
                 }),
 
+                files: [],
                 formFile: new Form({
                     cid: this.$route.params.id,
                     file: [],
@@ -614,9 +598,72 @@ export default {
                 let val = (value/1).toFixed(2).replace(',', '.')
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             },
+
             // Remove Input File
             removeInputFile(index) {
                 this.formFile.file.splice(index, 1);
+            },
+            inputFilter(newFile, oldFile, prevent) {
+                if (newFile && !oldFile) {
+                    // Before adding a file
+                    // Filter system files or hide files
+                    if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
+                        return prevent()
+                    }
+                    // Filter php html js file
+                    if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
+                        return prevent()
+                    }
+                    // Filter large file
+                    let e = newFile.file;
+                    let reader = new FileReader();
+                    if(e['size'] > 2111775){
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'You are uploading a large file!\n' + '"' + newFile.name + '"',
+                            confirmButtonText: 'Close'
+                        })
+                        return prevent();
+                    }
+
+                    // Filter Duplicate File
+                    this.formFile.file.forEach(element => {
+                        if (newFile.file.name === element.name) {
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Oops...',
+                                text: 'You are uploading a duplicate file!\n' + '"' + newFile.name + '"',
+                                confirmButtonText: 'Close'
+                            })
+                            return prevent();
+                        }
+                    });
+
+                    if ( /\s/.test(newFile.name) ) {
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'The file name must not have space! ' + '"' + newFile.name + '"',
+                            confirmButtonText: 'Close'
+                        })
+                        return prevent();
+                    }
+                }
+            },
+            inputFile(newFile, oldFile) {
+                if (newFile && !oldFile) {
+                    // Filter the file size
+                    console.log('add', newFile)
+                }
+                if (newFile && oldFile) {
+                    // update
+                    console.log('update', newFile)
+                }
+                if (!newFile && oldFile) {
+                    // remove
+                    console.log('remove', oldFile)
+                }
             },
 
             loadCustomer(id = this.$route.params.id) {
@@ -697,28 +744,116 @@ export default {
                 axios.get('/api/product/' + cid).then((response) => {
                     this.customerProduct = response.data;
                 }).catch((error) => {
-                    return 'Customer have no product.'
+                    return 'Customer have no product.';
                 });
             },
 
             // Get Type Name by typeid
             getType(value) {
-                axios.get('/api/productType/' + value).then((response) => {
-                    this.productType = response.data[0].type_name
+                axios.get('/api/productType/' + value).then(response => {
+                    this.productType  = response.data[0].type_name
+                    console.log(productType.data.id)
+                    console.log(this.productType)
                 }).catch((error) => {
-                    
+                    return 'Unit Type can not found!';
                 });
+                return this.productType;
+            },
+
+            // Get File by Customer ID
+            getCustomerFile(cid = this.$route.params.id){
+                axios.get('/api/file/' + cid).then((response) => {
+                    this.customerFile = response.data;
+                    
+                }).catch((error) => {
+                    return 'File can not found.'
+                });
+            },
+
+            // Add File
+            addFile(){
+                $('#addFile').modal('show');
+                this.formFile.file = [];
+            },
+            fieldChange(e){
+                let selectedFiles=e.target.files;
+                console.log("1")
+                if(!selectedFiles.length){
+                    return false;
+                }
+                console.log("2")
+
+                for(let i=0; i < selectedFiles.length; i++){
+                    this.files.push(selectedFiles[i]);
+                }
+                console.log("3")
+
+                console.log(this.files);
+            },
+            inputFileByCustomer(){
+                let formData = new FormData();
+
+                for(let i=0; i < this.files.length ; i++){
+                    formData.append('files['+ i +']', this.files[i]);
+                }
+
+                this.$Progress.start();
+
+                const config = { };
+                $('#upload-file').value=[];
+                axios.post('/api/file',
+                    formData,
+                    {
+                        data: {
+                            cid: this.formFile.cid
+                        }
+                    })
+                .then((response) => {
+                    toast.fire({
+                        type: 'success',
+                        title: 'File added in successfully'
+                    })
+                    this.$Progress.finish();
+                    $('#addFile').modal('show');
+                    this.formFile.clear();
+                    this.formFile.reset();
+                })
+                .catch(() => {
+                    Swal.fire({
+                        title: 'Insert Error!!!',
+                        text: 'File can not insert.',
+                        type: 'error',
+                        confirmButtonText: 'Close',
+                    })
+                    this.$Progress.fail();
+                });
+            },
+
+            handleFileUpload(){
+                let files = this.$refs.file.files;
+                let formData = new FormData();
+                let headers = {'Content-Type': 'multipart/form-data'};
+
+                for (let index = 0; index < files.length; index++) {
+                    formData.append('files[' + index + ']', files[index]);                    
+                }
+
+                this.formFile.post('/api/inputFile/' + this.$route.params.id)
+                    .then((response) => {
+                        console.log('response', response);
+                    })
+                    .catch((error) => {
+                        console.error(error.response);
+                    })
             }
         },
         created() {
             this.loadCustomer();
             this.getProduct();
+            this.getCustomerFile();
             Fire.$on('reloadData', () => {
                 this.loadCustomer();
             }); // using event AfterCreate
         }
-        // mounted() {
-        //     console.log('Component mounted.')
-        // }
     }
 </script>

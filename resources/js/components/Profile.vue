@@ -203,7 +203,7 @@
                                         <label for="photo" class="col-sm-2 control-label">Profile Photo</label>
 
                                         <div class="col-sm-12">
-                                            <input type="file" @change="updateProfile" placeholder="">
+                                            <input type="file" @change="updateProfile">
                                         </div>
                                     </div>
                                     <div class="form-group">
