@@ -848,9 +848,11 @@ export default {
             }
         },
         created() {
+            this.$Progress.start();
             this.loadCustomer();
             this.getProduct();
             this.getCustomerFile();
+            this.$Progress.finish();
             Fire.$on('reloadData', () => {
                 this.loadCustomer();
             }); // using event AfterCreate

@@ -2,7 +2,7 @@
     <div>
         <div class="inline field">
             <label>Gender: </label>
-            <span>{{rowData.sex}}</span>
+            <span>{{rowData.sex | upText}}</span>
         </div>
         <div class="inline field">
             <label>Company Name: </label>
@@ -19,6 +19,9 @@
         <div class="inline field">
             <label>Website: </label>
             <span> {{rowData.website}}</span>
+        </div>
+        <div class="inline-field">
+            <router-link :to="{name: 'Viewcustomer', params: {id: rowData.id}}">Show More Details</router-link>
         </div>
     </div>
 </template>

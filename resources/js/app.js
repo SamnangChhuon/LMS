@@ -57,6 +57,8 @@ Vue.use(VueInputMask)
 import Vuetable from 'vuetable-2';
 Vue.use(Vuetable)
 
+
+
 let routes = [
     // Dasboard
     { 
@@ -230,8 +232,8 @@ Vue.component('vuetable-pagination-info', require('./components/components/datat
 
 Vue.component('custom-actions', require('./components/components/datatable/CustomActions.vue').default);
 Vue.component('my-detail-row', require('./components/components/datatable/DetailRow.vue').default);
-Vue.component('filter-bar', require('./components/components/datatable/FilterBar.vue').default);
 Vue.component('settings-modal', require('./components/components/datatable/SettingsModal.vue').default);
+Vue.component('customer-detail', require('./components/components/datatable/CustomerDetail.vue').default);
 
 
 const VueUploadComponent = require('vue-upload-component')

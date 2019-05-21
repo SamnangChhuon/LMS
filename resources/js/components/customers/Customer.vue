@@ -10,72 +10,95 @@
                             <button class="btn btn-success" @click="addNewCustomer() , collapseToggle()">Add New <i class="fas fa-user-plus fa-fw"></i></button>
                         </div>
                     </div>
-                        <filter-bar></filter-bar>
-
-                    <div class="card-body table-responsive p-0 pb-3 border-top">
-                        <vuetable ref="vuetable"
-                        class="table table-hover"
-                        api-url="http://127.0.0.1:8000/api/customer"
-                        :fields="fields"
-                        pagination-path="pagination"
-                        :css="css.table"
-                        :sort-order="sortOrder"
-                        :multi-sort="multiSort"
-                        :per-page="perPage"
-                        :append-params="moreParams"
-                        detail-row-component="my-detail-row"
-                        detail-row-transition="expand"
-                        :row-class="rowClassCB"
-                        @vuetable:pagination-data="onPaginationData"
-                        @vuetable:load-success="onLoadSuccess"
-                        @vuetable:loading="showLoader"
-                        @vuetable:loaded="hideLoader"
-                        @vuetable:cell-clicked="onCellClicked"
-                        @vuetable:initialized="onInitialized"
-                        @vuetable:data-reset="onDataReset"
-                        ></vuetable>
-                        <div class="p-2 vuetable-pagination">
-                            <vuetable-pagination-info ref="paginationInfo"
-                            info-class="pagination-info"
-                                :info-template="paginationInfoTemplate"
-                            ></vuetable-pagination-info>
-                            <component :is="paginationComponent" ref="pagination"
-                            :css="css.pagination"
-                                @vuetable-pagination:change-page="onChangePage"
-                            ></component>
+                    
+                    <div class="card-body p-0">
+                        <div class="row p-2">
+                            <div class="col-md-6">
+                                <div class="form-inline">
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Search: </span>
+                                        </div>
+                                        <input class="form-control" v-model="searchFor" @keyup.enter="setFilter">
+                                    </div>
+                                    <button class="btn btn-primary mb-2 mr-sm-2" @click="setFilter">Go</button>
+                                    <button class="btn btn-secondary mb-2" @click="resetFilter">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="fa-pull-right">
+                                    <button class="btn btn-light" id="settingsBtn" @click="showSettingsModal">
+                                    <i class="fas fa-cog"></i> Settings
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <settings-modal ref="settingsModal"
-                            :vuetable-fields="vuetableFields"
-                        ></settings-modal>
+                        
+                        <div class="table-responsive pb-3 border-top">
 
-                        <!-- <table class="table table-hover">
-                            <tbody>
-                                <tr>
-                                    <th>CID</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Type</th>
-                                    <th>Business Phone</th>
-                                    <th>Personal Phone</th>
-                                    <th>Registered At</th>
-                                    <th>Modify</th>
-                                </tr>
-                                <tr v-for="customer in customers.data" :key="customer.id">
-                                    <td><router-link :to="{name: 'Viewcustomer', params: {id: customer.id}}">{{ customer.id }}</router-link></td>
-                                    <td>{{ customer.firstname }}</td>
-                                    <td>{{ customer.lastname }}</td>
-                                    <td>{{ customer.type | upText }}</td>
-                                    <td>{{ customer.businessphone }}</td>
-                                    <td>{{ customer.personalphone }}</td>
-                                    <td>{{ customer.created_at | myDate }}</td>
-                                    <td>
-                                        <a href="#" @click="editCustomer(customer)" title="Edit"><i class="fas fa-edit text-info"></i></a>
-                                        |
-                                        <a href="#" @click="deleteCustomer(customer.id)" title="Delete"><i class="fas fa-trash text-danger"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table> -->
+                            <vuetable ref="vuetable"
+                            class="table table-hover"
+                            api-url="http://127.0.0.1:8000/api/customer"
+                            :fields="fields"
+                            pagination-path="pagination"
+                            :css="css.table"
+                            :sort-order="sortOrder"
+                            :multi-sort="multiSort"
+                            :per-page="perPage"
+                            :append-params="moreParams"
+                            detail-row-component="my-detail-row"
+                            detail-row-transition="expand"
+                            :row-class="rowClassCB"
+                            @vuetable:pagination-data="onPaginationData"
+                            @vuetable:load-success="onLoadSuccess"
+                            @vuetable:loading="showLoader"
+                            @vuetable:loaded="hideLoader"
+                            @vuetable:cell-clicked="onCellClicked"
+                            @vuetable:data-reset="onDataReset"
+                            ></vuetable>
+                            <div class="p-2 vuetable-pagination">
+                                <vuetable-pagination-info ref="paginationInfo"
+                                info-class="pagination-info"
+                                    :info-template="paginationInfoTemplate"
+                                ></vuetable-pagination-info>
+                                <component :is="paginationComponent" ref="pagination"
+                                :css="css.pagination"
+                                    @vuetable-pagination:change-page="onChangePage"
+                                ></component>
+                            </div>
+                            <settings-modal ref="settingsModal"
+                                :vuetable-fields="vuetableFields"
+                            ></settings-modal>
+
+                            <!-- <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <th>CID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Type</th>
+                                        <th>Business Phone</th>
+                                        <th>Personal Phone</th>
+                                        <th>Registered At</th>
+                                        <th>Modify</th>
+                                    </tr>
+                                    <tr v-for="customer in customers.data" :key="customer.id">
+                                        <td><router-link :to="{name: 'Viewcustomer', params: {id: customer.id}}">{{ customer.id }}</router-link></td>
+                                        <td>{{ customer.firstname }}</td>
+                                        <td>{{ customer.lastname }}</td>
+                                        <td>{{ customer.type | upText }}</td>
+                                        <td>{{ customer.businessphone }}</td>
+                                        <td>{{ customer.personalphone }}</td>
+                                        <td>{{ customer.created_at | myDate }}</td>
+                                        <td>
+                                            <a href="#" @click="editCustomer(customer)" title="Edit"><i class="fas fa-edit text-info"></i></a>
+                                            |
+                                            <a href="#" @click="deleteCustomer(customer.id)" title="Delete"><i class="fas fa-trash text-danger"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table> -->
+                        </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -484,6 +507,11 @@ import moment from 'moment'
                         id: data[i].id,
                         firstname: data[i].firstname,
                         lastname: data[i].lastname,
+                        sex: data[i].sex,
+                        companyname: data[i].companyname,
+                        email: data[i].email,
+                        line: data[i].line,
+                        website: data[i].website,
                         type: data[i].type,
                         businessphone: data[i].businessphone,
                         personalphone: data[i].personalphone,
@@ -550,7 +578,6 @@ import moment from 'moment'
                 return (index % 2) === 0 ? 'odd' : 'even'
             },
             onCellClicked (data, field, event) {
-                console.log('cellClicked', field.name)
                 if (field.name !== '__actions') {
                     this.$refs.vuetable.toggleDetailRow(data.id)
                 }
@@ -587,10 +614,6 @@ import moment from 'moment'
             onChangePage (page) {
                 this.$refs.vuetable.changePage(page)
             },
-            onInitialized (fields) {
-                console.log('onInitialized', fields)
-                this.vuetableFields = fields
-            },
             onDataReset () {
                 console.log('onDataReset')
                 this.$refs.paginationInfo.resetData()
@@ -622,7 +645,9 @@ import moment from 'moment'
             }
         },
         created() {
+            this.$Progress.start();
             this.loadCustomers();
+            this.$Progress.finish();
             
             Fire.$on('reloadData', () => {
                 this.loadCustomers();
@@ -636,6 +661,13 @@ import moment from 'moment'
     }
 
     let tableColumns = [
+        {
+            name: '__component:customer-detail',
+            title: 'Details',
+            titleClass: 'text-center',
+            dataClass: 'text-center',
+            width: '80px'
+        },
         {
             name: 'id',
             title: 'CID',
@@ -681,7 +713,7 @@ import moment from 'moment'
             title: 'Modify',
             titleClass: 'text-center',
             dataClass: 'text-center',
-        }
+        },
     ]
 </script>
 
