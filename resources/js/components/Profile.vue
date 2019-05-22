@@ -53,14 +53,13 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                        <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li> -->
+                        <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-                            <div class="active tab-pane" id="activity">
-                                <!-- Post -->
+                            <!-- <div class="active tab-pane" id="activity">
                                 <div class="post">
                                 <div class="user-block">
                                     <img class="img-circle img-bordered-sm" :src="getProfilePhoto()" alt="user image">
@@ -70,7 +69,6 @@
                                     </span>
                                     <span class="description">Shared publicly - 7:30 PM today</span>
                                 </div>
-                                <!-- /.user-block -->
                                 <p>
                                     Lorem ipsum represents a long-held tradition for designers,
                                     typographers and the like. Some people hate it and argue for
@@ -91,9 +89,6 @@
 
                                 <input class="form-control form-control-sm" type="text" placeholder="Type a comment">
                                 </div>
-                                <!-- /.post -->
-
-                                <!-- Post -->
                                 <div class="post clearfix">
                                 <div class="user-block">
                                     <img class="img-circle img-bordered-sm" :src="getProfilePhoto()" alt="User Image">
@@ -103,7 +98,6 @@
                                     </span>
                                     <span class="description">Sent you a message - 3 days ago</span>
                                 </div>
-                                <!-- /.user-block -->
                                 <p>
                                     Lorem ipsum represents a long-held tradition for designers,
                                     typographers and the like. Some people hate it and argue for
@@ -121,9 +115,6 @@
                                     </div>
                                 </form>
                                 </div>
-                                <!-- /.post -->
-
-                                <!-- Post -->
                                 <div class="post">
                                 <div class="user-block">
                                     <img class="img-circle img-bordered-sm" :src="getProfilePhoto()" alt="User Image">
@@ -133,30 +124,23 @@
                                     </span>
                                     <span class="description">Posted 5 photos - 5 days ago</span>
                                 </div>
-                                <!-- /.user-block -->
                                 <div class="row mb-3">
                                     <div class="col-sm-6">
                                     <img class="img-fluid" :src="getProfilePhoto()" alt="Photo">
                                     </div>
-                                    <!-- /.col -->
                                     <div class="col-sm-6">
                                     <div class="row">
                                         <div class="col-sm-6">
                                         <img class="img-fluid mb-3" :src="getProfilePhoto()" alt="Photo">
                                         <img class="img-fluid" :src="getProfilePhoto()" alt="Photo">
                                         </div>
-                                        <!-- /.col -->
                                         <div class="col-sm-6">
                                         <img class="img-fluid mb-3" :src="getProfilePhoto()" alt="Photo">
                                         <img class="img-fluid" :src="getProfilePhoto()" alt="Photo">
                                         </div>
-                                        <!-- /.col -->
                                     </div>
-                                    <!-- /.row -->
                                     </div>
-                                    <!-- /.col -->
                                 </div>
-                                <!-- /.row -->
 
                                 <p>
                                     <a href="#" class="link-black text-sm mr-2"><i class="fa fa-share mr-1"></i> Share</a>
@@ -170,12 +154,11 @@
 
                                 <input class="form-control form-control-sm" type="text" placeholder="Type a comment">
                                 </div>
-                                <!-- /.post -->
-                            </div>
+                            </div> -->
                             
                             <!-- /.tab-pane -->
 
-                            <div class="tab-pane" id="settings">
+                            <div class="tab-pane active" id="settings">
                                 <form class="form-horizontal">
                                     <div class="form-group">
                                         <label for="name" class="col-sm-2 control-label">Name</label>

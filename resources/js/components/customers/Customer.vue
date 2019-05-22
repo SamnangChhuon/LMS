@@ -10,9 +10,8 @@
                             <button class="btn btn-success" @click="addNewCustomer() , collapseToggle()">Add New <i class="fas fa-user-plus fa-fw"></i></button>
                         </div>
                     </div>
-                    
                     <div class="card-body p-0">
-                        <div class="row p-2">
+                        <!-- <div class="row p-2">
                             <div class="col-md-6">
                                 <div class="form-inline">
                                     <div class="input-group mb-2 mr-sm-2">
@@ -32,18 +31,16 @@
                                     </button>
                                 </div>
                             </div>
-                        </div>
-                        
+                        </div> -->
                         <div class="table-responsive pb-3 border-top">
-
                             <vuetable ref="vuetable"
                             class="table table-hover"
-                            api-url="http://127.0.0.1:8000/api/customer"
+                            api-url="/api/customer"
                             :fields="fields"
                             pagination-path="pagination"
-                            :css="css.table"
                             :sort-order="sortOrder"
-                            :multi-sort="multiSort"
+                            :multi-sort="true"
+                            :css="css.table"
                             :per-page="perPage"
                             :append-params="moreParams"
                             detail-row-component="my-detail-row"
@@ -66,9 +63,6 @@
                                     @vuetable-pagination:change-page="onChangePage"
                                 ></component>
                             </div>
-                            <settings-modal ref="settingsModal"
-                                :vuetable-fields="vuetableFields"
-                            ></settings-modal>
 
                             <!-- <table class="table table-hover">
                                 <tbody>
@@ -323,7 +317,7 @@ import moment from 'moment'
                 fields: tableColumns,
                 vuetableFields: false,
                 sortOrder: [
-                    { field: 'id', direction: 'asc'},
+                    { field: 'id', sortField: 'id', direction: 'asc'},
                 ],
                 multiSort: true,
                 paginationComponent: 'vuetable-pagination',
@@ -499,7 +493,6 @@ import moment from 'moment'
                     from: data.from,
                     to: data.to
                 }
-
                 transformed.data = []
                 data = data.data
                 for (let i = 0; i < data.length; i++) {
@@ -518,7 +511,6 @@ import moment from 'moment'
                         created_at: data[i].created_at,
                     })
                 }
-
                 return transformed
             },
             showSettingsModal () {
@@ -546,7 +538,7 @@ import moment from 'moment'
             },
             setFilter () {
                 this.moreParams['filter'] = this.searchFor
-                this.$nextTick(function() {
+                this.$nextTick(() => {
                     this.$refs.vuetable.refresh()
                 })
             },
@@ -571,7 +563,7 @@ import moment from 'moment'
             highlight (needle, haystack) {
                 return haystack.replace(
                     new RegExp('(' + this.preg_quote(needle) + ')', 'ig'),
-                    '<span class="highlight">$1</span>'
+                    '<span class="bg-warning">$1</span>'
                 )
             },
             rowClassCB (data, index) {
@@ -582,12 +574,6 @@ import moment from 'moment'
                     this.$refs.vuetable.toggleDetailRow(data.id)
                 }
             },
-            onCellDoubleClicked (data, field, event) {
-                console.log('cellDoubleClicked:', field.name)
-            },
-            onCellRightClicked (data, field, event) {
-                console.log('cellRightClicked:', field.name)
-            },
             onLoadSuccess (response) {
                 // set pagination data to pagination-info component
                 this.$refs.paginationInfo.setPaginationData(response.data)
@@ -595,8 +581,13 @@ import moment from 'moment'
                 let data = response.data.data
                 if (this.searchFor !== '') {
                     for (let n in data) {
-                    data[n].name = this.highlight(this.searchFor, data[n].name)
-                    data[n].email = this.highlight(this.searchFor, data[n].email)
+                        data[n].id = this.highlight(this.searchFor, data[n].id)
+                        data[n].firstname = this.highlight(this.searchFor, data[n].firstname)
+                        data[n].lastname = this.highlight(this.searchFor, data[n].lastname)
+                        data[n].type = this.highlight(this.searchFor, data[n].type)
+                        data[n].businessphone = this.highlight(this.searchFor, data[n].businessphone)
+                        data[n].personalphone = this.highlight(this.searchFor, data[n].personalphone)
+                        data[n].created_at = this.highlight(this.searchFor, data[n].created_at)
                     }
                 }
             },

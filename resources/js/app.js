@@ -96,6 +96,14 @@ let routes = [
             breadcrumb: 'Add New Product'
         } 
     },
+    { 
+        path: '/products', 
+        name: 'Products',
+        component: require('./components/products/Products.vue').default, 
+        meta: {
+            breadcrumb: 'Products'
+        } 
+    },
     // Promotion
     { 
         path: '/promotion', 
@@ -107,11 +115,11 @@ let routes = [
     },
     // Repayment
     { 
-        path: '/repayment', 
-        name: 'Repayment',
-        component: require('./components/repayment/Repayment.vue').default, 
+        path: '/sale', 
+        name: 'Sale',
+        component: require('./components/sale/Sale.vue').default, 
         meta: {
-            breadcrumb: 'Repayment'
+            breadcrumb: 'Sale'
         } 
     },
     // Income
@@ -232,7 +240,6 @@ Vue.component('vuetable-pagination-info', require('./components/components/datat
 
 Vue.component('custom-actions', require('./components/components/datatable/CustomActions.vue').default);
 Vue.component('my-detail-row', require('./components/components/datatable/DetailRow.vue').default);
-Vue.component('settings-modal', require('./components/components/datatable/SettingsModal.vue').default);
 Vue.component('customer-detail', require('./components/components/datatable/CustomerDetail.vue').default);
 
 

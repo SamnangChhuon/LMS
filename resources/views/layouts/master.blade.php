@@ -17,7 +17,7 @@
 <div class="wrapper" id="app">
 
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+  <nav class="main-header navbar navbar-expand bg-info navbar-light border-bottom">
 
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -108,15 +108,21 @@
             </router-link>
           </li>
           <li class="nav-item">
+            <router-link :to="{name: 'Products'}" class="nav-link">
+              <i class="nav-icon fas fa-user-tie"></i>
+              <p>Products</p>
+            </router-link>
+          </li>
+          <li class="nav-item">
             <router-link :to="{name: 'Income'}" class="nav-link">
               <i class="nav-icon fas fa-coins"></i>
               <p>Income & Expense</p>
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="{name: 'Repayment'}" class="nav-link">
+            <router-link :to="{name: 'Sale'}" class="nav-link">
               <i class="nav-icon fas fa-clipboard-check"></i>
-              <p>Repayment</p>
+              <p>Sale</p>
             </router-link>
           </li>
 

@@ -132,7 +132,8 @@
                                                 </tr>
                                                 <tr v-for="(file, index) in customerFile" :key="file.id">
                                                     <td>{{index + 1}}</td>
-                                                    <td><img v-if="file.file" :src="file.file" width="40" height="auto"></td>
+                                                    <!-- <td><img v-if="file.file" :src="file.file" width="40" height="auto"></td> -->
+                                                    <td><img v-if="file.file" :src="'/storage/app/customers/img/'  + file.cid +'/' + file.file" width="40" height="auto"></td>
                                                     <td>{{file.file}}</td>
                                                     <td></td>
                                                 </tr>
@@ -762,7 +763,7 @@ export default {
 
             // Get File by Customer ID
             getCustomerFile(cid = this.$route.params.id){
-                axios.get('/api/file/' + cid).then((response) => {
+                axios.get('/api/showFile/' + cid).then((response) => {
                     this.customerFile = response.data;
                     
                 }).catch((error) => {

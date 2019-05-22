@@ -7,8 +7,8 @@
                         <h3 class="card-title m-0">{{ (type == 'expense') ? 'Expense' : 'Income' }}</h3>
                         <div class="btn-toolbar ml-auto mb-2 mb-md-0">
                             <div class="btn-group mr-2 nav nav-pills">
-                                <button type="button" class="btn btn-outline-secondary active" id="tabExpense" data-toggle="pill" href="#pillExpense" role="tab" aria-controls="pillExpense" aria-selected="true" v-on:click="type = 'expense'">Expense</button>
-                                <button type="button" class="btn btn-outline-secondary" id="tabIncome" data-toggle="pill" href="#pillIncome" role="tab" aria-controls="pillIncome" aria-selected="false" v-on:click="type = 'income'">Income</button>
+                                <button type="button" class="btn btn-outline-secondary active" id="tabIncome" data-toggle="pill" href="#pillIncome" role="tab" aria-controls="pillIncome" aria-selected="false" v-on:click="type = 'income'">Income</button>
+                                <button type="button" class="btn btn-outline-secondary" id="tabExpense" data-toggle="pill" href="#pillExpense" role="tab" aria-controls="pillExpense" aria-selected="true" v-on:click="type = 'expense'">Expense</button>
                             </div>
                         </div>
                     </div>
@@ -20,12 +20,12 @@
                                 <strong>General</strong>
                                 <p>Put data in here to create income profile</p>
                                 <div class="tab-content" id="pillOptions">
-                                    <div class="tab-pane fade active show" id="pillExpense" role="tabpanel" aria-labelledby="tabExpense">
+                                    <div class="tab-pane fade" id="pillExpense" role="tabpanel" aria-labelledby="tabExpense">
                                         <form>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="cid">Customer ID <span class="text-danger">*</span></label>
+                                                        <label for="cid">Payment ID <span class="text-danger">*</span></label>
                                                         <input v-model="form.cid" type="text" name="cid" class="form-control"
                                                         :class="{ 'is-invalid': form.errors.has('cid')}">
                                                         <has-error :form="form" field="cid"></has-error>
@@ -74,12 +74,12 @@
                                         </form>
                                     </div>
 
-                                    <div class="tab-pane fade" id="pillIncome" role="tabpanel" aria-labelledby="tabIncome">
+                                    <div class="tab-pane fade active show" id="pillIncome" role="tabpanel" aria-labelledby="tabIncome">
                                         <form>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="cid">Customer ID <span class="text-danger">*</span></label>
+                                                        <label for="cid">Payment ID <span class="text-danger">*</span></label>
                                                         <input v-model="form.cid" type="text" name="cid" class="form-control"
                                                         :class="{ 'is-invalid': form.errors.has('cid')}">
                                                         <has-error :form="form" field="cid"></has-error>

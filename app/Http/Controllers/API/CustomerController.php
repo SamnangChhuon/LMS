@@ -29,6 +29,7 @@ class CustomerController extends Controller
     public function index()
     {
         return Customer::latest()->paginate(10);
+        // return Customer::get();
     }
 
     /**

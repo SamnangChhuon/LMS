@@ -97,13 +97,13 @@ class FileController extends Controller
         $int = 0;
         if ($files) {
             foreach($files as $file){
-                // $filename = $file['name']->getClientOriginalName();
-                // $filename = time() . '.' . $file['name'];
-                // $file->storeAs('/customers/img/' . $cid , $filename);
-                // File::create([
-                //     'cid' => $cid,
-                //     'file' => $filename
-                // ]);
+                $filename = $file['name']->getClientOriginalName();
+                $filename = time() . '.' . $file['name'];
+                $file->storeAs('/customers/img/' . $cid , $filename);
+                File::create([
+                    'cid' => $cid,
+                    'file' => $filename
+                ]);
                 $int++;
                 return response()->json(['result', $file['name']]);
 
@@ -133,7 +133,11 @@ class FileController extends Controller
      */
     public function show(File $file)
     {
-        return File::where('cid', '=', $file['id'] )->get();
+        return File::where('cid', '=', $file->cid )->get();
+    }
+    public function showFile($id)
+    {
+        return File::where('cid', '=', $id )->get();
     }
 
     /**
