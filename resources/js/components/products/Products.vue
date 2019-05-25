@@ -1,5 +1,6 @@
 <template>
     <div class="container-fluid">
+        <!-- <bounce-loader></bounce-loader> -->
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
@@ -7,7 +8,7 @@
                         <h3 class="card-title">Products Table</h3>
 
                         <div class="card-tools">
-                            <router-link class="btn btn-success" :to="{name:'addNewProductPage'}">Add New <i class="fas fa-plus fa-fw"></i></router-link>
+                            <router-link class="btn btn-success" :to="{name:'AddProduct'}">Add New <i class="fas fa-plus fa-fw"></i></router-link>
                         </div>
                     </div>
 

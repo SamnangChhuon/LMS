@@ -54,7 +54,7 @@
 
                 <div class="tab-content" id="customerContent">
 
-                    <!-- Informations Tab -->
+                    <!-- Product Tab -->
                     <div class="tab-pane fade show active" id="productsTab">
                         <div class="card">
                             <div class="card-header bg-white py-3">
@@ -98,6 +98,50 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="card">
+                            <div class="card-header bg-white py-3">
+                                <h3 class="card-title m-0">Product Details</h3>
+                                <div class="card-tools">
+                                    <!-- <router-link :to="{name: 'addNewProductPage', param: {id: customer.id}}" class="btn btn-info text-white"><i class="fa fa-plus"></i> Add product</router-link> -->
+                                </div>
+                            </div>
+                            <div class="card-body p-2">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>Payment Date</th>
+                                                    <th>Installment</th>
+                                                    <th>Description</th>
+                                                    <th>Progressive %</th>
+                                                    <th>Amount</th>
+                                                    <th>Paid</th>
+                                                </tr>
+                                            </thead>
+                                            <!-- <tbody>
+                                                <tr v-for="product in customerProduct" :key="product.id">
+                                                    <td>{{ product.name }} / {{product.code}}</td>
+                                                    <td>{{ getType(product.typeid) }}</td>
+                                                    <td>$ {{ formatPrice(product.price) }}</td>
+                                                    <td>{{ product.promotion }}</td>
+                                                    <td>000</td>
+                                                    <td>1111</td>
+                                                    <td>22222</td>
+                                                </tr>
+                                                <tr v-if="customerProduct == ''" class="text-center">
+                                                    <td colspan="7">No product found.</td>
+                                                </tr>
+                                            </tbody> -->
+                                            
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
 
                     <!-- Legal Documents Tab -->

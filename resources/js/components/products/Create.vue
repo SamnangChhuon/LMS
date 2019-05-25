@@ -6,7 +6,8 @@
                     <div class="card-header">
                         <h3 class="card-title m-0"><small>Add Product</small></h3>
                         <div class="card-tools">
-                            <router-link :to="{name:'Viewcustomer'}" class="btn btn-dark btn-sm" title="Back to Products Table"><i class="fas fa-long-arrow-alt-right"></i></router-link>
+                            <router-link v-show="customer!=''" :to="{name:'Viewcustomer'}" class="btn btn-dark btn-sm" title="Back to Customer Profile"><i class="fas fa-long-arrow-alt-right"></i></router-link>
+                            <router-link v-show="customer==''" :to="{name:'Products'}" class="btn btn-dark btn-sm" title="Back to Products Table"><i class="fas fa-long-arrow-alt-right"></i></router-link>
                         </div>
                     </div>
 
@@ -14,7 +15,7 @@
                         <div class="row">
                             <div class="col-md-6 pb-4">
                                 <form @submit.prevent="editModeProduct ? updateProduct() : createProduct()" @keydown="formProduct.onKeydown($event)">
-                                    <div class="row">
+                                    <div v-show="customer" class="row">
                                         <div class="col-md-6">
                                             <strong>Customer ID</strong>
                                             <p>CID {{ customer.id }}</p>
@@ -24,8 +25,8 @@
                                             <p v-if="customer.firstname != null && customer.lastname != null">
                                                 {{ (customer.sex == 'male') ? 'Mr. ' : 'Ms/Mrs. ' }}{{ customer.firstname + ' ' + customer.lastname }}</p>
                                         </div>
+                                        <div class="col-md-12"><hr></div>
                                     </div>
-                                    <hr>
                                     <div>
                                         <strong>General</strong>
                                         <p class="text-muted">Change general information for this product</p>
@@ -141,7 +142,8 @@
                                         </div>
                                         <div class="col-md-12">
                                             <hr>
-                                            <router-link :to="{name:'Viewcustomer'}" class="btn btn-secondary" title="Back to Customer">Cancel</router-link>
+                                            <!-- <router-link v-if="customer!=''" :to="{name:'Viewcustomer'}" class="btn btn-secondary" title="Back to Customer">Cancel</router-link>
+                                            <router-link v-else :to="{name:'Products'}" class="btn btn-secondary" title="Back to Products">Cancel</router-link> -->
                                             <div class="float-right">
                                                 <button type="button" @click="resetProductForm()" class="btn btn-danger">Clear</button>
                                                 <button v-show="editModeProduct" type="submit" class="btn btn-success">Update <i class="fas fa-pencil-alt fa-fw"></i></button>
@@ -413,10 +415,12 @@
                 this.url = '';
             },
             loadCustomer(id = this.$route.params.id) {
-                axios.get("/api/customer/" + id )
-                .then((response) => {
-                    this.customer = response.data
-                });
+                if (id!='') {
+                    axios.get("/api/customer/" + id )
+                    .then((response) => {
+                        this.customer = response.data
+                    });
+                }
             },
             // loadProductUpdate(id = this.$route.params.id) {
             //     if (id != null) {

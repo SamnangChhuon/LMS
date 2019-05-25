@@ -57,7 +57,10 @@ Vue.use(VueInputMask)
 import Vuetable from 'vuetable-2';
 Vue.use(Vuetable)
 
+import Vue from 'vue'
+import vSelect from 'vue-select'
 
+Vue.component('v-select', vSelect);
 
 let routes = [
     // Dasboard
@@ -96,12 +99,22 @@ let routes = [
             breadcrumb: 'Add New Product'
         } 
     },
+    // Product
     { 
         path: '/products', 
         name: 'Products',
         component: require('./components/products/Products.vue').default, 
         meta: {
             breadcrumb: 'Products'
+        } 
+    },
+    //  Product > Add
+    { 
+        path: '/products/add', 
+        name: 'AddProduct',
+        component: require('./components/products/Create.vue').default, 
+        meta: {
+            breadcrumb: 'Add Product'
         } 
     },
     // Promotion
@@ -245,6 +258,9 @@ Vue.component('customer-detail', require('./components/components/datatable/Cust
 
 const VueUploadComponent = require('vue-upload-component')
 Vue.component('file-upload', VueUploadComponent)
+
+Vue.component('bounce-loader', require('./components/components/vue-spinner/BounceLoader.vue').default);
+
 
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
