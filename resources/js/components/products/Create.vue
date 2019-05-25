@@ -57,21 +57,6 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="categoryid">Product Category</label>
-                                                <div class="input-group">
-                                                    <select name="categoryid" v-model="formProduct.categoryid" id="categoryid" class="form-control" :class="{ 'is-valid': formProduct.errors.has('categoryid') }">
-                                                        <option value="">Select an option</option>
-                                                        <option :value="category.id" v-for="category in categories.data" :key="category.id">{{ category.cate_name }}</option>
-                                                    </select>
-                                                    <has-error :form="formProduct" field="categoryid"></has-error>
-                                                    <span class="input-group-append">
-                                                        <button type="button" class="btn btn-success" id="btnCreateCategory" @click="createCategory()" data-toggle="modal" data-target="#createProductCategory"><i class="fas fa-plus"></i></button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
                                                 <label for="typeid">Product Type</label>
                                                 <div class="input-group">
                                                     <select name="typeid" v-model="formProduct.typeid" id="typeid" class="form-control" :class="{ 'is-valid': formProduct.errors.has('typeid') }">
@@ -155,44 +140,6 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
-                                    <div class="col-md-12 mb-3">
-                                        <table style="width:100%">
-                                            <tr>
-                                                <td><h5>Product Category Table</h5></td>
-                                                <td class="fa-pull-right">
-                                                    <button type="button" class="btn btn-success" id="btnCreateCategory" @click="createCategory()" data-toggle="modal" data-target="#createProductCategory">New Category <i class="fas fa-plus"></i></button>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        
-                                        <table class="table table-hover table-sm">
-                                            <thead class="thead-dark">
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th>Product Category</th>
-                                                    <th>Modified Time</th>
-                                                    <th>Modify</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="(category, index) in categories.data" :key="category.id">
-                                                    <td>{{ index + 1 }}</td>
-                                                    <td>{{ category.cate_name }}</td>
-                                                    <td>{{ category.created_at | myDate }}</td>
-                                                    <td>
-                                                        <a href="#" @click="editProductCategory(category)"><i class="fas fa-edit text-info"></i></a>
-                                                        |
-                                                        <a href="#" @click="deleteProductCategory(category.id)"><i class="fas fa-trash text-danger"></i></a>
-                                                    </td>
-                                                </tr>
-                                                
-                                            </tbody>
-                                        </table>
-                                        <pagination :data="categories" @pagination-change-page="getCategories"></pagination>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <hr>
-                                    </div>
                                     <div class="col-md-12 mt-3">
                                         <table style="width:100%">
                                             <tr>
@@ -235,36 +182,6 @@
                     <div class="card-footer">
                         
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Model Product Category -->
-        <div class="modal fade" id="createProductCategory" tabindex="100" role="dialog" >
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Creating New Product Category</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-
-                    <form @submit.prevent="editModeProductCategory ? updateProductCategory() : createProductCategory()" @keydown="formCate.onKeydown($event)">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="cate_name">Product Category <span class="text-danger">*</span></label>
-                                <input v-model="formCate.cate_name" type="text" name="cate_name" class="form-control" :class="{ 'is-invalid': formCate.errors.has('cate_name')}">
-                                <has-error :form="formCate" field="cate_name"></has-error>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button v-show="editModeProductCategory" type="submit" id="btnCreateProductCategory" name="submitCreateProductCategory" class="btn btn-success">Update Category <i class="fas fa-pencil-alt fa-fw"></i></button>
-                            <button v-show="!editModeProductCategory" type="submit" id="btnCreateProductCategory" name="submitCreateProductCategory" class="btn btn-primary">Add Category <i class="fas fa-plus fa-fw"></i></button>
-                        </div>
-                    </form>
-
                 </div>
             </div>
         </div>
@@ -329,14 +246,9 @@
                     name: '',
                     code:'',
                     description: '',
-                    categoryid: '',
                     typeid: '',
                     price: '',
                     promotion: 'no',
-                }),
-                formCate: new Form({
-                    id: '',
-                    cate_name: '',
                 }),
                 formType: new Form({
                     id: '',
@@ -501,116 +413,6 @@
                 });
             },
 
-            // Product Category
-            createCategory() {
-                this.editModeProductCategory = false;
-                this.formCate.clear(); // Clear Errors Form
-                this.formCate.reset();  // Clear Input Form
-                $('#createProductCategory').modal('show');
-            },
-            createProductCategory(){
-                this.$Progress.start();
-                this.formCate.post('/api/productCategory')
-                .then((response) => {
-                    if (response.data.existed) {
-                        this.$Progress.fail();
-                        Swal.fire({
-                            title: 'Duplicate Data!!!',
-                            text: 'Category\'s already existed',
-                            type: 'error',
-                            confirmButtonText: 'Close',
-                        })
-                        $('input[name=cate_name]').addClass('is-invalid');
-                        setTimeout(function () { 
-                            $('input[name=cate_name]').removeClass('is-invalid');
-                        }, 5000);
-                    } else {
-                        Fire.$emit('reloadCategories');
-                        $('#createProductCategory').modal('hide');
-                        toast.fire({
-                            type: 'success',
-                            title: 'Category added in successfully'
-                        })
-                        this.$Progress.finish();
-                    }
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
-            },
-            indexProductCategory() {
-                axios.get("/api/productCategory").then(({ data }) => (this.categories = data));
-            },
-            getCategories(page = 1){
-                axios.get('/api/productCategory?page=' + page)
-                    .then(response => {
-                        this.categories = response.data;
-                    });
-            },
-            editProductCategory(category){
-                this.editModeProductCategory = true;
-                this.formCate.reset(); // Reset the modal
-                this.formCate.clear();
-                $('#createProductCategory').modal('show');
-                this.formCate.fill(category); // Pass the data to the modal
-            },
-            updateProductCategory() {
-                this.$Progress.start();
-                this.formCate.put('/api/productCategory/' + this.formCate.id)
-                .then((response) => {
-                    if (response.data.existed) {
-                        this.$Progress.fail();
-                        Swal.fire({
-                            title: 'Duplicate Data!!!',
-                            text: 'Category\'s already existed',
-                            type: 'error',
-                            confirmButtonText: 'Close',
-                        })
-                        $('input[name=cate_name]').addClass('is-invalid');
-                        setTimeout(function () { 
-                            $('input[name=cate_name]').addClass('is-invalid');
-                        }, 4000);
-                    } else {
-                        Fire.$emit('reloadCategories'); 
-                        $('#createProductCategory').modal('hide');
-                        Swal.fire(
-                            'Updated!',
-                            'Category\'s name has been updated.',
-                            'success'
-                        )
-                        this.$Progress.finish();
-                    }
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
-            },
-            deleteProductCategory(id) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    // Send requesst to the server
-                    if (result.value) {
-                        this.formCate.delete('/api/productCategory/' + id).then(() => {
-                            Swal.fire(
-                                'Deleted!',
-                                'Category\'s has been deleted.',
-                                'success'
-                            )
-                            Fire.$emit('reloadCategories'); // Register new event "reloadData"
-                        }).catch(() => {
-                            Swal.fire("Failed!", "There was something wrong.", "warning");
-                        });
-                    }
-                })
-            },
-
             // Product Type
             createType() {
                 this.editModeProductType = false;
@@ -724,11 +526,6 @@
         created() {
             this.loadCustomer();
             // this.loadProductUpdate();
-
-            this.indexProductCategory();
-            Fire.$on('reloadCategories', () => {
-                this.indexProductCategory();
-            });
 
             this.indexProductType();
             Fire.$on('reloadTypes', () => {

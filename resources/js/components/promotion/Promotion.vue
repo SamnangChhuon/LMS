@@ -155,6 +155,7 @@
                     description: '',
                     validFromDate: '',
                     validToDate: '',
+                    pid:'',
                     proType: '',
                     proNumber: '',
                     proProduct: '',

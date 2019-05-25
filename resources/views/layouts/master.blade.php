@@ -12,6 +12,8 @@
   
   <link rel="icon" href="{{ asset('/img/logo.png') }}" type="image/png" sizes="16x16">
   <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('/vendor/cropperjs/css/cropper.css') }}">
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper" id="app">
@@ -25,15 +27,15 @@
         <a class="nav-link" data-widget="pushmenu" href="#" title="Toggle"><i class="fa fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <router-link to="/customer" class="nav-link">Customers</router-link>
       </li>
     </ul>
 
     <!-- SEARCH FORM -->
-    <div class="form-inline ml-3">
+    {{-- <div class="form-inline ml-3">
       <div class="input-group input-group-sm">
         <input class="form-control form-control-navbar" @keyup="searchit" v-model="search" type="search" placeholder="Search" aria-label="Search">
         <div class="input-group-append">
@@ -42,7 +44,7 @@
           </button>
         </div>
       </div>
-    </div>
+    </div> --}}
 
         <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -95,12 +97,12 @@
               <p>Dashboard</p>
             </router-link>
           </li>
-          {{-- <li class="nav-item">
+          <li class="nav-item">
             <router-link :to="{name: 'Reports'}" class="nav-link">
               <i class="nav-icon fas fa-file-alt"></i>
               <p>Reports</p>
             </router-link>
-          </li> --}}
+          </li>
           <li class="nav-item">
             <router-link :to="{name: 'Customers'}" class="nav-link">
               <i class="nav-icon fas fa-user-tie"></i>
@@ -217,6 +219,7 @@
 @endauth
 
 <script src="{{ asset('/js/app.js') }}"></script>
+<script src="{{ asset('/vendor/cropperjs/js/cropper.js') }}"></script>
 
 </body>
 </html>

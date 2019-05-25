@@ -27,6 +27,10 @@ class ProductController extends Controller
     {
         return Product::latest()->paginate(10);
     }
+    public function getProducts()
+    {
+        return Product::get();
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -83,6 +87,10 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         return Product::where('cid', '=', $product['id'] )->get();
+    }
+
+    public function getProduct(Product $product){
+        return Product::where('id', '=', $product['id'] )->get();
     }
 
     /**

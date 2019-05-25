@@ -25,39 +25,56 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="product">Product Type<span class="text-danger">*</span></label>
-                                                        <select name="" class="form-control">
-                                                            <option value="">1</option>
-                                                            <option value="">2</option>
-                                                            <option value="">3</option>
+                                                        <label for="product">Product <span class="text-danger">*</span></label>
+                                                        <select v-model="formPay.typeid" name="typeid" class="form-control" :class="{ 'is-valid': formPay.errors.has('typeid') }" @change="onChange($event)">
+                                                            <option value="">Please Select Type</option>
+                                                            <option :value="product.id" v-for="product in products" :key="product.id">
+                                                                {{product.name}}
+                                                            </option>
                                                         </select>
-                                                        <has-error :form="formSale" field="product"></has-error>
+                                                        <has-error :form="formPay" field="cid"></has-error>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="pricing">Pricing <span class="text-danger">*</span></label>
-                                                        <input v-model="formSale.pricing" type="text" name="pricing" class="form-control" :class="{ 'is-invalid': formSale.errors.has('pricing')}">
-                                                        <has-error :form="formSale" field="pricing"></has-error>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
+                                                            </div>
+                                                            <input :value="pricing" type="text" name="pricing" class="form-control" placeholder="0.00" disabled>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group" :class="{ 'is-valid': formSale.errors.has('promotion') }">
+                                                    <div class="form-group" :class="{ 'is-valid': formPay.errors.has('promotion') }">
                                                         <label>Do you want to add Promotion for this product ?</label>
                                                         <br>
-                                                        <p-radio class="p-default p-round mr-4" v-model="formSale.promotion" name="promotion" value="yes" 
+                                                        <p-radio class="p-default p-round mr-4" name="promotion"
                                                         color="primary-o">Yes</p-radio>
-                                                        <p-radio class="p-default p-round" v-model="formSale.promotion" name="promotion" value="no" 
-                                                        color="primary-o">No</p-radio>
-                                                        <has-error :form="formSale" field="promotion"></has-error>
+                                                        <p-radio class="p-default p-round" name="promotion"
+                                                        color="primary-o" checked>No</p-radio>
+                                                        <has-error :form="formPay" field="pmid"></has-error>
                                                     </div>
-                                                    <div class="form-group" v-if="formSale.promotion == 'yes'">
+                                                    <div class="form-group">
                                                         <button type="button" class="btn btn-success" id="btnAddPromotion" data-toggle="modal" data-target="#addPromotion">Add Promotion <i class="fas fa-plus"></i></button>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="input-group boxed">
+                                                            <div class="input-group-prepend">
+                                                                <input type="radio" name="proType" id="soldout" value="soldout" v-model="productStatus">
+                                                                <label for="soldout">Sold Out</label>
+                                                                <input type="radio" name="proType" id="block" value="block" v-model="productStatus">
+                                                                <label for="block">Block</label>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <label v-if="productStatus === 'block'">Time Period: {{new Date().getDate()}} + plus 1 week </label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="productDes">Product Description</label>
-                                                        <textarea v-model="formSale.productDes" name="productDes" class="form-control" rows="3" :class="{ 'is-invalid': formSale.errors.has('productDes') }"></textarea>
-                                                        <has-error :form="formSale" field="productDes"></has-error>
+                                                        <textarea v-model="formPay.productDes" name="productDes" class="form-control" rows="3" :class="{ 'is-invalid': formPay.errors.has('productDes') }" disabled></textarea>
+                                                        <has-error :form="formPay" field="productDes"></has-error>
                                                     </div>
                                                     <hr>
                                                 </div>
@@ -68,40 +85,42 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="cid">Customer <span class="text-danger">*</span></label>
-                                                        <select name="" class="form-control">
-                                                            <option value="">1</option>
-                                                            <option value="">2</option>
-                                                            <option value="">3</option>
+                                                        <select v-model="formPay.cid" name="cid" class="form-control" :class="{ 'is-valid': formPay.errors.has('cid') }">
+                                                            <option value="">Please Select Customer</option>
+                                                            <option :value="customer.id" v-for="customer in customers" :key="customer.id">
+                                                                {{customer.firstname + ' ' + customer.lastname}}
+                                                            </option>
                                                         </select>
+                                                        <has-error :form="formPay" field="cid"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="custPhone">Personal Phone <span class="text-danger">*</span></label>
-                                                        <input v-model="formSale.custPhone" type="text" name="custPhone" class="form-control" :class="{ 'is-invalid': formSale.errors.has('custPhone')}">
-                                                        <has-error :form="formSale" field="custPhone"></has-error>
+                                                        <input v-model="formPay.custPhone" type="text" name="custPhone" class="form-control" :class="{ 'is-invalid': formPay.errors.has('custPhone')}">
+                                                        <has-error :form="formPay" field="custPhone"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="personalPhone">Email <span class="text-danger">*</span></label>
-                                                        <input v-model="formSale.custEmail" type="text" name="custEmail" class="form-control" :class="{ 'is-invalid': formSale.errors.has('custEmail')}">
-                                                        <has-error :form="formSale" field="custEmail"></has-error>
+                                                        <input v-model="formPay.custEmail" type="text" name="custEmail" class="form-control" :class="{ 'is-invalid': formPay.errors.has('custEmail')}">
+                                                        <has-error :form="formPay" field="custEmail"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="custRemark">Remark</label>
-                                                        <textarea v-model="formSale.custRemark" name="custRemark" class="form-control" rows="3" :class="{ 'is-invalid': formSale.errors.has('custRemark') }"></textarea>
-                                                        <has-error :form="formSale" field="custRemark"></has-error>
+                                                        <textarea v-model="formPay.custRemark" name="custRemark" class="form-control" rows="3" :class="{ 'is-invalid': formPay.errors.has('custRemark') }"></textarea>
+                                                        <has-error :form="formPay" field="custRemark"></has-error>
                                                     </div>
                                                     <hr>
                                                 </div>
-                                                <div v-if="formSale.loanType == 'pay'" class="col-md-12">
+                                                <div v-if="formPay.loanType == 'pay'" class="col-md-12">
                                                     <strong>Detail</strong>
                                                     <p>Add information in here to create pay</p>
                                                 </div>
-                                                <div v-if="formSale.loanType == 'repayment'" class="col-md-12">
+                                                <div v-if="formPay.loanType == 'repayment'" class="col-md-12">
                                                     <strong>Detail</strong>
                                                     <p>Add information in here to create repayment</p>
                                                 </div>
@@ -116,17 +135,17 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
                                                             </div>
-                                                            <input v-model="formSale.principalAmount" type="text" name="principalAmount" class="form-control" placeholder="0.00"
-                                                            :class="{ 'is-invalid': formSale.errors.has('principalAmount')}">
-                                                            <has-error :form="formSale" field="principalAmount"></has-error>
+                                                            <input v-model="formPay.principalAmount" type="text" name="principalAmount" class="form-control" placeholder="0.00"
+                                                            :class="{ 'is-invalid': formPay.errors.has('principalAmount')}">
+                                                            <has-error :form="formPay" field="principalAmount"></has-error>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="loanReleaseDate">Payment Date <span class="text-danger">*</span></label>
-                                                        <input v-model="formSale.loanReleaseDate" type="date" name="loanReleaseDate" class="form-control" :class="{ 'is-invalid': formSale.errors.has('loanReleaseDate')}">
-                                                        <has-error :form="formSale" field="loanReleaseDate"></has-error>
+                                                        <input v-model="formPay.loanReleaseDate" type="date" name="loanReleaseDate" class="form-control" :class="{ 'is-invalid': formPay.errors.has('loanReleaseDate')}">
+                                                        <has-error :form="formPay" field="loanReleaseDate"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -136,6 +155,16 @@
                                                             <option value="">Wing</option>
                                                             <option value="">ABA</option>
                                                             <option value="">Cash</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="receivedBy">Sale Incharge <span class="text-danger">*</span></label>
+                                                        <select class="form-control" name="" id="">
+                                                            <option value="">1</option>
+                                                            <option value="">2</option>
+                                                            <option value="">3</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -158,33 +187,33 @@
                                                             <option value="">2</option>
                                                             <option value="">3</option>
                                                         </select>
-                                                        <has-error :form="formSale" field="product"></has-error>
+                                                        <has-error :form="formPay" field="product"></has-error>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="pricing">Pricing <span class="text-danger">*</span></label>
-                                                        <input v-model="formSale.pricing" type="text" name="pricing" class="form-control" :class="{ 'is-invalid': formSale.errors.has('pricing')}">
-                                                        <has-error :form="formSale" field="pricing"></has-error>
+                                                        <input v-model="formPay.pricing" type="text" name="pricing" class="form-control" :class="{ 'is-invalid': formPay.errors.has('pricing')}">
+                                                        <has-error :form="formPay" field="pricing"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group" :class="{ 'is-valid': formSale.errors.has('promotion') }">
+                                                    <div class="form-group" :class="{ 'is-valid': formPay.errors.has('promotion') }">
                                                         <label>Do you want to add Promotion for this product ?</label>
                                                         <br>
-                                                        <p-radio class="p-default p-round mr-4" v-model="formSale.promotion" name="promotion" value="yes" 
+                                                        <p-radio class="p-default p-round mr-4" v-model="formPay.promotion" name="promotion" value="yes" 
                                                         color="primary-o">Yes</p-radio>
-                                                        <p-radio class="p-default p-round" v-model="formSale.promotion" name="promotion" value="no" 
+                                                        <p-radio class="p-default p-round" v-model="formPay.promotion" name="promotion" value="no" 
                                                         color="primary-o">No</p-radio>
-                                                        <has-error :form="formSale" field="promotion"></has-error>
+                                                        <has-error :form="formPay" field="promotion"></has-error>
                                                     </div>
-                                                    <div class="form-group" v-if="formSale.promotion == 'yes'">
+                                                    <div class="form-group" v-if="formPay.promotion == 'yes'">
                                                         <button type="button" class="btn btn-success" id="btnAddPromotion" data-toggle="modal" data-target="#addPromotion">Add Promotion <i class="fas fa-plus"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="productDes">Product Description</label>
-                                                        <textarea v-model="formSale.productDes" name="productDes" class="form-control" rows="3" :class="{ 'is-invalid': formSale.errors.has('productDes') }"></textarea>
-                                                        <has-error :form="formSale" field="productDes"></has-error>
+                                                        <textarea v-model="formPay.productDes" name="productDes" class="form-control" rows="3" :class="{ 'is-invalid': formPay.errors.has('productDes') }"></textarea>
+                                                        <has-error :form="formPay" field="productDes"></has-error>
                                                     </div>
                                                     <hr>
                                                 </div>
@@ -200,36 +229,36 @@
                                                             <option value="">2</option>
                                                             <option value="">3</option>
                                                         </select>
-                                                        <has-error :form="formSale" field="cid"></has-error>
+                                                        <has-error :form="formPay" field="cid"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="custPhone">Personal Phone <span class="text-danger">*</span></label>
-                                                        <input v-model="formSale.custPhone" type="text" name="custPhone" class="form-control" :class="{ 'is-invalid': formSale.errors.has('custPhone')}">
-                                                        <has-error :form="formSale" field="custPhone"></has-error>
+                                                        <input v-model="formPay.custPhone" type="text" name="custPhone" class="form-control" :class="{ 'is-invalid': formPay.errors.has('custPhone')}">
+                                                        <has-error :form="formPay" field="custPhone"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="personalPhone">Email <span class="text-danger">*</span></label>
-                                                        <input v-model="formSale.custEmail" type="text" name="custEmail" class="form-control" :class="{ 'is-invalid': formSale.errors.has('custEmail')}">
-                                                        <has-error :form="formSale" field="custEmail"></has-error>
+                                                        <input v-model="formPay.custEmail" type="text" name="custEmail" class="form-control" :class="{ 'is-invalid': formPay.errors.has('custEmail')}">
+                                                        <has-error :form="formPay" field="custEmail"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="custRemark">Remark</label>
-                                                        <textarea v-model="formSale.custRemark" name="custRemark" class="form-control" rows="3" :class="{ 'is-invalid': formSale.errors.has('custRemark') }"></textarea>
-                                                        <has-error :form="formSale" field="custRemark"></has-error>
+                                                        <textarea v-model="formPay.custRemark" name="custRemark" class="form-control" rows="3" :class="{ 'is-invalid': formPay.errors.has('custRemark') }"></textarea>
+                                                        <has-error :form="formPay" field="custRemark"></has-error>
                                                     </div>
                                                     <hr>
                                                 </div>
-                                                <div v-if="formSale.loanType == 'pay'" class="col-md-12">
+                                                <div v-if="formPay.loanType == 'pay'" class="col-md-12">
                                                     <strong>Detail</strong>
                                                     <p>Add information in here to create pay</p>
                                                 </div>
-                                                <div v-if="formSale.loanType == 'repayment'" class="col-md-12">
+                                                <div v-if="formPay.loanType == 'repayment'" class="col-md-12">
                                                     <strong>Detail</strong>
                                                     <p>Add information in here to create repayment</p>
                                                 </div>
@@ -296,6 +325,16 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="receivedBy">Sale Incharge <span class="text-danger">*</span></label>
+                                                        <select class="form-control" name="" id="">
+                                                            <option value="">1</option>
+                                                            <option value="">2</option>
+                                                            <option value="">3</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -324,11 +363,34 @@
     export default {
         data() {
             return {
-                formSale: new Form({
-                    loanType: 'pay'
+                customers: {},
+                products: {},
+                pricing: '',
+                currentDate: '',
+                productStatus: '',
+                formPay: new Form({
+                    typeid: '',
+                    pmid: '',
+                    cid: '',
+                    loanType: 'pay',
                 }),
                 formRepayment: new Form({})
             }
         },
+        methods: {
+            loadCustomers(){
+                axios.get("/api/getCustomers").then(({ data }) => (this.customers = data));
+            },
+            loadProducts(){
+                axios.get("/api/getProducts").then(({ data }) => (this.products = data));
+            },
+            onChange(event){
+            }
+
+        },
+        created(){
+            this.loadProducts();
+            this.loadCustomers();
+        }
     }
 </script>

@@ -20,8 +20,8 @@
                         <div class="col-md-6">
                            <div class="widget-user-header bg-info-active">
                                 <div class="widget-user-image">
-                                    <img v-if="customer.sex === 'male'" class="img-circle elevation-2" src="/img/user/none/male_user.png" alt="User Avatar">
-                                    <img v-else-if="customer.sex === 'female'" class="img-circle elevation-2" src="/img/user/none/female_user.png" alt="User Avatar">
+                                    <img v-if="customer.sex === 'male'" class="img-circle elevation-2" src="/img/user/none/male_user.png" alt="User Avatar" @click="avatarModel">
+                                    <img v-else-if="customer.sex === 'female'" class="img-circle elevation-2" src="/img/user/none/female_user.png" alt="User Avatar" @click="avatarModel">
                                 </div>
                                 <h3 class="widget-user-username">{{ customer.firstname + ' ' + customer.lastname }}</h3>
                                 <h5 class="widget-user-desc">CID {{ customer.id }}</h5>
@@ -591,12 +591,18 @@
                 </div>
             </div>
         </div>
+
+        <!-- Customer Upload Profile Model -->
+        <div class="modal fade" id="avatarCustomer" aria-hidden="true">
+            <customer-avatar></customer-avatar>
+        </div>
+
     </div>
 </template>
 
 
 <script>
-export default {
+    export default {
         data() {
             return {
                 customerProduct: [],
@@ -638,6 +644,10 @@ export default {
             }
         },
         methods: {
+            avatarModel(){
+                $('#avatarCustomer').modal('show');
+            },
+
             // Price for Format
             formatPrice(value) {
                 let val = (value/1).toFixed(2).replace(',', '.')

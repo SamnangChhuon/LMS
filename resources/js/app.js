@@ -57,6 +57,9 @@ Vue.use(VueInputMask)
 import Vuetable from 'vuetable-2';
 Vue.use(Vuetable)
 
+import Cropper from 'cropperjs';
+window.Cropper = Cropper
+
 import Vue from 'vue'
 import vSelect from 'vue-select'
 
@@ -151,6 +154,15 @@ let routes = [
         component: require('./components/Developer.vue').default, 
         meta: {
             breadcrumb: 'Developer'
+        } 
+    },
+    // Report
+    { 
+        path: '/reports', 
+        name: 'Reports',
+        component: require('./components/reports/Reports.vue').default, 
+        meta: {
+            breadcrumb: 'Reports'
         } 
     },
     // Profile of User
@@ -258,6 +270,8 @@ Vue.component('customer-detail', require('./components/components/datatable/Cust
 
 const VueUploadComponent = require('vue-upload-component')
 Vue.component('file-upload', VueUploadComponent)
+
+Vue.component('customer-avatar', require('./components/components/modal/CustomerAvatar.vue').default)
 
 Vue.component('bounce-loader', require('./components/components/vue-spinner/BounceLoader.vue').default);
 

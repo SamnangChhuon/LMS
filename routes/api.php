@@ -29,7 +29,17 @@ Route::apiResources([
 Route::get('profile', 'API\UserController@profile');
 Route::get('findUser', 'API\UserController@search');
 Route::put('profile', 'API\UserController@updateProfile');
+
 Route::post('inputFile/{cid}', 'API\FileController@storeFileById');
 Route::get('showFile/{id}', 'API\FileController@showFile');
+
+Route::put('customer/avatar', 'API\CustomerController@uploadAvatar');
+Route::get('getCustomers', 'API\CustomerController@getCustomers');
+
+Route::get('getProducts', 'API\ProductController@getProducts');
+Route::get('getProduct/{id}', 'API\ProductController@getProduct');
+
+
+
 
 

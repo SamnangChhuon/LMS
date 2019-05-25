@@ -27,6 +27,10 @@ class ProductTypeController extends Controller
     {
         return ProductType::latest()->paginate(10);
     }
+    public function getTypes()
+    {
+        return ProductType::get();
+    }
 
     /**
      * Show the form for creating a new resource.

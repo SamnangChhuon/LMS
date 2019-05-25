@@ -29,7 +29,10 @@ class CustomerController extends Controller
     public function index()
     {
         return Customer::latest()->paginate(10);
-        // return Customer::get();
+    }
+
+    public function getCustomers(){
+        return Customer::get();
     }
 
     /**
@@ -136,6 +139,26 @@ class CustomerController extends Controller
 
                 return response()->json(['success' => 'Customer\'s update in successfully.']);
             }
+        }
+    }
+
+    public function uploadAvatar(Request $request, $id){
+        $customer = Customer::findOrFail($id);
+
+        $currentPhoto = $customer->photo;
+        if ($request->photo != $currentPhoto) {
+            // Convert the name of photo to another unique name
+            $name = time() . '.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
+            // Put the photo to the folder in "public"
+            \Image::make($request->photo)->storeAs('/customers/img/' . $id .$name);
+            // $name->storeAs('/customers/img/' . $id);
+
+            $request->merge(['photo' => $name]);
+
+            // $customerPhoto = public_path('img/profile/').$currentPhoto;
+            // if (file_exists($customerPhoto)) {
+            //     @unlink($customerPhoto);
+            // }
         }
     }
 

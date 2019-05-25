@@ -22,7 +22,7 @@ class CreateTblProductsTable extends Migration
             $table->bigInteger('categoryid')->index()->unsigned()->default('0');
             $table->bigInteger('typeid')->index()->unsigned()->default('0');
             $table->double('price', 16, 2)->nullable()->unsigned();
-            $table->string('status', 10)->default('active');
+            $table->string('status', 10)->default('available');
             $table->timestamps();
         });
     }

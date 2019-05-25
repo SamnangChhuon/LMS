@@ -19,6 +19,7 @@
                                     <th>Product ID</th>
                                     <th>Product Name</th>
                                     <th>Product Code</th>
+                                    <th>Status</th>
                                     <th>Modified Time</th>
                                     <th>Modify</th>
                                 </tr>
@@ -26,6 +27,11 @@
                                     <td>{{ product.id }}</td>
                                     <td>{{ product.name }}</td>
                                     <td>{{ product.code }}</td>
+                                    <td>
+                                        <span class="right badge badge-success" v-if="product.status === 'available'">{{ product.status | upText }}</span>
+                                        <span class="right badge badge-danger" v-else-if="product.status === 'soldout'">{{ product.status | upText }}</span>
+                                        <span class="right badge badge-warning" v-else-if="product.status === 'block'">{{ product.status | upText }}</span>
+                                    </td>
                                     <td>{{ product.created_at | myDate }}</td>
                                     <td>
                                         <router-link :to="{name: 'addNewProductPage', params: {id: product.id}}"><i class="fas fa-edit text-info"></i></router-link>
@@ -51,12 +57,17 @@
     export default {
         data() {
             return {
+                search: '',
                 url: null,
                 products: {},
                 category: {},
             }
         },
         methods: {
+            // Search
+            searchit: _.debounce(() => {
+                Fire.$emit('searching');
+            }, 1000),
             getAllProducts(page = 1){
                 axios.get('/api/product?page=' + page)
                 .then(response => {
