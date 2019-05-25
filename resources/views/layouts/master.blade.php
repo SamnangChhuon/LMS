@@ -141,6 +141,12 @@
                   <p>Users</p>
                 </router-link>
               </li>
+              <li class="nav-item">
+                <router-link :to="{name: 'developer'}" class="nav-link">
+                  <i class="nav-icon fas fa-cogs"></i>
+                  <p>Developer</p>
+                </router-link>
+              </li>
               {{-- <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
@@ -149,12 +155,7 @@
               </li> --}}
             </ul>
           </li>
-          <li class="nav-item">
-            <router-link :to="{name: 'developer'}" class="nav-link">
-              <i class="nav-icon fas fa-cogs"></i>
-              <p>Developer</p>
-            </router-link>
-          </li>
+          
           @endcan
           
           <li class="nav-item">

@@ -7401,8 +7401,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -80674,64 +80672,10 @@ var render = function() {
                             ],
                             1
                           )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-6" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _vm._m(4),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "input-group" },
-                            [
-                              _vm._m(5),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.formProduct.price,
-                                    expression: "formProduct.price"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                class: {
-                                  "is-invalid": _vm.formProduct.errors.has(
-                                    "price"
-                                  )
-                                },
-                                attrs: {
-                                  type: "text",
-                                  name: "price",
-                                  placeholder: "0.00"
-                                },
-                                domProps: { value: _vm.formProduct.price },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.formProduct,
-                                      "price",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("has-error", {
-                                attrs: { form: _vm.formProduct, field: "price" }
-                              })
-                            ],
-                            1
-                          )
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "form-group" }, [
-                          _vm._m(6),
+                          _vm._m(4),
                           _vm._v(" "),
                           _c(
                             "div",
@@ -80776,6 +80720,58 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-6" }, [
+                        _c("div", { staticClass: "form-group" }, [
+                          _vm._m(5),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "input-group" },
+                            [
+                              _vm._m(6),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.formProduct.price,
+                                    expression: "formProduct.price"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  "is-invalid": _vm.formProduct.errors.has(
+                                    "price"
+                                  )
+                                },
+                                attrs: {
+                                  type: "text",
+                                  name: "price",
+                                  placeholder: "0.00"
+                                },
+                                domProps: { value: _vm.formProduct.price },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.formProduct,
+                                      "price",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.formProduct, field: "price" }
+                              })
+                            ],
+                            1
+                          )
+                        ]),
+                        _vm._v(" "),
                         _c(
                           "div",
                           {
@@ -81275,6 +81271,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "image" } }, [
+      _vm._v("File Image"),
+      _c("small", [_vm._v("(.png, .jpg, .jpeg, .webp, .gif)")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "price" } }, [
       _vm._v("Product Price "),
       _c("span", { staticClass: "text-danger" }, [_vm._v("*")])
@@ -81288,15 +81293,6 @@ var staticRenderFns = [
       _c("span", { staticClass: "input-group-text" }, [
         _c("i", { staticClass: "fa fa-dollar-sign" })
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "image" } }, [
-      _vm._v("File Image"),
-      _c("small", [_vm._v("(.png, .jpg, .jpeg, .webp, .gif)")])
     ])
   },
   function() {

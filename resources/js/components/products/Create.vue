@@ -69,19 +69,6 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="price">Product Price <span class="text-danger">*</span></label>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
-                                                    </div>
-                                                    <input v-model="formProduct.price" type="text" name="price" class="form-control" placeholder="0.00"
-                                                    :class="{ 'is-invalid': formProduct.errors.has('price')}">
-                                                    <has-error :form="formProduct" field="price"></has-error>
-                                                </div>
-                                            </div>
                                             <div class="form-group">
                                                 <label for="image">File Image<small>(.png, .jpg, .jpeg, .webp, .gif)</small></label>
                                                 <div class="input-group">
@@ -102,6 +89,17 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="price">Product Price <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
+                                                    </div>
+                                                    <input v-model="formProduct.price" type="text" name="price" class="form-control" placeholder="0.00"
+                                                    :class="{ 'is-invalid': formProduct.errors.has('price')}">
+                                                    <has-error :form="formProduct" field="price"></has-error>
+                                                </div>
+                                            </div>
                                             <div class="form-group" :class="{ 'is-valid': formProduct.errors.has('promotion') }">
                                                 <label>Do you want to add Promotion for this product ?</label>
                                                 <br>

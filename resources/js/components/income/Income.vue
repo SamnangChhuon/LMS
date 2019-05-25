@@ -26,20 +26,20 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="cid">Payment ID <span class="text-danger">*</span></label>
-                                                        <input v-model="form.cid" type="text" name="cid" class="form-control"
-                                                        :class="{ 'is-invalid': form.errors.has('cid')}">
-                                                        <has-error :form="form" field="cid"></has-error>
+                                                        <input v-model="formIncome.cid" type="text" name="cid" class="form-control"
+                                                        :class="{ 'is-invalid': formIncome.errors.has('cid')}">
+                                                        <has-error :form="formIncome" field="cid"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="type">Expense Type <span class="text-danger">*</span></label>
                                                         <div class="input-group">
-                                                            <select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-valid': form.errors.has('type') }">
+                                                            <select name="type" v-model="formIncome.type" id="type" class="form-control" :class="{ 'is-valid': formIncome.errors.has('type') }">
                                                                 <option value="">Select an option</option>
                                                                 <!-- <option :value="type.id" v-for="type in types.data" :key="type.id">{{ type.type_name }}</option> -->
                                                             </select>
-                                                            <has-error :form="form" field="type"></has-error>
+                                                            <has-error :form="formIncome" field="type"></has-error>
                                                             <span class="input-group-append">
                                                                 <button type="button" class="btn btn-success" id="btnCreateType" @click="createType()" data-toggle="modal" data-target="#createProductType"><i class="fas fa-plus"></i></button>
                                                             </span>
@@ -49,24 +49,24 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="date">Expense Date <span class="text-danger">*</span></label>
-                                                        <input v-model="form.date" type="text" name="date" class="form-control"
-                                                        :class="{ 'is-invalid': form.errors.has('date')}">
-                                                        <has-error :form="form" field="date"></has-error>
+                                                        <input v-model="formIncome.date" type="date" name="date" class="form-control"
+                                                        :class="{ 'is-invalid': formIncome.errors.has('date')}">
+                                                        <has-error :form="formIncome" field="date"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="amount">Amount <span class="text-danger">*</span></label>
-                                                        <input v-model="form.amount" type="text" name="amount" class="form-control"
-                                                        :class="{ 'is-invalid': form.errors.has('amount')}">
-                                                        <has-error :form="form" field="amount"></has-error>
+                                                        <input v-model="formIncome.amount" type="text" name="amount" class="form-control"
+                                                        :class="{ 'is-invalid': formIncome.errors.has('amount')}">
+                                                        <has-error :form="formIncome" field="amount"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="description">Description</label>
-                                                        <textarea v-model="form.description" name="description" id="description" class="form-control" rows="4" :class="{ 'is-invalid': form.errors.has('description') }"></textarea>
-                                                        <has-error :form="form" field="description"></has-error>
+                                                        <textarea v-model="formIncome.description" name="description" id="description" class="form-control" rows="4" :class="{ 'is-invalid': formIncome.errors.has('description') }"></textarea>
+                                                        <has-error :form="formIncome" field="description"></has-error>
                                                     </div>
                                                 </div>
                                             </div>
@@ -80,20 +80,20 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="cid">Payment ID <span class="text-danger">*</span></label>
-                                                        <input v-model="form.cid" type="text" name="cid" class="form-control"
-                                                        :class="{ 'is-invalid': form.errors.has('cid')}">
-                                                        <has-error :form="form" field="cid"></has-error>
+                                                        <input v-model="formExpense.cid" type="text" name="cid" class="form-control"
+                                                        :class="{ 'is-invalid': formExpense.errors.has('cid')}">
+                                                        <has-error :form="formExpense" field="cid"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="type">Income Type <span class="text-danger">*</span></label>
                                                         <div class="input-group">
-                                                            <select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-valid': form.errors.has('type') }">
+                                                            <select name="type" v-model="formExpense.type" id="type" class="form-control" :class="{ 'is-valid': formExpense.errors.has('type') }">
                                                                 <option value="">Select an option</option>
                                                                 <!-- <option :value="type.id" v-for="type in types.data" :key="type.id">{{ type.type_name }}</option> -->
                                                             </select>
-                                                            <has-error :form="form" field="type"></has-error>
+                                                            <has-error :form="formExpense" field="type"></has-error>
                                                             <span class="input-group-append">
                                                                 <button type="button" class="btn btn-success" id="btnCreateType" @click="createType()" data-toggle="modal" data-target="#createProductType"><i class="fas fa-plus"></i></button>
                                                             </span>
@@ -103,24 +103,29 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="date">Income Date <span class="text-danger">*</span></label>
-                                                        <input v-model="form.date" type="text" name="date" class="form-control"
-                                                        :class="{ 'is-invalid': form.errors.has('date')}">
-                                                        <has-error :form="form" field="date"></has-error>
+                                                        <input v-model="formExpense.date" type="date" name="date" class="form-control"
+                                                        :class="{ 'is-invalid': formExpense.errors.has('date')}">
+                                                        <has-error :form="formExpense" field="date"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="amount">Amount <span class="text-danger">*</span></label>
-                                                        <input v-model="form.amount" type="text" name="amount" class="form-control"
-                                                        :class="{ 'is-invalid': form.errors.has('amount')}">
-                                                        <has-error :form="form" field="amount"></has-error>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i class="fa fa-dollar-sign"></i></span>
+                                                            </div>
+                                                            <input v-model="formExpense.amount" type="text" name="amount" class="form-control" placeholder="0.00"
+                                                            :class="{ 'is-invalid': formExpense.errors.has('amount')}">
+                                                            <has-error :form="formExpense" field="amount"></has-error>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="description">Description</label>
-                                                        <textarea v-model="form.description" name="description" id="description" class="form-control" rows="4" :class="{ 'is-invalid': form.errors.has('description') }"></textarea>
-                                                        <has-error :form="form" field="description"></has-error>
+                                                        <textarea v-model="formExpense.description" name="description" id="description" class="form-control" rows="4" :class="{ 'is-invalid': formExpense.errors.has('description') }"></textarea>
+                                                        <has-error :form="formExpense" field="description"></has-error>
                                                     </div>
                                                 </div>
                                             </div>
@@ -129,11 +134,6 @@
                                     </div>
 
                                 </div>
-                            </div>
-
-                            <div class="col-md-7">
-                                <strong>Customer ID</strong>
-                                <p>CID</p>
                             </div>
                         </div>
                     </div>
@@ -151,10 +151,44 @@
         data() {
             return {
                 type: 'expense',
-                form: new Form({
-
+                formIncome: new Form({
+                    cid: ''
                 }),
+                formExpense: new Form({
+                    
+                })
             }
+        },
+        methods: {
+            createIncome(){
+                this.$Progress.start();
+                this.formIncome.post('/api/income')
+                .then((response) => {
+                    if (response.data.error) {
+                        this.$Progress.fail();
+                        Swal.fire({
+                            title: 'Insert Error!!!',
+                            text: 'Income can not insert.',
+                            type: 'error',
+                            confirmButtonText: 'Close',
+                        })
+                    } else {
+                        toast.fire({
+                            type: 'success',
+                            title: 'Income added in successfully'
+                        })
+                        this.formIncome.clear();
+                        this.formIncome.reset();
+                        this.$Progress.finish();
+                    }
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+            }
+        },
+        created() {
+            
         },
     }
 </script>

@@ -23,7 +23,10 @@ Route::apiResources([
     'product'  =>  'API\ProductController',
     'productCategory'  =>  'API\ProductCategoryController',
     'productType'  =>  'API\ProductTypeController',
-    'file'  =>  'API\FileController'
+    'file'  =>  'API\FileController',
+
+    'income'  =>  'API\IncomeController',
+    'expense'  =>  'API\ExpenseController'
     ]);
     
 Route::get('profile', 'API\UserController@profile');
