@@ -11,60 +11,39 @@
                         </div>
                     </div>
                     <div class="card-body p-0">
-                        <!-- <div class="row p-2">
+                        <div class="row p-2">
                             <div class="col-md-6">
                                 <div class="form-inline">
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Search: </span>
                                         </div>
-                                        <input class="form-control" v-model="searchFor" @keyup.enter="setFilter">
+                                        <input class="form-control" @keyup="searchit" v-model="search" type="search" placeholder="Search" aria-label="Search">
                                     </div>
-                                    <button class="btn btn-primary mb-2 mr-sm-2" @click="setFilter">Go</button>
-                                    <button class="btn btn-secondary mb-2" @click="resetFilter">Reset</button>
+                                    <button class="btn btn-primary mb-2 mr-sm-2"  v-on:click="searchit">Go</button>
+                                    <button class="btn btn-secondary mb-2" v-on:click="loadCustomers">Reset</button>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="fa-pull-right">
-                                    <button class="btn btn-light" id="settingsBtn" @click="showSettingsModal">
-                                    <i class="fas fa-cog"></i> Settings
-                                    </button>
+                                <div class="form-inline fa-pull-right ">
+                                    <div class="form-group mb-2">
+                                        <label for="">Sort By: </label>
+                                    </div>
+                                    <div class="form-group mx-sm-3 mb-2">
+                                        <select name="" class="form-control">
+                                            <option value="">ID</option>
+                                            <option value="">First Name</option>
+                                            <option value="">Last Name</option>
+                                            <option value="">Business Phone</option>
+                                            <option value="">Personal Phone</option>
+                                            <option value="">Registered Date</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="table-responsive pb-3 border-top">
-                            <vuetable ref="vuetable"
-                            class="table table-hover"
-                            api-url="/api/customer"
-                            :fields="fields"
-                            pagination-path="pagination"
-                            :sort-order="sortOrder"
-                            :multi-sort="true"
-                            :css="css.table"
-                            :per-page="perPage"
-                            :append-params="moreParams"
-                            detail-row-component="my-detail-row"
-                            detail-row-transition="expand"
-                            :row-class="rowClassCB"
-                            @vuetable:pagination-data="onPaginationData"
-                            @vuetable:load-success="onLoadSuccess"
-                            @vuetable:loading="showLoader"
-                            @vuetable:loaded="hideLoader"
-                            @vuetable:cell-clicked="onCellClicked"
-                            @vuetable:data-reset="onDataReset"
-                            ></vuetable>
-                            <div class="p-2 vuetable-pagination">
-                                <vuetable-pagination-info ref="paginationInfo"
-                                info-class="pagination-info"
-                                    :info-template="paginationInfoTemplate"
-                                ></vuetable-pagination-info>
-                                <component :is="paginationComponent" ref="pagination"
-                                :css="css.pagination"
-                                    @vuetable-pagination:change-page="onChangePage"
-                                ></component>
-                            </div>
-
-                            <!-- <table class="table table-hover">
+                            <table class="table table-striped table-hover">
                                 <tbody>
                                     <tr>
                                         <th>CID</th>
@@ -76,8 +55,8 @@
                                         <th>Registered At</th>
                                         <th>Modify</th>
                                     </tr>
-                                    <tr v-for="customer in customers.data" :key="customer.id">
-                                        <td><router-link :to="{name: 'Viewcustomer', params: {id: customer.id}}">{{ customer.id }}</router-link></td>
+                                    <tr v-for="customer in customers.data" :key="customer.id" @click="ViewCustomer(customer.id)">
+                                        <td>{{ customer.id }}</td>
                                         <td>{{ customer.firstname }}</td>
                                         <td>{{ customer.lastname }}</td>
                                         <td>{{ customer.type | upText }}</td>
@@ -91,12 +70,21 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table> -->
+                            </table>
                         </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <!-- <pagination :data="customers" @pagination-change-page="getAllCustomer"></pagination> -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>Showing record: {{customers.from}} to {{customers.to}} from {{customers.total}} item(s)</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="fa-pull-right">
+                                    <pagination :data="customers" @pagination-change-page="getAllCustomer"></pagination>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -310,49 +298,15 @@ import moment from 'moment'
                     country: '',
                     remarkaddress: ''
                 }),
-
-                loading: '',
-                searchFor: '',
-                moreParams: { aa: 1111, bb: 222 },
-                fields: tableColumns,
-                vuetableFields: false,
-                sortOrder: [
-                    { field: 'id', sortField: 'id', direction: 'asc'},
-                ],
-                multiSort: true,
-                paginationComponent: 'vuetable-pagination',
-                perPage: 10,
-                paginationInfoTemplate: 'Showing record: {from} to {to} from {total} item(s)',
-                lang: lang,
-                css: {
-                    table: {
-                        tableClass: 'table table-bordered table-striped table-hover',
-                        ascendingIcon: 'fas fa-chevron-up',
-                        descendingIcon: 'fas fa-chevron-down'
-                    },
-                    pagination: {
-                        wrapperClass: 'pagination',
-                        activeClass: 'active',
-                        disabledClass: 'disabled',
-                        pageClass: 'page',
-                        linkClass: 'link',
-                        icons: {
-                            first: 'fas fa-angle-double-left',
-                            prev: 'fas fa-angle-left',
-                            next: 'fas fa-angle-right',
-                            last: 'fas fa-angle-double-right',
-                        },
-                    },
-                    icons: {
-                        first: 'fas fa-step-backward',
-                        prev: 'fas fa-chevron-left',
-                        next: 'fas fa-chevron-right',
-                        last: 'fas fa-step-forward',
-                    },
-                },
+                search:'',
             }
         },
+
         methods: {
+            searchit: _.debounce(() => {
+                Fire.$emit('searching');
+            }, 500),
+
             collapseToggle: function(){
                 $('#contactInformation').removeClass('show');
                 $('#addressInformation').removeClass('show');
@@ -363,9 +317,12 @@ import moment from 'moment'
                         this.customers = response.data;
                     });
             },
+            
 
             loadCustomers() {
-                axios.get("api/customer").then(({ data }) => (this.customers = data));
+                axios.get("api/customer").then(response => {
+                        this.customers = response.data;
+                    });
             },
 
             createCustomer() {
@@ -479,270 +436,33 @@ import moment from 'moment'
                 this.form.reset();  // Clear Input Form
                 $('#addNew').modal('show');
             },
-
-            // Datatable
-            transform (data) {
-                let transformed = {}
-                transformed.pagination = {
-                    total: data.total,
-                    per_page: data.per_page,
-                    current_page: data.current_page,
-                    last_page: data.last_page,
-                    next_page_url: data.next_page_url,
-                    prev_page_url: data.prev_page_url,
-                    from: data.from,
-                    to: data.to
-                }
-                transformed.data = []
-                data = data.data
-                for (let i = 0; i < data.length; i++) {
-                    transformed['data'].push({
-                        id: data[i].id,
-                        firstname: data[i].firstname,
-                        lastname: data[i].lastname,
-                        sex: data[i].sex,
-                        companyname: data[i].companyname,
-                        email: data[i].email,
-                        line: data[i].line,
-                        website: data[i].website,
-                        type: data[i].type,
-                        businessphone: data[i].businessphone,
-                        personalphone: data[i].personalphone,
-                        created_at: data[i].created_at,
-                    })
-                }
-                return transformed
-            },
-            showSettingsModal () {
-                let self = this
-                $('#settingsModal').modal({
-                    detachable: true,
-                    onVisible () {
-                        $('.ui.checkbox').checkbox()
-                    }
-                }).modal('show')
-            },
-            showLoader () {
-                this.loading = 'loading'
-            },
-            hideLoader () {
-                this.loading = ''
-            },
-            allCap (value) {
-                if (value != null) {
-                    return value.charAt(0).toUpperCase() + value.slice(1);
-                }
-            },
-            formatDate(value){
-                return moment(value).format('MMMM Do YYYY');
-            },
-            setFilter () {
-                this.moreParams['filter'] = this.searchFor
-                this.$nextTick(() => {
-                    this.$refs.vuetable.refresh()
-                })
-            },
-            resetFilter () {
-                this.searchFor = ''
-                this.setFilter()
-            },
-            preg_quote ( str ) {
-            // http://kevin.vanzonneveld.net
-            // +   original by: booeyOH
-            // +   improved by: Ates Goral (http://magnetiq.com)
-            // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // +   bugfixed by: Onno Marsman
-            // *     example 1: preg_quote("$40");
-            // *     returns 1: '\$40'
-            // *     example 2: preg_quote("*RRRING* Hello?");
-            // *     returns 2: '\*RRRING\* Hello\?'
-            // *     example 3: preg_quote("\\.+*?[^]$(){}=!<>|:");
-            // *     returns 3: '\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:'
-                return (str+'').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1");
-            },
-            highlight (needle, haystack) {
-                return haystack.replace(
-                    new RegExp('(' + this.preg_quote(needle) + ')', 'ig'),
-                    '<span class="bg-warning">$1</span>'
-                )
-            },
-            rowClassCB (data, index) {
-                return (index % 2) === 0 ? 'odd' : 'even'
-            },
-            onCellClicked (data, field, event) {
-                if (field.name !== '__actions') {
-                    this.$refs.vuetable.toggleDetailRow(data.id)
-                }
-            },
-            onLoadSuccess (response) {
-                // set pagination data to pagination-info component
-                this.$refs.paginationInfo.setPaginationData(response.data)
-
-                let data = response.data.data
-                if (this.searchFor !== '') {
-                    for (let n in data) {
-                        data[n].id = this.highlight(this.searchFor, data[n].id)
-                        data[n].firstname = this.highlight(this.searchFor, data[n].firstname)
-                        data[n].lastname = this.highlight(this.searchFor, data[n].lastname)
-                        data[n].type = this.highlight(this.searchFor, data[n].type)
-                        data[n].businessphone = this.highlight(this.searchFor, data[n].businessphone)
-                        data[n].personalphone = this.highlight(this.searchFor, data[n].personalphone)
-                        data[n].created_at = this.highlight(this.searchFor, data[n].created_at)
-                    }
-                }
-            },
-            onLoadError (response) {
-                if (response.status == 400) {
-                    sweetAlert('Something\'s Wrong!', response.data.message, 'error')
-                } else {
-                    sweetAlert('Oops', E_SERVER_ERROR, 'error')
-                }
-            },
-            onPaginationData (tablePagination) {
-                this.$refs.paginationInfo.setPaginationData(tablePagination)
-                this.$refs.pagination.setPaginationData(tablePagination)
-            },
-            onChangePage (page) {
-                this.$refs.vuetable.changePage(page)
-            },
-            onDataReset () {
-                console.log('onDataReset')
-                this.$refs.paginationInfo.resetData()
-                this.$refs.pagination.resetData()
-            },
-        },
-        watch: {
-            'perPage' (val, oldVal) {
-                this.$nextTick(function() {
-                    this.$refs.vuetable.refresh()
-                })
-            },
-            'paginationComponent' (val, oldVal) {
-                this.$nextTick(function() {
-                    this.$refs.pagination.setPaginationData(this.$refs.vuetable.tablePagination)
-                })
+            ViewCustomer(value){
+                this.$router.push({ name: 'Viewcustomer', params: { id: value }});
             }
-        },
-        events: {
-            'filter-set' (filterText) {
-                this.moreParams = {
-                    filter: filterText
-                }
-                Vue.nextTick( () => this.$refs.vuetable.refresh() )
-            },
-            'filter-reset' () {
-                this.moreParams = {}
-                Vue.nextTick( () => this.$refs.vuetable.refresh() )
-            }
+
         },
         created() {
+            
             this.$Progress.start();
             this.loadCustomers();
             this.$Progress.finish();
             
+            Fire.$on('searching', () => {
+                let query = this.search;
+                this.$Progress.start();
+                axios.get('/api/findCustomer?q=' + query)
+                .then((data) => {
+                    this.customers = data.data;
+                    this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                })
+            });
+
             Fire.$on('reloadData', () => {
                 this.loadCustomers();
             }); // using event AfterCreate
         },
     }
-
-    let lang = {
-        'firstname': 'First Name',
-        'lastname': 'Last Name',
-    }
-
-    let tableColumns = [
-        {
-            name: '__component:customer-detail',
-            title: 'Details',
-            titleClass: 'text-center',
-            dataClass: 'text-center',
-            width: '80px'
-        },
-        {
-            name: 'id',
-            title: 'CID',
-            sortField: 'id',
-            width: '80px'
-        },
-        {
-            name: 'firstname',
-            title: 'First Name',
-            sortField: 'firstname',
-        },
-        {
-            name: 'lastname',
-            title: 'Last Name',
-            sortField: 'lastname',
-        },
-        {
-            name: 'type',
-            title: 'Type',
-            sortField: 'type',
-            callback: 'allCap'
-        },
-        {
-            name: 'businessphone',
-            title: 'Business Phone',
-            sortField: 'businessphone',
-        },
-        {
-            name: 'personalphone',
-            title: 'Personal Phone',
-            sortField: 'personalphone',
-        },
-        {
-            name: 'created_at',
-            title: 'Registered At',
-            sortField: 'created_at',
-            titleClass: 'text-center',
-            dataClass: 'text-center',
-            callback: 'formatDate'
-        },
-        {
-            name: '__component:custom-actions',
-            title: 'Modify',
-            titleClass: 'text-center',
-            dataClass: 'text-center',
-        },
-    ]
 </script>
-
-<style>
-    .table{margin: 0;}
-.pagination {
-  margin: 0;
-  float: right;
-}
-.pagination a.page {
-  border: 1px solid lightgray;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin-right: 2px;
-}
-.pagination a.page.active {
-  color: white;
-  background-color: #337ab7;
-  border: 1px solid lightgray;
-  border-radius: 3px;
-  padding: 5px 10px;
-  margin-right: 2px;
-}
-.pagination a.btn-nav {
-  border: 1px solid lightgray;
-  border-radius: 3px;
-  padding: 5px 7px;
-  margin-right: 2px;
-}
-.pagination a.btn-nav.disabled {
-  color: lightgray;
-  border: 1px solid lightgray;
-  border-radius: 3px;
-  padding: 5px 7px;
-  margin-right: 2px;
-  cursor: not-allowed;
-}
-.pagination-info {
-  float: left;
-}
-</style>

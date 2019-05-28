@@ -60,9 +60,7 @@ Vue.use(Vuetable)
 import Cropper from 'cropperjs';
 window.Cropper = Cropper
 
-import Vue from 'vue'
 import vSelect from 'vue-select'
-
 Vue.component('v-select', vSelect);
 
 let routes = [
@@ -79,7 +77,7 @@ let routes = [
     { 
         path: '/customer', 
         name: 'Customers',
-        component: require('./components/customers/Customer2.vue').default, 
+        component: require('./components/customers/Customer.vue').default, 
         meta: {
             breadcrumb: 'Customer'
         } 

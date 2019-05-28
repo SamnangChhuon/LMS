@@ -20,8 +20,10 @@
                         <div class="col-md-6">
                            <div class="widget-user-header bg-info-active">
                                 <div class="widget-user-image">
-                                    <img v-if="customer.sex === 'male'" class="img-circle elevation-2" src="/img/user/none/male_user.png" alt="User Avatar" @click="avatarModel">
-                                    <img v-else-if="customer.sex === 'female'" class="img-circle elevation-2" src="/img/user/none/female_user.png" alt="User Avatar" @click="avatarModel">
+                                    <img v-if="customer.photo == null" class="img-customer img-circle elevation-2"
+                                     :src="(customer.sex == 'male') ? '/img/user/none/male_user.png' : '/img/user/none/female_user.png'" alt="User Avatar">
+                                    <img v-else class="img-customer img-circle elevation-2" :src="'/img/customers/'+  customer.id + '/' + customer.photo" alt="User Avatar">
+                                    <span class="hover-image img-circle" @click="avatarModel"></span>
                                 </div>
                                 <h3 class="widget-user-username">{{ customer.firstname + ' ' + customer.lastname }}</h3>
                                 <h5 class="widget-user-desc">CID {{ customer.id }}</h5>
@@ -594,7 +596,32 @@
 
         <!-- Customer Upload Profile Model -->
         <div class="modal fade" id="avatarCustomer" aria-hidden="true">
-            <customer-avatar></customer-avatar>
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <form class="form-horizontal">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Customer Profile</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="text-center">
+                                <label for="avatar">
+                                    <img :src="previewAvatar()"  class="img-circle w-100" />
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <input type="file" @change="updateProfile" ref="imageInput">
+                            </div>
+                        </div>
+                        <div class="modal-footer d-block">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+                            <button type="submit" class="btn btn-success fa-pull-right" @click.prevent="updateInfo">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -635,6 +662,9 @@
                     country: '',
                     remarkaddress: ''
                 }),
+                formAvatar: new Form({
+                    photo: ''
+                }),
 
                 files: [],
                 formFile: new Form({
@@ -646,6 +676,51 @@
         methods: {
             avatarModel(){
                 $('#avatarCustomer').modal('show');
+                this.$refs.imageInput.value = null;
+                this.formAvatar.clear();
+                this.formAvatar.reset();
+            },
+            previewAvatar() {
+                let photo = (this.formAvatar.photo.length > 200) ? this.formAvatar.photo : "/img/user/avatar.png" ;
+                return photo;
+                this.$Progress.finish();
+            },
+            updateProfile(e) {
+                // console.log('uploading');
+                let file = e.target.files[0];
+                // console.log(file);
+                let reader = new FileReader();
+
+                if (file['size'] < 2111775 ) {
+                    reader.onloadend = (file) => {
+                        // console.log('RESULT', reader.result);
+                        this.$Progress.start();
+                        this.formAvatar.photo = reader.result;
+                    }
+                    reader.readAsDataURL(file);
+                    this.$Progress.finish();
+
+                } else {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: "You are uploading a large file!",
+                    })
+                }
+            },
+            updateInfo() {
+                this.$Progress.start();
+                this.formAvatar.put('/api/customerAvatar/' + this.$route.params.id)
+                .then(() => {
+                    $('#avatarCustomer').modal('show');
+                    this.$refs.imageInput.value = null;
+                    this.formAvatar.clear();
+                    this.formAvatar.reset();
+                    this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
             },
 
             // Price for Format
@@ -914,3 +989,21 @@
         }
     }
 </script>
+
+<style>
+    .hover-image{
+        width: 65px;
+        height: 65px;
+        display: none;
+        cursor: pointer;
+        background-color: rgba(86, 86, 86, 0.6);
+        background-image: url('/img/icon/photo-camera.png');
+        background-position: center;
+        position: absolute;
+        background-repeat: no-repeat;
+    }
+    .widget-user-image:hover .hover-image{
+        display: block;
+    }
+
+</style>

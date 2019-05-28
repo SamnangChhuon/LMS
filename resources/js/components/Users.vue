@@ -22,17 +22,15 @@
                                         </div>
                                         <input class="form-control form-control-navbar" @keyup="searchit" v-model="search" type="search" placeholder="Search" aria-label="Search">
                                     </div>
-                                    <button class="btn btn-primary mb-2 mr-sm-2" v-on:click="searchit">Go</button>
+                                    <button class="btn btn-primary mb-2 mr-2" v-on:click="searchit">Go</button>
                                     <button class="btn btn-secondary mb-2" v-on:click="loadUsers">Reset</button>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-inline fa-pull-right ">
-                                    <div class="form-group mb-2">
+                                <div class="form-inline">
+                                    <div class="form-group mb-2 ml-sm-auto">
                                         <label>Sort By: </label>
-                                    </div>
-                                    <div class="form-group mb-2">
-                                        <select v-model="sortBy" class="form-control mx-sm-3" @change="sortUsers">
+                                        <select v-model="sortBy" class="form-control mx-sm-2" @change="sortUsers">
                                             <option value="">Select an option</option>
                                             <option value="id">ID</option>
                                             <option value="name">Name</option>
@@ -40,8 +38,10 @@
                                             <option value="type">Type</option>
                                             <option value="created_at">Registered Date</option>
                                         </select>
-                                        <button class="btn btn-link" @click="direction()" v-show="sortDirection === 'asc'"><i class="fas fa-sort-amount-up"></i></button>
-                                        <button class="btn btn-link" @click="direction()" v-show="sortDirection === 'desc'"><i class="fas fa-sort-amount-down"></i></button>
+                                        <div>
+                                            <button class="btn btn-link" @click="direction()" v-show="sortDirection === 'asc'"><i class="fas fa-sort-amount-up"></i></button>
+                                            <button class="btn btn-link" @click="direction()" v-show="sortDirection === 'desc'"><i class="fas fa-sort-amount-down"></i></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +167,7 @@
                 }),
                 sortBy: '',
                 sortDirection: 'desc',
-                search:''
+                search:'',
             }
         },
         methods:{
@@ -278,6 +278,11 @@
             }
         },
         created() {
+
+            this.$Progress.start();
+            this.loadUsers();
+            this.$Progress.finish();
+
             Fire.$on('searching', () => {
                 let query = this.search;
                 this.$Progress.start();
@@ -303,7 +308,6 @@
                     this.$Progress.fail();
                 })
             });
-            this.loadUsers();
             Fire.$on('AfterCreate', () => {
                 this.loadUsers();
             }); // using event AfterCreate
@@ -311,3 +315,7 @@
         }
     }
 </script>
+
+<style>
+    .v-select .vs__dropdown-toggle{padding-top: 5px;}
+</style>

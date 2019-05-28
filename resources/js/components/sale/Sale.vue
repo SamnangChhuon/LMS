@@ -364,7 +364,7 @@
         data() {
             return {
                 customers: {},
-                products: {},
+                products: [],
                 pricing: '',
                 currentDate: '',
                 productStatus: '',

@@ -142,26 +142,6 @@ class CustomerController extends Controller
         }
     }
 
-    public function uploadAvatar(Request $request, $id){
-        $customer = Customer::findOrFail($id);
-
-        $currentPhoto = $customer->photo;
-        if ($request->photo != $currentPhoto) {
-            // Convert the name of photo to another unique name
-            $name = time() . '.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
-            // Put the photo to the folder in "public"
-            \Image::make($request->photo)->storeAs('/customers/img/' . $id .$name);
-            // $name->storeAs('/customers/img/' . $id);
-
-            $request->merge(['photo' => $name]);
-
-            // $customerPhoto = public_path('img/profile/').$currentPhoto;
-            // if (file_exists($customerPhoto)) {
-            //     @unlink($customerPhoto);
-            // }
-        }
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -175,5 +155,45 @@ class CustomerController extends Controller
         // Delete the user
         $customer->delete();
         return ['status' => 'Customer Deleted'];
+    }
+
+    public function searchCustomer() {
+        if($search = \Request::get('q')) {
+            $customers = Customer::where(function($query) use ($search){
+            $query->where('firstname', 'LIKE', "%$search%")
+                ->orWhere('lastname', 'LIKE', "%$search%")
+                ->orWhere('type', 'LIKE', "%$search%")
+                ->orWhere('businessphone', 'LIKE', "%$search%")
+                ->orWhere('personalphone', 'LIKE', "%$search%")
+                ->orWhere('created_at', 'LIKE', "%$search%");
+            })->toJson();
+        } else {
+            $customers = Customer::latest()->paginate(10);
+        }
+        return $customers;
+    }
+
+    public function avatarUpload(Request $request, $id){
+        $customer = Customer::where('id', '=', $id)->first();
+
+        $currentPhoto = $customer->photo;
+        if ($request->photo != $currentPhoto) {
+            // Convert the name of photo to another unique name
+            $name = time() . '.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
+            // Put the photo to the folder in "public"
+            \Image::make($request->photo)->save(public_path('img/customers/'). $customer->id.'/' .$name);
+
+            $request->merge(['photo' => $name]);
+
+            $customerPhoto = public_path('img/customers/'). $customer->id.'/' .$currentPhoto;
+            if (file_exists($customerPhoto)) {
+                @unlink($customerPhoto);
+            }
+
+            Customer::where('id', '=', $id)->update([
+                'photo' => $name
+            ]);
+            return ['status' => 'Updated Customer Profile!!'];
+        }
     }
 }
