@@ -13,7 +13,7 @@
                     </div>
 
                     <div class="card-body table-responsive p-0">
-                        <table class="table table-hover">
+                        <table id="productsTable" class="table table-hover">
                             <tbody>
                                 <tr>
                                     <th>Product ID</th>
@@ -54,6 +54,16 @@
 </template>
 
 <script>
+    // $(function () {
+    //     $('#productsTable').DataTable({
+    //         "paging": true,
+    //         "lengthChange": false,
+    //         "searching": false,
+    //         "ordering": true,
+    //         "info": true,
+    //         "autoWidth": false
+    //     });
+    // });
     export default {
         data() {
             return {

@@ -12,6 +12,7 @@
   
   <link rel="icon" href="{{ asset('/img/logo.png') }}" type="image/png" sizes="16x16">
   <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('/vendor/datatable/css/dataTables.bootstrap4.css') }}">
   <link rel="stylesheet" href="{{ asset('/vendor/cropperjs/css/cropper.css') }}">
 
 </head>
@@ -220,6 +221,8 @@
 @endauth
 
 <script src="{{ asset('/js/app.js') }}"></script>
+<script src="{{ asset('/vendor/datatable/js/jquery.dataTables.js') }}"></script>
+<script src="{{ asset('/vendor/datatable/js/dataTables.bootstrap4.js') }}"></script>
 <script src="{{ asset('/vendor/cropperjs/js/cropper.js') }}"></script>
 
 </body>

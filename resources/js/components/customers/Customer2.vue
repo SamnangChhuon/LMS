@@ -14,54 +14,35 @@
                         <div class="row p-2">
                             <div class="col-md-6">
                                 <div class="form-inline">
-                                    <!-- <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Search: </span>
                                         </div>
-                                        <input class="form-control" v-model="searchFor" @keyup.enter="setFilter">
+                                        <!-- <input class="form-control" v-model="searchFor" @keyup.enter="setFilter"> -->
                                     </div>
-                                    <button class="btn btn-primary mb-2 mr-sm-2" @click="setFilter">Go</button>
-                                    <button class="btn btn-secondary mb-2" @click="resetFilter">Reset</button> -->
+                                    <!-- <button class="btn btn-primary mb-2 mr-sm-2" @click="setFilter">Go</button> -->
+                                    <!-- <button class="btn btn-secondary mb-2" @click="resetFilter">Reset</button> -->
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <!-- <div class="fa-pull-right">
-                                    <button class="btn btn-light" id="settingsBtn" @click="showSettingsModal">
-                                    <i class="fas fa-cog"></i> Settings
-                                    </button>
-                                </div> -->
+                                <div class="form-inline fa-pull-right ">
+                                    <div class="form-group mb-2">
+                                        <label for="">Sort By: </label>
+                                    </div>
+                                    <div class="form-group mx-sm-3 mb-2">
+                                        <select name="" class="form-control">
+                                            <option value="">ID</option>
+                                            <option value="">First Name</option>
+                                            <option value="">Last Name</option>
+                                            <option value="">Business Phone</option>
+                                            <option value="">Personal Phone</option>
+                                            <option value="">Registered Date</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="table-responsive pb-3 border-top">
-                            <!-- <vuetable ref="vuetable"
-                            class="table table-hover"
-                            api-url="http://127.0.0.1:8000/api/customer"
-                            :fields="fields"
-                            pagination-path="pagination"
-                            :css="css.table"
-                            :per-page="perPage"
-                            :append-params="moreParams"
-                            detail-row-component="my-detail-row"
-                            detail-row-transition="expand"
-                            :row-class="rowClassCB"
-                            @vuetable:pagination-data="onPaginationData"
-                            @vuetable:load-success="onLoadSuccess"
-                            @vuetable:loading="showLoader"
-                            @vuetable:loaded="hideLoader"
-                            @vuetable:cell-clicked="onCellClicked"
-                            @vuetable:data-reset="onDataReset"
-                            ></vuetable>
-                            <div class="p-2 vuetable-pagination">
-                                <vuetable-pagination-info ref="paginationInfo"
-                                info-class="pagination-info"
-                                    :info-template="paginationInfoTemplate"
-                                ></vuetable-pagination-info>
-                                <component :is="paginationComponent" ref="pagination"
-                                :css="css.pagination"
-                                    @vuetable-pagination:change-page="onChangePage"
-                                ></component>
-                            </div> -->
-
                             <table class="table table-bordered table-striped table-hover">
                                 <tbody>
                                     <tr>
@@ -74,7 +55,7 @@
                                         <th>Registered At</th>
                                         <th>Modify</th>
                                     </tr>
-                                    <tr v-for="customer in customers.data" :key="customer.id" @click="rowDetails">
+                                    <tr v-for="customer in customers.data" :key="customer.id" @click="rowDetails(customer)">
                                         <td><router-link :to="{name: 'Viewcustomer', params: {id: customer.id}}">{{ customer.id }}</router-link></td>
                                         <td>{{ customer.firstname }}</td>
                                         <td>{{ customer.lastname }}</td>
@@ -310,7 +291,9 @@ import moment from 'moment'
                 }),
             }
         },
+
         methods: {
+
             collapseToggle: function(){
                 $('#contactInformation').removeClass('show');
                 $('#addressInformation').removeClass('show');
@@ -321,9 +304,12 @@ import moment from 'moment'
                         this.customers = response.data;
                     });
             },
+            
 
             loadCustomers() {
-                axios.get("api/customer").then(({ data }) => (this.customers = data));
+                axios.get("api/customer").then(response => {
+                        this.customers = response.data;
+                    });
             },
 
             createCustomer() {
@@ -438,7 +424,7 @@ import moment from 'moment'
                 $('#addNew').modal('show');
             },
             rowDetails(event){
-                console.log('rowDetails',event)
+                console.log(event)
             }
 
         },

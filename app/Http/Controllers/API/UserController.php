@@ -149,6 +149,17 @@ class UserController extends Controller
             $query->where('name', 'LIKE', "%$search%")
                 ->orWhere('email', 'LIKE', "%$search%")
                 ->orWhere('type', 'LIKE', "%$search%");
+            })->get()->toJson();
+        } else {
+            $users = User::latest()->paginate(10);
+        }
+        return $users;
+    }
+
+    public function sortUsers() {
+        if($sortBy = \Request::get('sort') || $direction = \Request::get('direction')) {
+            $users = User::where(function($query) use ($sortBy, $direction){
+                $query->orderBy("%$sortBy%", "%$direction%");
             })->paginate(10);
         } else {
             $users = User::latest()->paginate(10);

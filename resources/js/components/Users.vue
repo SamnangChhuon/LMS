@@ -11,35 +11,80 @@
                         </div>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0">
-                        <table class="table table-hover">
-                            <tbody>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Type</th>
-                                    <th>Registered At</th>
-                                    <th>Modify</th>
-                                </tr>
-                                <tr v-for="user in users.data" :key="user.id">
-                                    <td>{{ user.id }}</td>
-                                    <td>{{ user.name }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.type | upText }}</td>
-                                    <td>{{ user.created_at | myDate }}</td>
-                                    <td>
-                                        <a href="#" @click="editModal(user)"><i class="fas fa-edit text-info"></i></a>
-                                        |
-                                        <a href="#" @click="deleteUsers(user.id)"><i class="fas fa-trash text-danger"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="card-body p-0">
+                        
+                        <div class="row p-2">
+                            <div class="col-md-6">
+                                <div class="form-inline">
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Search: </span>
+                                        </div>
+                                        <input class="form-control form-control-navbar" @keyup="searchit" v-model="search" type="search" placeholder="Search" aria-label="Search">
+                                    </div>
+                                    <button class="btn btn-primary mb-2 mr-sm-2" v-on:click="searchit">Go</button>
+                                    <button class="btn btn-secondary mb-2" v-on:click="loadUsers">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inline fa-pull-right ">
+                                    <div class="form-group mb-2">
+                                        <label>Sort By: </label>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <select v-model="sortBy" class="form-control mx-sm-3" @change="sortUsers">
+                                            <option value="">Select an option</option>
+                                            <option value="id">ID</option>
+                                            <option value="name">Name</option>
+                                            <option value="email">Email</option>
+                                            <option value="type">Type</option>
+                                            <option value="created_at">Registered Date</option>
+                                        </select>
+                                        <button class="btn btn-link" @click="direction()" v-show="sortDirection === 'asc'"><i class="fas fa-sort-amount-up"></i></button>
+                                        <button class="btn btn-link" @click="direction()" v-show="sortDirection === 'desc'"><i class="fas fa-sort-amount-down"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive p-0">
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Type</th>
+                                        <th>Registered At</th>
+                                        <th>Modify</th>
+                                    </tr>
+                                    <tr v-for="user in users.data" :key="user.id">
+                                        <td>{{ user.id }}</td>
+                                        <td>{{ user.name }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.type | upText }}</td>
+                                        <td>{{ user.created_at | myDate }}</td>
+                                        <td>
+                                            <a href="#" @click="editModal(user)"><i class="fas fa-edit text-info"></i></a>
+                                            |
+                                            <a href="#" @click="deleteUsers(user.id)"><i class="fas fa-trash text-danger"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <pagination :data="users" @pagination-change-page="getResults"></pagination>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>Showing record: {{users.from}} to {{users.to}} from {{users.total}} item(s)</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="fa-pull-right">
+                                    <pagination class="" :data="users" @pagination-change-page="getResults"></pagination>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /.card -->
@@ -97,7 +142,6 @@
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                             <button v-show="editmode" type="submit" class="btn btn-success">Update <i class="fas fa-pencil-alt fa-fw"></i></button>
                             <button v-show="!editmode" type="submit" class="btn btn-primary">Create <i class="fas fa-plus fa-fw"></i></button>
-
                         </div>
                     </form>
                 </div>
@@ -120,10 +164,28 @@
                     type: '',
                     bio: '',
                     photo: ''
-                })
+                }),
+                sortBy: '',
+                sortDirection: 'desc',
+                search:''
             }
         },
         methods:{
+            sortUsers: _.debounce(() => {
+                Fire.$emit('sortUsers');
+            }, 500),
+            direction(){
+                if (this.sortDirection == 'asc') {
+                    this.sortDirection = 'desc';
+                    console.log(this.sortDirection);
+                } else {
+                    this.sortDirection = 'asc';
+                    console.log(this.sortDirection);
+                }
+            },
+            searchit: _.debounce(() => {
+                Fire.$emit('searching');
+            }, 500),
             getResults(page = 1) {
                 axios.get('api/user?page=' + page)
                     .then(response => {
@@ -189,7 +251,7 @@
                 // if (this.$gate.isAdminOrAuthor()) {
                 //     axios.get("api/user").then(({ data }) => (this.users = data));
                 // }
-                    axios.get("api/user").then(({ data }) => (this.users = data));
+                    axios.get("/api/user").then(({ data }) => (this.users = data));
 
             },
             createUser() {
@@ -217,15 +279,30 @@
         },
         created() {
             Fire.$on('searching', () => {
-                let query = this.$parent.search;
-                axios.get('api/findUser?q=' + query)
+                let query = this.search;
+                this.$Progress.start();
+                axios.get('/api/findUser?q=' + query)
                 .then((data) => {
                     this.users = data.data;
+                    this.$Progress.finish();
                 })
                 .catch(() => {
-                    
+                    this.$Progress.fail();
                 })
-            })
+            });
+            Fire.$on('sortUsers', () => {
+                let sort = this.sortBy;
+                let direction = this.sortDirection;
+                this.$Progress.start();
+                axios.get('/api/sortUsers?sort=' + sort + '&direction=' + direction )
+                .then((data) => {
+                    this.users = data.data;
+                    this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                })
+            });
             this.loadUsers();
             Fire.$on('AfterCreate', () => {
                 this.loadUsers();

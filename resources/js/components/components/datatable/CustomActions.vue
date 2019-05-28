@@ -19,6 +19,12 @@ export default {
         rowData: {
             type: Object,
             required: true
+        },
+        rowIndex: {
+            type: Number
+        },
+        options: {
+            type: Object,
         }
     },
     methods: {
