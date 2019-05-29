@@ -4828,6 +4828,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -5029,6 +5030,8 @@ __webpack_require__.r(__webpack_exports__);
     Fire.$on('reloadData', function () {
       _this6.loadCustomers();
     }); // using event AfterCreate
+
+    loader.hide();
   }
 });
 
@@ -5682,7 +5685,8 @@ __webpack_require__.r(__webpack_exports__);
       editMode: false,
       customer: {
         firstname: '',
-        lastname: ''
+        lastname: '',
+        photo: ''
       },
       form: new Form({
         id: '',
@@ -5720,18 +5724,20 @@ __webpack_require__.r(__webpack_exports__);
     avatarModel: function avatarModel() {
       $('#avatarCustomer').modal('show');
       this.$refs.imageInput.value = null;
-      this.formAvatar.clear();
-      this.formAvatar.reset();
     },
     previewAvatar: function previewAvatar() {
+      this.$Progress.start();
       var photo = this.formAvatar.photo.length > 200 ? this.formAvatar.photo : "/img/user/avatar.png";
-      return photo;
       this.$Progress.finish();
+      return photo;
+    },
+    previewCustomerAvatar: function previewCustomerAvatar() {// let avatar = (this.customer.photo == null) ? 
     },
     updateProfile: function updateProfile(e) {
       var _this = this;
 
-      // console.log('uploading');
+      this.$Progress.start(); // console.log('uploading');
+
       var file = e.target.files[0]; // console.log(file);
 
       var reader = new FileReader();
@@ -5739,8 +5745,6 @@ __webpack_require__.r(__webpack_exports__);
       if (file['size'] < 2111775) {
         reader.onloadend = function (file) {
           // console.log('RESULT', reader.result);
-          _this.$Progress.start();
-
           _this.formAvatar.photo = reader.result;
         };
 
@@ -5752,24 +5756,43 @@ __webpack_require__.r(__webpack_exports__);
           title: 'Oops...',
           text: "You are uploading a large file!"
         });
+        this.$Progress.fail();
       }
     },
     updateInfo: function updateInfo() {
       var _this2 = this;
 
       this.$Progress.start();
-      this.formAvatar.put('/api/customerAvatar/' + this.$route.params.id).then(function () {
-        $('#avatarCustomer').modal('show');
-        _this2.$refs.imageInput.value = null;
 
-        _this2.formAvatar.clear();
+      if (this.formAvatar.photo == "") {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: "Please upload the picture!"
+        });
+        this.$Progress.fail();
+      } else {
+        this.formAvatar.put('/api/customerAvatar/' + this.$route.params.id).then(function () {
+          $('#avatarCustomer').modal('hide');
+          toast.fire({
+            type: 'success',
+            title: 'Customer profile updated in successfully'
+          });
+          Fire.$emit('reloadData');
 
-        _this2.formAvatar.reset();
+          _this2.$Progress.finish();
+        })["catch"](function () {
+          if (_this2.formAvatar.photo == "") {
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: "There was something wrong."
+            });
+          }
 
-        _this2.$Progress.finish();
-      })["catch"](function () {
-        _this2.$Progress.fail();
-      });
+          _this2.$Progress.fail();
+        });
+      }
     },
     // Price for Format
     formatPrice: function formatPrice(value) {

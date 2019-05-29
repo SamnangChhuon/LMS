@@ -1,5 +1,6 @@
 <template>
     <div class="container-fluid">
+        <!-- <bounce-loader></bounce-loader> -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -442,7 +443,6 @@ import moment from 'moment'
 
         },
         created() {
-            
             this.$Progress.start();
             this.loadCustomers();
             this.$Progress.finish();
@@ -463,6 +463,8 @@ import moment from 'moment'
             Fire.$on('reloadData', () => {
                 this.loadCustomers();
             }); // using event AfterCreate
+loader.hide();
+
         },
     }
 </script>

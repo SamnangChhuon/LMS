@@ -22,7 +22,7 @@
                                 <div class="widget-user-image">
                                     <img v-if="customer.photo == null" class="img-customer img-circle elevation-2"
                                      :src="(customer.sex == 'male') ? '/img/user/none/male_user.png' : '/img/user/none/female_user.png'" alt="User Avatar">
-                                    <img v-else class="img-customer img-circle elevation-2" :src="'/img/customers/'+  customer.id + '/' + customer.photo" alt="User Avatar">
+                                    <img v-else class="img-customer img-circle elevation-2" :src="'/img/customers/'+customer.id+'/'+customer.photo" alt="User Avatar">
                                     <span class="hover-image img-circle" @click="avatarModel"></span>
                                 </div>
                                 <h3 class="widget-user-username">{{ customer.firstname + ' ' + customer.lastname }}</h3>
@@ -639,6 +639,7 @@
                 customer: {
                     firstname: '',
                     lastname: '',
+                    photo: '',
                 },
                 form: new Form({
                     id: '',
@@ -677,15 +678,18 @@
             avatarModel(){
                 $('#avatarCustomer').modal('show');
                 this.$refs.imageInput.value = null;
-                this.formAvatar.clear();
-                this.formAvatar.reset();
             },
             previewAvatar() {
-                let photo = (this.formAvatar.photo.length > 200) ? this.formAvatar.photo : "/img/user/avatar.png" ;
-                return photo;
+                this.$Progress.start();
+                let photo = (this.formAvatar.photo.length > 200) ? this.formAvatar.photo : "/img/user/avatar.png";
                 this.$Progress.finish();
+                return photo;
+            },
+            previewCustomerAvatar(){
+                // let avatar = (this.customer.photo == null) ? 
             },
             updateProfile(e) {
+                this.$Progress.start();
                 // console.log('uploading');
                 let file = e.target.files[0];
                 // console.log(file);
@@ -694,33 +698,50 @@
                 if (file['size'] < 2111775 ) {
                     reader.onloadend = (file) => {
                         // console.log('RESULT', reader.result);
-                        this.$Progress.start();
                         this.formAvatar.photo = reader.result;
                     }
                     reader.readAsDataURL(file);
                     this.$Progress.finish();
-
                 } else {
                     Swal.fire({
                         type: 'error',
                         title: 'Oops...',
                         text: "You are uploading a large file!",
-                    })
+                    });
+                    this.$Progress.fail();
                 }
             },
             updateInfo() {
                 this.$Progress.start();
-                this.formAvatar.put('/api/customerAvatar/' + this.$route.params.id)
-                .then(() => {
-                    $('#avatarCustomer').modal('show');
-                    this.$refs.imageInput.value = null;
-                    this.formAvatar.clear();
-                    this.formAvatar.reset();
-                    this.$Progress.finish();
-                })
-                .catch(() => {
+                if (this.formAvatar.photo == "") {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: "Please upload the picture!",
+                    });
                     this.$Progress.fail();
-                });
+                } else {
+                    this.formAvatar.put('/api/customerAvatar/' + this.$route.params.id)
+                    .then(() => {
+                        $('#avatarCustomer').modal('hide');
+                        toast.fire({
+                            type: 'success',
+                            title: 'Customer profile updated in successfully'
+                        })
+                        Fire.$emit('reloadData'); 
+                        this.$Progress.finish();
+                    })
+                    .catch(() => {
+                        if (this.formAvatar.photo == "") {
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Oops...',
+                                text: "There was something wrong.",
+                            })
+                        }
+                        this.$Progress.fail();
+                    });
+                }
             },
 
             // Price for Format
