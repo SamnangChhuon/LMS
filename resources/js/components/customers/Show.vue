@@ -31,9 +31,17 @@
                         </div>
                         <div class="col-md-6">
                             <div class="fa-pull-right">
-                                <div class="btn-group p-2">
-                                    <a href="#" class="btn btn-default" @click="editCustomer(customer)" title="Edit"><i class="fas fa-edit text-info"></i> Edit</a>
-                                    <a href="#" class="btn btn-default" @click="deleteCustomer(customer.id)" title="Delete"><i class="fas fa-trash text-danger"></i> Delete</a>
+                                <div class="card-tools p-2">
+                                    <a href="/customer" class="btn btn-light" title="Back"><i class="fas fa-arrow-left text-dark"></i> Back</a>
+                                    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"><i class="fas fa-cog"></i></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item" @click="editCustomer(customer)" title="Edit"><i class="fas fa-edit text-primary"></i> Edit</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item" @click="deleteCustomer(customer.id)" title="Delete"><i class="fas fa-trash text-danger"></i> Delete</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -681,7 +689,7 @@
             },
             previewAvatar() {
                 this.$Progress.start();
-                let photo = (this.formAvatar.photo.length > 200) ? this.formAvatar.photo : "/img/user/avatar.png";
+                let photo = (this.formAvatar.photo.length > 200) ? this.formAvatar.photo : "/img/profile/avatar.png";
                 this.$Progress.finish();
                 return photo;
             },

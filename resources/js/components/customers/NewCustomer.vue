@@ -1,15 +1,5 @@
 <template>
     <div class="container-fluid">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Customers Table</h3>
-
-                <div class="card-tools">
-                    <button class="btn btn-success" @click="addNewCustomer() , collapseToggle()">Add New <i class="fas fa-user-plus fa-fw"></i></button>
-                </div>
-            </div>
-        </div>
-
         <filterable v-bind="filterable">
             <thead slot="thead">
                 <tr>
@@ -23,7 +13,7 @@
                     <th>Modify</th>
                 </tr>
             </thead>
-            <tr slot-scope="{item}">
+            <tr slot-scope="{item}" @click="ViewCustomer(item.id)">
                 <td>{{item.id}}</td>
                 <td>{{item.firstname}}</td>
                 <td>{{item.lastname}}</td>
@@ -73,8 +63,51 @@
                 }
             }
         },
-        method:{
-            
+        methods:{
+            ViewCustomer(value){
+                this.$router.push({ name: 'Viewcustomer', params: { id: value }});
+            },
+            editCustomer(customer) {
+                this.editMode = true;
+                $('#warningAlert').hide(); // Hide the Warning Alert
+                this.form.reset(); // Reset the modal
+                this.form.clear();
+                $('#addNew').modal('show');
+                this.form.fill(customer); // Pass the data to the modal
+            },
+            updateCustomer(){
+                this.$Progress.start();
+                this.form.put('api/customer/' + this.form.id)
+                .then((response) => {
+                    if (response.data.existed) {
+                        this.$Progress.fail();
+                        Swal.fire({
+                            title: 'Duplicate Data!!!',
+                            text: 'Customer\'s name already existed',
+                            type: 'error',
+                            confirmButtonText: 'Close',
+                        })
+                        $('input[name=firstname]').addClass('is-invalid');
+                        $('input[name=lastname]').addClass('is-invalid');
+                        setTimeout(function () { 
+                            $('input[name=firstname]').removeClass('is-invalid');
+                            $('input[name=lastname]').removeClass('is-invalid');
+                        }, 4000);
+                    } else {
+                        Fire.$emit('reloadData'); 
+                        $('#addNew').modal('hide');
+                        Swal.fire(
+                            'Updated!',
+                            'Customer\'s information has been updated.',
+                            'success'
+                        )
+                        this.$Progress.finish();
+                    }
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+            },
         }
     }
 </script>

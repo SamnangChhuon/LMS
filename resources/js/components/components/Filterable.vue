@@ -12,6 +12,9 @@
                     </label>
                     <span>of the following:</span>
                 </div>
+                <div class="card-tools mt-1">
+                    <button class="btn btn-success" @click="addNewCustomer() , collapseToggle()">Add New <i class="fas fa-user-plus fa-fw"></i></button>
+                </div>
             </div>
             <div class="card-body">
                 <div class="filter">
@@ -138,7 +141,7 @@
                     <tbody>
                         <slot v-if="collection.data && collection.data.length"
                             v-for="item in collection.data"
-                            :item="item" @click="ViewCustomer(item.id)"
+                            :item="item"
                             ></slot>
                     </tbody>
                 </table>
@@ -392,9 +395,6 @@
                     {title: 'less than', name: 'less_than_count', parent: ['counter'], component: 'single'},
                     {title: 'greater than', name: 'greater_than_count', parent: ['counter'], component: 'single'},
                 ]
-            },
-            ViewCustomer(value){
-                this.$router.push({ name: 'Viewcustomer', params: { id: value }});
             }
         }
     }

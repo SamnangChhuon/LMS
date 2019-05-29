@@ -161,22 +161,6 @@ class CustomerController extends Controller
         return ['status' => 'Customer Deleted'];
     }
 
-    public function searchCustomer() {
-        if($search = \Request::get('q')) {
-            $customers = Customer::where(function($query) use ($search){
-            $query->where('firstname', 'LIKE', "%$search%")
-                ->orWhere('lastname', 'LIKE', "%$search%")
-                ->orWhere('type', 'LIKE', "%$search%")
-                ->orWhere('businessphone', 'LIKE', "%$search%")
-                ->orWhere('personalphone', 'LIKE', "%$search%")
-                ->orWhere('created_at', 'LIKE', "%$search%");
-            })->toJson();
-        } else {
-            $customers = Customer::latest()->paginate(10);
-        }
-        return $customers;
-    }
-
     public function avatarUpload(Request $request, $id){
         $customer = Customer::where('id', '=', $id)->first();
 
@@ -185,7 +169,7 @@ class CustomerController extends Controller
             // Convert the name of photo to another unique name
             $name = time() . '.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
             // Put the photo to the folder in "public"
-            \Image::make($request->photo)->save(public_path('img/customers/'). $customer->id.'/' .$name);
+            \Image::make($request->photo)->save(public_path('storage/customers/'). $customer->id.'/' .$name);
 
             $request->merge(['photo' => $name]);
 

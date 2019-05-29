@@ -2817,6 +2817,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3089,14 +3092,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         parent: ['counter'],
         component: 'single'
       }];
-    },
-    ViewCustomer: function ViewCustomer(value) {
-      this.$router.push({
-        name: 'Viewcustomer',
-        params: {
-          id: value
-        }
-      });
     }
   }
 });
@@ -5065,16 +5060,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5137,7 +5122,57 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  method: {}
+  methods: {
+    ViewCustomer: function ViewCustomer(value) {
+      this.$router.push({
+        name: 'Viewcustomer',
+        params: {
+          id: value
+        }
+      });
+    },
+    editCustomer: function editCustomer(customer) {
+      this.editMode = true;
+      $('#warningAlert').hide(); // Hide the Warning Alert
+
+      this.form.reset(); // Reset the modal
+
+      this.form.clear();
+      $('#addNew').modal('show');
+      this.form.fill(customer); // Pass the data to the modal
+    },
+    updateCustomer: function updateCustomer() {
+      var _this = this;
+
+      this.$Progress.start();
+      this.form.put('api/customer/' + this.form.id).then(function (response) {
+        if (response.data.existed) {
+          _this.$Progress.fail();
+
+          Swal.fire({
+            title: 'Duplicate Data!!!',
+            text: 'Customer\'s name already existed',
+            type: 'error',
+            confirmButtonText: 'Close'
+          });
+          $('input[name=firstname]').addClass('is-invalid');
+          $('input[name=lastname]').addClass('is-invalid');
+          setTimeout(function () {
+            $('input[name=firstname]').removeClass('is-invalid');
+            $('input[name=lastname]').removeClass('is-invalid');
+          }, 4000);
+        } else {
+          Fire.$emit('reloadData');
+          $('#addNew').modal('hide');
+          Swal.fire('Updated!', 'Customer\'s information has been updated.', 'success');
+
+          _this.$Progress.finish();
+        }
+      })["catch"](function () {
+        _this.$Progress.fail();
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -5151,6 +5186,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5832,7 +5875,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     previewAvatar: function previewAvatar() {
       this.$Progress.start();
-      var photo = this.formAvatar.photo.length > 200 ? this.formAvatar.photo : "/img/user/avatar.png";
+      var photo = this.formAvatar.photo.length > 200 ? this.formAvatar.photo : "/img/profile/avatar.png";
       this.$Progress.finish();
       return photo;
     },
@@ -73495,6 +73538,24 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("span", [_vm._v("of the following:")])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-tools mt-1" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-success",
+              on: {
+                click: function($event) {
+                  _vm.addNewCustomer(), _vm.collapseToggle()
+                }
+              }
+            },
+            [
+              _vm._v("Add New "),
+              _c("i", { staticClass: "fas fa-user-plus fa-fw" })
+            ]
+          )
         ])
       ]),
       _vm._v(" "),
@@ -75779,30 +75840,6 @@ var render = function() {
     "div",
     { staticClass: "container-fluid" },
     [
-      _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-header" }, [
-          _c("h3", { staticClass: "card-title" }, [_vm._v("Customers Table")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-tools" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-success",
-                on: {
-                  click: function($event) {
-                    _vm.addNewCustomer(), _vm.collapseToggle()
-                  }
-                }
-              },
-              [
-                _vm._v("Add New "),
-                _c("i", { staticClass: "fas fa-user-plus fa-fw" })
-              ]
-            )
-          ])
-        ])
-      ]),
-      _vm._v(" "),
       _c(
         "filterable",
         _vm._b(
@@ -75812,51 +75849,61 @@ var render = function() {
                 key: "default",
                 fn: function(ref) {
                   var item = ref.item
-                  return _c("tr", {}, [
-                    _c("td", [_vm._v(_vm._s(item.id))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(item.firstname))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(item.lastname))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(_vm._f("upText")(item.type)))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(item.businessphone))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(item.personalphone))]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(_vm._s(_vm._f("myDate")(item.created_at)))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c(
-                        "a",
-                        {
-                          attrs: { href: "#", title: "Edit" },
-                          on: {
-                            click: function($event) {
-                              return _vm.editCustomer(_vm.customer)
+                  return _c(
+                    "tr",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.ViewCustomer(item.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("td", [_vm._v(_vm._s(item.id))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.firstname))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.lastname))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(_vm._f("upText")(item.type)))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.businessphone))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.personalphone))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(_vm._f("myDate")(item.created_at)))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#", title: "Edit" },
+                            on: {
+                              click: function($event) {
+                                return _vm.editCustomer(_vm.customer)
+                              }
                             }
-                          }
-                        },
-                        [_c("i", { staticClass: "fas fa-edit text-info" })]
-                      ),
-                      _vm._v("\n                |\n                "),
-                      _c(
-                        "a",
-                        {
-                          attrs: { href: "#", title: "Delete" },
-                          on: {
-                            click: function($event) {
-                              return _vm.deleteCustomer(_vm.customer.id)
+                          },
+                          [_c("i", { staticClass: "fas fa-edit text-info" })]
+                        ),
+                        _vm._v("\n                |\n                "),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#", title: "Delete" },
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteCustomer(_vm.customer.id)
+                              }
                             }
-                          }
-                        },
-                        [_c("i", { staticClass: "fas fa-trash text-danger" })]
-                      )
-                    ])
-                  ])
+                          },
+                          [_c("i", { staticClass: "fas fa-trash text-danger" })]
+                        )
+                      ])
+                    ]
+                  )
                 }
               }
             ])
@@ -75964,47 +76011,55 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-md-6" }, [
               _c("div", { staticClass: "fa-pull-right" }, [
-                _c("div", { staticClass: "btn-group p-2" }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "btn btn-default",
-                      attrs: { href: "#", title: "Edit" },
-                      on: {
-                        click: function($event) {
-                          return _vm.editCustomer(_vm.customer)
-                        }
-                      }
-                    },
-                    [
-                      _c("i", { staticClass: "fas fa-edit text-info" }),
-                      _vm._v(" Edit")
-                    ]
-                  ),
+                _c("div", { staticClass: "card-tools p-2" }, [
+                  _vm._m(0),
                   _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "btn btn-default",
-                      attrs: { href: "#", title: "Delete" },
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteCustomer(_vm.customer.id)
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "dropdown-menu" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "dropdown-item",
+                        attrs: { href: "#", title: "Edit" },
+                        on: {
+                          click: function($event) {
+                            return _vm.editCustomer(_vm.customer)
+                          }
                         }
-                      }
-                    },
-                    [
-                      _c("i", { staticClass: "fas fa-trash text-danger" }),
-                      _vm._v(" Delete")
-                    ]
-                  )
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-edit text-primary" }),
+                        _vm._v(" Edit")
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "dropdown-divider" }),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "dropdown-item",
+                        attrs: { href: "#", title: "Delete" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteCustomer(_vm.customer.id)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-trash text-danger" }),
+                        _vm._v(" Delete")
+                      ]
+                    )
+                  ])
                 ])
               ])
             ])
           ])
         ]),
         _vm._v(" "),
-        _vm._m(0),
+        _vm._m(2),
         _vm._v(" "),
         _c(
           "div",
@@ -76052,7 +76107,7 @@ var render = function() {
                     _c("div", { staticClass: "row" }, [
                       _c("div", { staticClass: "col-md-12" }, [
                         _c("table", { staticClass: "table table-bordered" }, [
-                          _vm._m(1),
+                          _vm._m(3),
                           _vm._v(" "),
                           _c(
                             "tbody",
@@ -76104,7 +76159,7 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(2)
+                _vm._m(4)
               ]
             ),
             _vm._v(" "),
@@ -76149,7 +76204,7 @@ var render = function() {
                     _c("div", { staticClass: "row" }, [
                       _c("div", { staticClass: "col-md-12" }, [
                         _c("table", { staticClass: "table table-bordered" }, [
-                          _vm._m(3),
+                          _vm._m(5),
                           _vm._v(" "),
                           _c(
                             "tbody",
@@ -76238,7 +76293,7 @@ var render = function() {
               },
               [
                 _c("div", { staticClass: "card" }, [
-                  _vm._m(4),
+                  _vm._m(6),
                   _vm._v(" "),
                   _c("div", { staticClass: "card-body p-2" }, [
                     _c("div", { staticClass: "row" }, [
@@ -76314,7 +76369,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "card" }, [
-                  _vm._m(5),
+                  _vm._m(7),
                   _vm._v(" "),
                   _c("div", { staticClass: "card-body p-2" }, [
                     _c("div", { staticClass: "row" }, [
@@ -76384,7 +76439,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "card" }, [
-                  _vm._m(6),
+                  _vm._m(8),
                   _vm._v(" "),
                   _c("div", { staticClass: "card-body p-2" }, [
                     _c("div", { staticClass: "row" }, [
@@ -76490,7 +76545,7 @@ var render = function() {
                   [_vm._v("Update Customer's Info")]
                 ),
                 _vm._v(" "),
-                _vm._m(7)
+                _vm._m(9)
               ]),
               _vm._v(" "),
               _c(
@@ -76520,7 +76575,7 @@ var render = function() {
                           "div",
                           { staticClass: "form-group" },
                           [
-                            _vm._m(8),
+                            _vm._m(10),
                             _vm._v(" "),
                             _c("input", {
                               directives: [
@@ -76564,7 +76619,7 @@ var render = function() {
                           "div",
                           { staticClass: "form-group" },
                           [
-                            _vm._m(9),
+                            _vm._m(11),
                             _vm._v(" "),
                             _c("input", {
                               directives: [
@@ -76844,7 +76899,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(10),
+                    _vm._m(12),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -77248,7 +77303,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(11),
+                    _vm._m(13),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -77587,21 +77642,21 @@ var render = function() {
           { staticClass: "modal-dialog modal-xl", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(12),
+              _vm._m(14),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
                   "ul",
                   { staticStyle: { "list-style-type": "none", padding: "0" } },
                   [
-                    _vm._m(13),
+                    _vm._m(15),
                     _vm._v(" "),
                     _c("li", [
                       _c(
                         "div",
                         { staticClass: "text-center p-5" },
                         [
-                          _vm._m(14),
+                          _vm._m(16),
                           _vm._v(" "),
                           _c(
                             "file-upload",
@@ -77645,7 +77700,7 @@ var render = function() {
                 _vm._v(" "),
                 _vm.formFile.file.length
                   ? _c("table", { staticClass: "table table-bordered" }, [
-                      _vm._m(15),
+                      _vm._m(17),
                       _vm._v(" "),
                       _c(
                         "tbody",
@@ -77747,7 +77802,7 @@ var render = function() {
           [
             _c("div", { staticClass: "modal-content" }, [
               _c("form", { staticClass: "form-horizontal" }, [
-                _vm._m(16),
+                _vm._m(18),
                 _vm._v(" "),
                 _c("div", { staticClass: "modal-body" }, [
                   _c("div", { staticClass: "text-center" }, [
@@ -77806,6 +77861,38 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "btn btn-light",
+        attrs: { href: "/customer", title: "Back" }
+      },
+      [_c("i", { staticClass: "fas fa-arrow-left text-dark" }), _vm._v(" Back")]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-light dropdown-toggle",
+        attrs: { type: "button", "data-toggle": "dropdown" }
+      },
+      [
+        _c("span", { staticClass: "caret" }, [
+          _c("i", { staticClass: "fas fa-cog" })
+        ]),
+        _vm._v(" "),
+        _c("span", { staticClass: "sr-only" }, [_vm._v("Toggle Dropdown")])
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
