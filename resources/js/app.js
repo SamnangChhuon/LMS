@@ -77,7 +77,7 @@ let routes = [
     { 
         path: '/customer', 
         name: 'Customers',
-        component: require('./components/customers/Customer.vue').default, 
+        component: require('./components/customers/NewCustomer.vue').default, 
         meta: {
             breadcrumb: 'Customer'
         } 
@@ -272,6 +272,10 @@ Vue.component('file-upload', VueUploadComponent)
 Vue.component('customer-avatar', require('./components/components/modal/CustomerAvatar.vue').default)
 
 Vue.component('bounce-loader', require('./components/components/vue-spinner/BounceLoader.vue').default);
+
+
+Vue.component('filterable', require('./components/components/Filterable.vue').default);
+
 
 
 // const files = require.context('./', true, /\.vue$/i);

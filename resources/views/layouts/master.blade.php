@@ -31,7 +31,13 @@
         <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <router-link to="/customer" class="nav-link">Customers</router-link>
+        <router-link :to="{name: 'Customers'}" class="nav-link">Customers</router-link>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <router-link :to="{name: 'Reports'}" class="nav-link">Reports</router-link>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <router-link :to="{name: 'Sale'}" class="nav-link">Sale</router-link>
       </li>
     </ul>
 

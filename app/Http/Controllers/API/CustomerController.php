@@ -28,7 +28,11 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return Customer::where('type', '=', 'active' )->latest()->paginate(10);
+        // return Customer::where('type', '=', 'active' )->latest()->paginate(10);
+        return response()
+            ->json([
+                'collection' => Customer::advancedFilter()
+            ]);
     }
 
     public function getCustomers(){

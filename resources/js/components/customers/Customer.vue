@@ -1,90 +1,86 @@
 <template>
     <div class="container-fluid">
         <!-- <bounce-loader></bounce-loader> -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Customers Table</h3>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Customers Table</h3>
 
-                        <div class="card-tools">
-                            <button class="btn btn-success" @click="addNewCustomer() , collapseToggle()">Add New <i class="fas fa-user-plus fa-fw"></i></button>
+                <div class="card-tools">
+                    <button class="btn btn-success" @click="addNewCustomer() , collapseToggle()">Add New <i class="fas fa-user-plus fa-fw"></i></button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="row p-2">
+                    <div class="col-md-6">
+                        <div class="form-inline">
+                            <div class="input-group mb-2 mr-sm-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Search: </span>
+                                </div>
+                                <input class="form-control" @keyup="searchit" v-model="search" type="search" placeholder="Search" aria-label="Search">
+                            </div>
+                            <button class="btn btn-primary mb-2 mr-sm-2"  v-on:click="searchit">Go</button>
+                            <button class="btn btn-secondary mb-2" v-on:click="loadCustomers">Reset</button>
                         </div>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="row p-2">
-                            <div class="col-md-6">
-                                <div class="form-inline">
-                                    <div class="input-group mb-2 mr-sm-2">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Search: </span>
-                                        </div>
-                                        <input class="form-control" @keyup="searchit" v-model="search" type="search" placeholder="Search" aria-label="Search">
-                                    </div>
-                                    <button class="btn btn-primary mb-2 mr-sm-2"  v-on:click="searchit">Go</button>
-                                    <button class="btn btn-secondary mb-2" v-on:click="loadCustomers">Reset</button>
-                                </div>
+                    <div class="col-md-6">
+                        <div class="form-inline fa-pull-right">
+                            <div class="form-group mb-2">
+                                <label for="">Sort By: </label>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-inline fa-pull-right ">
-                                    <div class="form-group mb-2">
-                                        <label for="">Sort By: </label>
-                                    </div>
-                                    <div class="form-group mx-sm-3 mb-2">
-                                        <select name="" class="form-control">
-                                            <option value="">ID</option>
-                                            <option value="">First Name</option>
-                                            <option value="">Last Name</option>
-                                            <option value="">Business Phone</option>
-                                            <option value="">Personal Phone</option>
-                                            <option value="">Registered Date</option>
-                                        </select>
-                                    </div>
-                                </div>
+                            <div class="form-group mx-sm-3 mb-2">
+                                <select name="" class="form-control">
+                                    <option value="">ID</option>
+                                    <option value="">First Name</option>
+                                    <option value="">Last Name</option>
+                                    <option value="">Business Phone</option>
+                                    <option value="">Personal Phone</option>
+                                    <option value="">Registered Date</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="table-responsive pb-3 border-top">
-                            <table class="table table-striped table-hover">
-                                <tbody>
-                                    <tr>
-                                        <th>CID</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Type</th>
-                                        <th>Business Phone</th>
-                                        <th>Personal Phone</th>
-                                        <th>Registered At</th>
-                                        <th>Modify</th>
-                                    </tr>
-                                    <tr v-for="customer in customers.data" :key="customer.id" @click="ViewCustomer(customer.id)">
-                                        <td>{{ customer.id }}</td>
-                                        <td>{{ customer.firstname }}</td>
-                                        <td>{{ customer.lastname }}</td>
-                                        <td>{{ customer.type | upText }}</td>
-                                        <td>{{ customer.businessphone }}</td>
-                                        <td>{{ customer.personalphone }}</td>
-                                        <td>{{ customer.created_at | myDate }}</td>
-                                        <td>
-                                            <a href="#" @click="editCustomer(customer)" title="Edit"><i class="fas fa-edit text-info"></i></a>
-                                            |
-                                            <a href="#" @click="deleteCustomer(customer.id)" title="Delete"><i class="fas fa-trash text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p>Showing record: {{customers.from}} to {{customers.to}} from {{customers.total}} item(s)</p>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="fa-pull-right">
-                                    <pagination :data="customers" @pagination-change-page="getAllCustomer"></pagination>
-                                </div>
-                            </div>
+                </div>
+                <div class="table-responsive pb-3 border-top">
+                    <table class="table table-striped table-hover">
+                        <tbody>
+                            <tr>
+                                <th>CID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Type</th>
+                                <th>Business Phone</th>
+                                <th>Personal Phone</th>
+                                <th>Registered At</th>
+                                <th>Modify</th>
+                            </tr>
+                            <tr v-for="customer in customers.data" :key="customer.id" @click="ViewCustomer(customer.id)">
+                                <td>{{ customer.id }}</td>
+                                <td>{{ customer.firstname }}</td>
+                                <td>{{ customer.lastname }}</td>
+                                <td>{{ customer.type | upText }}</td>
+                                <td>{{ customer.businessphone }}</td>
+                                <td>{{ customer.personalphone }}</td>
+                                <td>{{ customer.created_at | myDate }}</td>
+                                <td>
+                                    <a href="#" @click="editCustomer(customer)" title="Edit"><i class="fas fa-edit text-info"></i></a>
+                                    |
+                                    <a href="#" @click="deleteCustomer(customer.id)" title="Delete"><i class="fas fa-trash text-danger"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Showing record: {{customers.from}} to {{customers.to}} from {{customers.total}} item(s)</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="fa-pull-right">
+                            <pagination :data="customers" @pagination-change-page="getAllCustomer"></pagination>
                         </div>
                     </div>
                 </div>
