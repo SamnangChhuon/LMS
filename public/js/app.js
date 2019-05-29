@@ -5030,8 +5030,6 @@ __webpack_require__.r(__webpack_exports__);
     Fire.$on('reloadData', function () {
       _this6.loadCustomers();
     }); // using event AfterCreate
-
-    loader.hide();
   }
 });
 
@@ -76458,8 +76456,8 @@ var render = function() {
                         attrs: {
                           src:
                             _vm.customer.sex == "male"
-                              ? "/img/user/none/male_user.png"
-                              : "/img/user/none/female_user.png",
+                              ? "/img/profile/none/male.png"
+                              : "/img/user/none/female.png",
                           alt: "User Avatar"
                         }
                       })
@@ -76467,7 +76465,7 @@ var render = function() {
                         staticClass: "img-customer img-circle elevation-2",
                         attrs: {
                           src:
-                            "/img/customers/" +
+                            "/storage/customers/" +
                             _vm.customer.id +
                             "/" +
                             _vm.customer.photo,

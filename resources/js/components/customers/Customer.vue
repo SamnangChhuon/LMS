@@ -463,8 +463,6 @@ import moment from 'moment'
             Fire.$on('reloadData', () => {
                 this.loadCustomers();
             }); // using event AfterCreate
-loader.hide();
-
         },
     }
 </script>

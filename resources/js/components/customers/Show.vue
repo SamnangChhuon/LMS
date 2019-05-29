@@ -21,8 +21,8 @@
                            <div class="widget-user-header bg-info-active">
                                 <div class="widget-user-image">
                                     <img v-if="customer.photo == null" class="img-customer img-circle elevation-2"
-                                     :src="(customer.sex == 'male') ? '/img/user/none/male_user.png' : '/img/user/none/female_user.png'" alt="User Avatar">
-                                    <img v-else class="img-customer img-circle elevation-2" :src="'/img/customers/'+customer.id+'/'+customer.photo" alt="User Avatar">
+                                     :src="(customer.sex == 'male') ? '/img/profile/none/male.png' : '/img/user/none/female.png'" alt="User Avatar">
+                                    <img v-else class="img-customer img-circle elevation-2" :src="'/storage/customers/' + customer.id + '/' + customer.photo" alt="User Avatar">
                                     <span class="hover-image img-circle" @click="avatarModel"></span>
                                 </div>
                                 <h3 class="widget-user-username">{{ customer.firstname + ' ' + customer.lastname }}</h3>
