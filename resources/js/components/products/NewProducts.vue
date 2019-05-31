@@ -1,0 +1,76 @@
+<template>
+    <div class="container-fluid">
+        <filterable v-bind="filterable">
+            <thead slot="thead">
+                <tr>
+                    <th>No.</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Product Code</th>
+                    <th>Status</th>
+                    <th>Modified Time</th>
+                </tr>
+            </thead>
+            <tr slot-scope="{item}" @click="ViewProduct(item.id)">
+                <td>{{item.index + 1}}</td>
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.code}}</td>
+                <td v-html="checkStatus(item.status)"></td>
+                <td>{{item.created_at | myDate}}</td>
+            </tr>
+        </filterable>
+    </div>
+</template>
+
+<script type="text/javascript">
+    export default {
+        data() {
+            return {
+                filterable: {
+                    url: 'api/product',
+                    orderables: [
+                        {title: 'Product ID', name: 'id'},
+                        {title: 'Product Name', name: 'name'},
+                        {title: 'Product Code', name: 'code'},
+                        {title: 'Status', name: 'status'},
+                        {title: 'Modified Time', name: 'created_at'},
+                    ],
+                    filterGroups: [
+                        {
+                            name: 'Customer',
+                            filters: [
+                                {title: 'Product ID', name: 'id', type: 'numeric'},
+                                {title: 'Product Name', name: 'name', type: 'string'},
+                                {title: 'Product Name', name: 'code', type: 'string'},
+                                {title: 'Status', name: 'status', type: 'string'},
+                                {title: 'Modified Time', name: 'created_at', type: 'datetime'},
+                            ]
+                        },
+                    ]
+                }
+            }
+        },
+        methods:{
+            ViewProduct(value){
+                // this.$router.push({ name: 'Viewcustomer', params: { id: value }});
+                console.log('View Product');
+            },
+            checkStatus(value) {
+                if(!value) return ''
+                let text = value.toString().charAt(0).toUpperCase() + value.slice(1);
+                if(value === 'available') {
+                    return '<h5><span class="badge badge-success">' + text + '</span></h5>';
+                } else if (value === 'block') {
+                    return '<h5><span class="badge badge-danger">' + text + '</span></h5>';
+                } else {
+                    return '<h5><span class="badge badge-info text-white">' + text + '</span></h5>';
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+    tbody tr:hover{cursor: pointer;}
+</style>

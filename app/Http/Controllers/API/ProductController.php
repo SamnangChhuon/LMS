@@ -25,8 +25,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::latest()->paginate(10);
+        return response()
+            ->json([
+                'collection' => Product::advancedFilter()
+            ]);
     }
+
     public function getProducts()
     {
         return Product::get();

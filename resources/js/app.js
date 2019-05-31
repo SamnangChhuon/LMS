@@ -104,7 +104,7 @@ let routes = [
     { 
         path: '/products', 
         name: 'Products',
-        component: require('./components/products/Products.vue').default, 
+        component: require('./components/products/NewProducts.vue').default, 
         meta: {
             breadcrumb: 'Products'
         } 
@@ -269,6 +269,7 @@ Vue.component('customer-detail', require('./components/components/datatable/Cust
 const VueUploadComponent = require('vue-upload-component')
 Vue.component('file-upload', VueUploadComponent)
 
+Vue.component('add-multi-file', require('./components/customers/components/AddMultiFile.vue').default)
 Vue.component('customer-avatar', require('./components/components/modal/CustomerAvatar.vue').default)
 
 Vue.component('bounce-loader', require('./components/components/vue-spinner/BounceLoader.vue').default);

@@ -10,7 +10,6 @@
                     <th>Business Phone</th>
                     <th>Personal Phone</th>
                     <th>Registered Date</th>
-                    <th>Modify</th>
                 </tr>
             </thead>
             <tr slot-scope="{item}" @click="ViewCustomer(item.id)">
@@ -21,11 +20,6 @@
                 <td>{{item.businessphone}}</td>
                 <td>{{item.personalphone}}</td>
                 <td>{{item.created_at | myDate}}</td>
-                <td>
-                    <a href="#" @click="editCustomer(customer)" title="Edit"><i class="fas fa-edit text-info"></i></a>
-                    |
-                    <a href="#" @click="deleteCustomer(customer.id)" title="Delete"><i class="fas fa-trash text-danger"></i></a>
-                </td>
             </tr>
         </filterable>
     </div>
@@ -67,47 +61,10 @@
             ViewCustomer(value){
                 this.$router.push({ name: 'Viewcustomer', params: { id: value }});
             },
-            editCustomer(customer) {
-                this.editMode = true;
-                $('#warningAlert').hide(); // Hide the Warning Alert
-                this.form.reset(); // Reset the modal
-                this.form.clear();
-                $('#addNew').modal('show');
-                this.form.fill(customer); // Pass the data to the modal
-            },
-            updateCustomer(){
-                this.$Progress.start();
-                this.form.put('api/customer/' + this.form.id)
-                .then((response) => {
-                    if (response.data.existed) {
-                        this.$Progress.fail();
-                        Swal.fire({
-                            title: 'Duplicate Data!!!',
-                            text: 'Customer\'s name already existed',
-                            type: 'error',
-                            confirmButtonText: 'Close',
-                        })
-                        $('input[name=firstname]').addClass('is-invalid');
-                        $('input[name=lastname]').addClass('is-invalid');
-                        setTimeout(function () { 
-                            $('input[name=firstname]').removeClass('is-invalid');
-                            $('input[name=lastname]').removeClass('is-invalid');
-                        }, 4000);
-                    } else {
-                        Fire.$emit('reloadData'); 
-                        $('#addNew').modal('hide');
-                        Swal.fire(
-                            'Updated!',
-                            'Customer\'s information has been updated.',
-                            'success'
-                        )
-                        this.$Progress.finish();
-                    }
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
-            },
         }
     }
 </script>
+
+<style>
+    tbody tr:hover{cursor: pointer;}
+</style>

@@ -12,351 +12,350 @@
 
 <template>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
 
-                <div class="card card-widget widget-user-2">
-                    <div class="row">
-                        <div class="col-md-6">
-                           <div class="widget-user-header bg-info-active">
-                                <div class="widget-user-image">
-                                    <img v-if="customer.photo == null" class="img-customer img-circle elevation-2"
-                                     :src="(customer.sex == 'male') ? '/img/profile/none/male.png' : '/img/user/none/female.png'" alt="User Avatar">
-                                    <img v-else class="img-customer img-circle elevation-2" :src="'/storage/customers/' + customer.id + '/' + customer.photo" alt="User Avatar">
-                                    <span class="hover-image img-circle" @click="avatarModel"></span>
-                                </div>
-                                <h3 class="widget-user-username">{{ customer.firstname + ' ' + customer.lastname }}</h3>
-                                <h5 class="widget-user-desc">CID {{ customer.id }}</h5>
+        <div class="card card-widget widget-user-2">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="widget-user-header bg-info-active">
+                        <div class="widget-user-image">
+                            <img v-if="customer.photo == null" class="img-customer img-circle elevation-2"
+                                :src="(customer.sex == 'male') ? '/img/profile/none/male.png' : '/img/user/none/female.png'" alt="User Avatar">
+                            <img v-else class="img-customer img-circle elevation-2" :src="'/storage/customers/' + customer.id + '/' + customer.photo" alt="User Avatar">
+                            <span class="hover-image img-circle" @click="avatarModel"></span>
+                        </div>
+                        <h3 class="widget-user-username">{{ customer.firstname + ' ' + customer.lastname }}</h3>
+                        <h5 class="widget-user-desc">CID {{ customer.id }}</h5>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="fa-pull-right">
+                        <div class="card-tools p-2">
+                            <a href="/customer" class="btn btn-light" title="Back"><i class="fas fa-arrow-left text-dark"></i> Back</a>
+                            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"><i class="fas fa-cog"></i></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item" @click="editCustomer(customer)" title="Edit"><i class="fas fa-edit text-primary"></i> Edit</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item" @click="deleteCustomer(customer.id)" title="Delete"><i class="fas fa-trash text-danger"></i> Delete</a>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="fa-pull-right">
-                                <div class="card-tools p-2">
-                                    <a href="/customer" class="btn btn-light" title="Back"><i class="fas fa-arrow-left text-dark"></i> Back</a>
-                                    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"><i class="fas fa-cog"></i></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a href="#" class="dropdown-item" @click="editCustomer(customer)" title="Edit"><i class="fas fa-edit text-primary"></i> Edit</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" class="dropdown-item" @click="deleteCustomer(customer.id)" title="Delete"><i class="fas fa-trash text-danger"></i> Delete</a>
-                                    </div>
-                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <ul class="nav nav-tabs" id="customer" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#productsTab">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#legalDocumentsTab">Legal Documents</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#informationsTab">Informations</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content" id="customerContent">
+
+            <!-- Product Tab -->
+            <div class="tab-pane fade show active" id="productsTab">
+                <div class="card">
+                    <div class="card-header bg-white py-3">
+                        <h3 class="card-title m-0">Product Details</h3>
+                        <div class="card-tools">
+                            <router-link :to="{name: 'addNewProductPage', param: {id: customer.id}}" class="btn btn-info text-white"><i class="fa fa-plus"></i> Add product</router-link>
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Unit</th>
+                                            <th>Unit Type</th>
+                                            <th>Original Price</th>
+                                            <th>Discount</th>
+                                            <th>Net Sale Price</th>
+                                            <th>Paid Amount</th>
+                                            <th>Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="product in customerProduct" :key="product.id">
+                                            <td>{{ product.name }} / {{product.code}}</td>
+                                            <td>{{ getType(product.typeid) }}</td>
+                                            <td>$ {{ formatPrice(product.price) }}</td>
+                                            <td>{{ product.promotion }}</td>
+                                            <td>000</td>
+                                            <td>1111</td>
+                                            <td>22222</td>
+                                        </tr>
+                                        <tr v-if="customerProduct == ''" class="text-center">
+                                            <td colspan="7">No product found.</td>
+                                        </tr>
+                                    </tbody>
+                                    
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <ul class="nav nav-tabs" id="customer" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#productsTab">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#legalDocumentsTab">Legal Documents</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#informationsTab">Informations</a>
-                        </li>
-                    </ul>
+                    <div class="card-header bg-white py-3">
+                        <h3 class="card-title m-0">Product Details</h3>
+                        <div class="card-tools">
+                            <!-- <router-link :to="{name: 'addNewProductPage', param: {id: customer.id}}" class="btn btn-info text-white"><i class="fa fa-plus"></i> Add product</router-link> -->
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Payment Date</th>
+                                            <th>Installment</th>
+                                            <th>Description</th>
+                                            <th>Progressive %</th>
+                                            <th>Amount</th>
+                                            <th>Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- <tbody>
+                                        <tr v-for="product in customerProduct" :key="product.id">
+                                            <td>{{ product.name }} / {{product.code}}</td>
+                                            <td>{{ getType(product.typeid) }}</td>
+                                            <td>$ {{ formatPrice(product.price) }}</td>
+                                            <td>{{ product.promotion }}</td>
+                                            <td>000</td>
+                                            <td>1111</td>
+                                            <td>22222</td>
+                                        </tr>
+                                        <tr v-if="customerProduct == ''" class="text-center">
+                                            <td colspan="7">No product found.</td>
+                                        </tr>
+                                    </tbody> -->
+                                    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Legal Documents Tab -->
+            <div class="tab-pane fade" id="legalDocumentsTab">
+                <div class="card">
+                    <div class="card-header bg-white py-3">
+                        <h3 class="card-title m-0">Legal Documents</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#addImage" @click="addFile()"><i class="fa fa-plus"></i> Add file</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col-md-2 bg-dark" style="height:400px;">
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Thumb</th>
+                                        <th>Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-if="customerFile == ''">
+                                        <td colspan="7">
+                                            <div class="text-center p-5">
+                                                <h4>Customer have no file or image.</h4>
+                                                <button type="button" class="btn btn-info text-white" @click="addFile()"><i class="fa fa-plus"></i> Select Files</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr v-for="(file, index) in customerFile" :key="file.id">
+                                        <td>{{index + 1}}</td>
+                                        <!-- <td><img v-if="file.file" :src="file.file" width="40" height="auto"></td> -->
+                                        <td><img v-if="file.file" :src="'/storage/app/customers/img/'  + file.cid +'/' + file.file" width="40" height="auto"></td>
+                                        <td>{{file.file}}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations Tab -->
+            <div class="tab-pane fade" id="informationsTab">
+                <div class="card">
+                    <div class="card-header bg-white p-2 pl-3">
+                        <h3 class="card-title m-0"><small>Customer Details</small></h3>
+                        <div class="card-tools fa-pull-right">
+                            <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table no-border">
+                                    <tr>
+                                        <th>First Name</th>
+                                        <td>{{ customer.firstname }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Name</th>
+                                        <td>{{ customer.lastname }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Company Name</th>
+                                        <td>{{ customer.companyname }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Customer Type</th>
+                                        <td>{{ customer.type | upText }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table no-border">
+                                    <tr>
+                                        <th>Customer ID</th>
+                                        <td>{{ customer.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date of Birth</th>
+                                        <td>{{ customer.dob }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Sex</th>
+                                        <td>{{ customer.sex | upText }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Modified Time</th>
+                                        <td>{{ customer.created_at | modified }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="tab-content" id="customerContent">
-
-                    <!-- Product Tab -->
-                    <div class="tab-pane fade show active" id="productsTab">
-                        <div class="card">
-                            <div class="card-header bg-white py-3">
-                                <h3 class="card-title m-0">Product Details</h3>
-                                <div class="card-tools">
-                                    <router-link :to="{name: 'addNewProductPage', param: {id: customer.id}}" class="btn btn-info text-white"><i class="fa fa-plus"></i> Add product</router-link>
-                                </div>
-                            </div>
-                            <div class="card-body p-2">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-bordered">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th>Unit</th>
-                                                    <th>Unit Type</th>
-                                                    <th>Original Price</th>
-                                                    <th>Discount</th>
-                                                    <th>Net Sale Price</th>
-                                                    <th>Paid Amount</th>
-                                                    <th>Balance</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="product in customerProduct" :key="product.id">
-                                                    <td>{{ product.name }} / {{product.code}}</td>
-                                                    <td>{{ getType(product.typeid) }}</td>
-                                                    <td>$ {{ formatPrice(product.price) }}</td>
-                                                    <td>{{ product.promotion }}</td>
-                                                    <td>000</td>
-                                                    <td>1111</td>
-                                                    <td>22222</td>
-                                                </tr>
-                                                <tr v-if="customerProduct == ''" class="text-center">
-                                                    <td colspan="7">No product found.</td>
-                                                </tr>
-                                            </tbody>
-                                            
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="card">
+                    <div class="card-header bg-white p-2 pl-3">
+                        <h3 class="card-title m-0"><small>Contact Information</small></h3>
+                        <div class="card-tools fa-pull-right">
+                            <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         </div>
-
-                        <div class="card">
-                            <div class="card-header bg-white py-3">
-                                <h3 class="card-title m-0">Product Details</h3>
-                                <div class="card-tools">
-                                    <!-- <router-link :to="{name: 'addNewProductPage', param: {id: customer.id}}" class="btn btn-info text-white"><i class="fa fa-plus"></i> Add product</router-link> -->
-                                </div>
-                            </div>
-                            <div class="card-body p-2">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-bordered">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th>Payment Date</th>
-                                                    <th>Installment</th>
-                                                    <th>Description</th>
-                                                    <th>Progressive %</th>
-                                                    <th>Amount</th>
-                                                    <th>Paid</th>
-                                                </tr>
-                                            </thead>
-                                            <!-- <tbody>
-                                                <tr v-for="product in customerProduct" :key="product.id">
-                                                    <td>{{ product.name }} / {{product.code}}</td>
-                                                    <td>{{ getType(product.typeid) }}</td>
-                                                    <td>$ {{ formatPrice(product.price) }}</td>
-                                                    <td>{{ product.promotion }}</td>
-                                                    <td>000</td>
-                                                    <td>1111</td>
-                                                    <td>22222</td>
-                                                </tr>
-                                                <tr v-if="customerProduct == ''" class="text-center">
-                                                    <td colspan="7">No product found.</td>
-                                                </tr>
-                                            </tbody> -->
-                                            
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
                     </div>
-
-                    <!-- Legal Documents Tab -->
-                    <div class="tab-pane fade" id="legalDocumentsTab">
-                        <div class="card">
-                            <div class="card-header bg-white py-3">
-                                <h3 class="card-title m-0">Legal Documents</h3>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#addImage" @click="addFile()"><i class="fa fa-plus"></i> Add file</button>
-                                </div>
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table no-border">
+                                    <tr>
+                                        <th>Business Phone</th>
+                                        <td>{{ customer.businessphone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Personal Phone</th>
+                                        <td>{{ customer.personalphone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Fax</th>
+                                        <td>{{ customer.fax }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>{{ customer.email }}</td>
+                                    </tr>
+                                </table>
                             </div>
-                            <div class="card-body p-2">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-bordered">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Thumb</th>
-                                                    <th>Name</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-if="customerFile == ''">
-                                                    <td colspan="7">
-                                                        <div class="text-center p-5">
-                                                            <h4>Customer have no file or image.</h4>
-                                                            <button type="button" class="btn btn-info text-white" @click="addFile()"><i class="fa fa-plus"></i> Select Files</button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr v-for="(file, index) in customerFile" :key="file.id">
-                                                    <td>{{index + 1}}</td>
-                                                    <!-- <td><img v-if="file.file" :src="file.file" width="40" height="auto"></td> -->
-                                                    <td><img v-if="file.file" :src="'/storage/app/customers/img/'  + file.cid +'/' + file.file" width="40" height="auto"></td>
-                                                    <td>{{file.file}}</td>
-                                                    <td></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-
+                            <div class="col-md-6">
+                                <table class="table no-border">
+                                    <tr>
+                                        <th>Website</th>
+                                        <td>{{ customer.website }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Twitter</th>
+                                        <td>{{ customer.twitter }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Line</th>
+                                        <td>{{ customer.line }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Remark</th>
+                                        <td>{{ customer.remarkcontact }}</td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Informations Tab -->
-                    <div class="tab-pane fade" id="informationsTab">
-                        <div class="card">
-                            <div class="card-header bg-white p-2 pl-3">
-                                <h3 class="card-title m-0"><small>Customer Details</small></h3>
-                                <div class="card-tools fa-pull-right">
-                                    <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                </div>
-                            </div>
-                            <div class="card-body p-2">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <table class="table no-border">
-                                            <tr>
-                                                <th>First Name</th>
-                                                <td>{{ customer.firstname }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Last Name</th>
-                                                <td>{{ customer.lastname }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Company Name</th>
-                                                <td>{{ customer.companyname }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Customer Type</th>
-                                                <td>{{ customer.type | upText }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <table class="table no-border">
-                                            <tr>
-                                                <th>Customer ID</th>
-                                                <td>{{ customer.id }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Date of Birth</th>
-                                                <td>{{ customer.dob }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Sex</th>
-                                                <td>{{ customer.sex | upText }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Modified Time</th>
-                                                <td>{{ customer.created_at | modified }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="card">
+                    <div class="card-header bg-white p-2 pl-3">
+                        <h3 class="card-title m-0"><small>Physical Address Information</small></h3>
+                        <div class="card-tools fa-pull-right">
+                            <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         </div>
-
-                        <div class="card">
-                            <div class="card-header bg-white p-2 pl-3">
-                                <h3 class="card-title m-0"><small>Contact Information</small></h3>
-                                <div class="card-tools fa-pull-right">
-                                    <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                </div>
-                            </div>
-                            <div class="card-body p-2">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <table class="table no-border">
-                                            <tr>
-                                                <th>Business Phone</th>
-                                                <td>{{ customer.businessphone }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Personal Phone</th>
-                                                <td>{{ customer.personalphone }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Fax</th>
-                                                <td>{{ customer.fax }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Email</th>
-                                                <td>{{ customer.email }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <table class="table no-border">
-                                            <tr>
-                                                <th>Website</th>
-                                                <td>{{ customer.website }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Twitter</th>
-                                                <td>{{ customer.twitter }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Line</th>
-                                                <td>{{ customer.line }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Remark</th>
-                                                <td>{{ customer.remarkcontact }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header bg-white p-2 pl-3">
-                                <h3 class="card-title m-0"><small>Physical Address Information</small></h3>
-                                <div class="card-tools fa-pull-right">
-                                    <button type="button" class="btn btn-tool p-0" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                </div>
-                            </div>
-                            <div class="card-body p-2">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <table class="table no-border">
-                                            <tr>
-                                                <th>Postal Code</th>
-                                                <td>{{ customer.postalcode }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Street</th>
-                                                <td>{{ customer.street }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>City</th>
-                                                <td>{{ customer.city }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <table class="table no-border">
-                                            <tr>
-                                                <th>Country</th>
-                                                <td>{{ customer.country }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Remark</th>
-                                                <td>{{ customer.remarkaddress }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
-
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table no-border">
+                                    <tr>
+                                        <th>Postal Code</th>
+                                        <td>{{ customer.postalcode }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Street</th>
+                                        <td>{{ customer.street }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>City</th>
+                                        <td>{{ customer.city }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table no-border">
+                                    <tr>
+                                        <th>Country</th>
+                                        <td>{{ customer.country }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Remark</th>
+                                        <td>{{ customer.remarkaddress }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
+
         </div>
+
 
         <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNewCustomer" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -535,72 +534,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="addFile" tabindex="-1" role="dialog" aria-labelledby="addImage" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add New Files</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul style="list-style-type:none;padding:0;">
-                            <li>
-                                <label for="" class="text-danger">Note: <br>- Existing attachments (images/files) will not allow.<br>- File can not larger than 2MB.<br>*** File name will be change to unique name in database.</label>
-                            </li>
-                            <li>
-                                <div class="text-center p-5">
-                                    <h4>Drop files anywhere to upload<br/>or</h4>
-                                    <file-upload
-                                    class="btn btn-primary"
-                                    extensions="gif,jpg,jpeg,png,webp"
-                                    accept="image/png,image/gif,image/jpeg,image/webp"
-                                    :multiple="true"
-                                    :drop="true"
-                                    :drop-directory="true"
-                                    :size="1024 * 1024 * 10"
-                                    v-model="formFile.file"
-                                    @input-filter="inputFilter"
-                                    @input-file="inputFile"
-                                    ref="file">
-                                        <i class="fa fa-plus"></i> Select files
-                                    </file-upload>
-                                </div>
-                            </li>
-                            <!-- <li>
-                                <input type="file" name="file" ref="file" multiple v-on:change="handleFileUpload">
-                            </li> -->
-                        </ul>
-                        <table v-if="formFile.file.length" class="table table-bordered">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th style="width:10px;text-align:center">#</th>
-                                    <th>File Name</th>
-                                    <th>File Size</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(file, index) in formFile.file" :key="file.id">
-                                    <td><button @click="removeInputFile(index)" class="btn btn-tool"><i class="fas fa-times"></i></button></td>
-                                    <td><span>{{file.name}}</span></td>
-                                    <td><span>{{file.size | formatSize}}</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div v-show="$refs.files && $refs.files.dropActive" class="drop-active">
-                            <h3>Drop files to upload</h3>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">Close</button>
-                        <div class="float-right">
-                            <button class="btn btn-success" @click.prevent="handleFileUpload" type="submit">Upload File</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <add-multi-file></add-multi-file>
 
         <!-- Customer Upload Profile Model -->
         <div class="modal fade" id="avatarCustomer" aria-hidden="true">
@@ -675,11 +609,7 @@
                     photo: ''
                 }),
 
-                files: [],
-                formFile: new Form({
-                    cid: this.$route.params.id,
-                    file: [],
-                })
+                
             }
         },
         methods: {
@@ -692,9 +622,6 @@
                 let photo = (this.formAvatar.photo.length > 200) ? this.formAvatar.photo : "/img/profile/avatar.png";
                 this.$Progress.finish();
                 return photo;
-            },
-            previewCustomerAvatar(){
-                // let avatar = (this.customer.photo == null) ? 
             },
             updateProfile(e) {
                 this.$Progress.start();
@@ -756,73 +683,6 @@
             formatPrice(value) {
                 let val = (value/1).toFixed(2).replace(',', '.')
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            },
-
-            // Remove Input File
-            removeInputFile(index) {
-                this.formFile.file.splice(index, 1);
-            },
-            inputFilter(newFile, oldFile, prevent) {
-                if (newFile && !oldFile) {
-                    // Before adding a file
-                    // Filter system files or hide files
-                    if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
-                        return prevent()
-                    }
-                    // Filter php html js file
-                    if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
-                        return prevent()
-                    }
-                    // Filter large file
-                    let e = newFile.file;
-                    let reader = new FileReader();
-                    if(e['size'] > 2111775){
-                        Swal.fire({
-                            type: 'error',
-                            title: 'Oops...',
-                            text: 'You are uploading a large file!\n' + '"' + newFile.name + '"',
-                            confirmButtonText: 'Close'
-                        })
-                        return prevent();
-                    }
-
-                    // Filter Duplicate File
-                    this.formFile.file.forEach(element => {
-                        if (newFile.file.name === element.name) {
-                            Swal.fire({
-                                type: 'error',
-                                title: 'Oops...',
-                                text: 'You are uploading a duplicate file!\n' + '"' + newFile.name + '"',
-                                confirmButtonText: 'Close'
-                            })
-                            return prevent();
-                        }
-                    });
-
-                    if ( /\s/.test(newFile.name) ) {
-                        Swal.fire({
-                            type: 'error',
-                            title: 'Oops...',
-                            text: 'The file name must not have space! ' + '"' + newFile.name + '"',
-                            confirmButtonText: 'Close'
-                        })
-                        return prevent();
-                    }
-                }
-            },
-            inputFile(newFile, oldFile) {
-                if (newFile && !oldFile) {
-                    // Filter the file size
-                    console.log('add', newFile)
-                }
-                if (newFile && oldFile) {
-                    // update
-                    console.log('update', newFile)
-                }
-                if (!newFile && oldFile) {
-                    // remove
-                    console.log('remove', oldFile)
-                }
             },
 
             loadCustomer(id = this.$route.params.id) {
@@ -929,82 +789,6 @@
                 });
             },
 
-            // Add File
-            addFile(){
-                $('#addFile').modal('show');
-                this.formFile.file = [];
-            },
-            fieldChange(e){
-                let selectedFiles=e.target.files;
-                console.log("1")
-                if(!selectedFiles.length){
-                    return false;
-                }
-                console.log("2")
-
-                for(let i=0; i < selectedFiles.length; i++){
-                    this.files.push(selectedFiles[i]);
-                }
-                console.log("3")
-
-                console.log(this.files);
-            },
-            inputFileByCustomer(){
-                let formData = new FormData();
-
-                for(let i=0; i < this.files.length ; i++){
-                    formData.append('files['+ i +']', this.files[i]);
-                }
-
-                this.$Progress.start();
-
-                const config = { };
-                $('#upload-file').value=[];
-                axios.post('/api/file',
-                    formData,
-                    {
-                        data: {
-                            cid: this.formFile.cid
-                        }
-                    })
-                .then((response) => {
-                    toast.fire({
-                        type: 'success',
-                        title: 'File added in successfully'
-                    })
-                    this.$Progress.finish();
-                    $('#addFile').modal('show');
-                    this.formFile.clear();
-                    this.formFile.reset();
-                })
-                .catch(() => {
-                    Swal.fire({
-                        title: 'Insert Error!!!',
-                        text: 'File can not insert.',
-                        type: 'error',
-                        confirmButtonText: 'Close',
-                    })
-                    this.$Progress.fail();
-                });
-            },
-
-            handleFileUpload(){
-                let files = this.$refs.file.files;
-                let formData = new FormData();
-                let headers = {'Content-Type': 'multipart/form-data'};
-
-                for (let index = 0; index < files.length; index++) {
-                    formData.append('files[' + index + ']', files[index]);                    
-                }
-
-                this.formFile.post('/api/inputFile/' + this.$route.params.id)
-                    .then((response) => {
-                        console.log('response', response);
-                    })
-                    .catch((error) => {
-                        console.error(error.response);
-                    })
-            }
         },
         created() {
             this.$Progress.start();
