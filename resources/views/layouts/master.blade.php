@@ -87,7 +87,7 @@
           <img src="{{ asset('/storage/users/' . Auth::user()->id.'/'. Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <router-link :to="{name: 'profile'}" class="d-block">
+          <router-link :to="{name: 'Profile'}" class="d-block">
             {{ Auth::user()->name }}
           </router-link>
         </div>
@@ -143,13 +143,19 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link :to="{name: 'users'}" class="nav-link">
+                <router-link :to="{name: 'Staffs'}" class="nav-link">
+                  <i class="fas fa-user-tie nav-icon"></i>
+                  <p>Staffs</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{name: 'Users'}" class="nav-link">
                   <i class="fas fa-users nav-icon"></i>
                   <p>Users</p>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{name: 'developer'}" class="nav-link">
+                <router-link :to="{name: 'Developer'}" class="nav-link">
                   <i class="nav-icon fas fa-cogs"></i>
                   <p>Developer</p>
                 </router-link>
@@ -166,7 +172,7 @@
           @endcan
           
           <li class="nav-item">
-            <router-link :to="{name: 'profile'}" class="nav-link">
+            <router-link :to="{name: 'Profile'}" class="nav-link">
               <i class="nav-icon fas fa-user-circle"></i>
               <p>Profile</p>
             </router-link>

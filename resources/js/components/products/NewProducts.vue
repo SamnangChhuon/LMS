@@ -7,6 +7,7 @@
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Product Code</th>
+                    <th>Price</th>
                     <th>Status</th>
                     <th>Modified Time</th>
                 </tr>
@@ -16,6 +17,7 @@
                 <td>{{item.id}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
+                <td>$ {{item.price | formatPrice}}</td>
                 <td v-html="checkStatus(item.status)"></td>
                 <td>{{item.created_at | myDate}}</td>
             </tr>
@@ -33,16 +35,18 @@
                         {title: 'Product ID', name: 'id'},
                         {title: 'Product Name', name: 'name'},
                         {title: 'Product Code', name: 'code'},
+                        {title: 'Price', name: 'price'},
                         {title: 'Status', name: 'status'},
                         {title: 'Modified Time', name: 'created_at'},
                     ],
                     filterGroups: [
                         {
-                            name: 'Customer',
+                            name: 'Product',
                             filters: [
                                 {title: 'Product ID', name: 'id', type: 'numeric'},
                                 {title: 'Product Name', name: 'name', type: 'string'},
                                 {title: 'Product Name', name: 'code', type: 'string'},
+                                {title: 'Price', name: 'price', type: 'string'},
                                 {title: 'Status', name: 'status', type: 'string'},
                                 {title: 'Modified Time', name: 'created_at', type: 'datetime'},
                             ]
@@ -67,6 +71,12 @@
                     return '<h5><span class="badge badge-info text-white">' + text + '</span></h5>';
                 }
             }
+        },
+        filters: {
+            formatPrice: function(value) {
+                let val = (value/1).toFixed(2).replace(',', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            },
         }
     }
 </script>

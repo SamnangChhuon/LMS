@@ -67,11 +67,11 @@ let routes = [
     // Dasboard
     { 
         path: '/dashboard', 
-        name: 'dashboard',
+        name: 'Dashboard',
         component: require('./components/Dashboard.vue').default, 
         meta: {
             breadcrumb: 'Dashboard'
-        } 
+        }
     },
     // Customer
     { 
@@ -148,7 +148,7 @@ let routes = [
     // Developer
     { 
         path: '/developer', 
-        name: 'developer',
+        name: 'Developer',
         component: require('./components/Developer.vue').default, 
         meta: {
             breadcrumb: 'Developer'
@@ -166,16 +166,25 @@ let routes = [
     // Profile of User
     { 
         path: '/profile', 
-        name: 'profile',
+        name: 'Profile',
         component: require('./components/Profile.vue').default, 
         meta: {
             breadcrumb: 'Profile'
         } 
     },
+    // Staffs
+    { 
+        path: '/staffs', 
+        name: 'Staffs', 
+        component: require('./components/staff/Staffs.vue').default, 
+        meta: {
+            breadcrumb: 'Staffs'
+        } 
+    },
     // User
     { 
         path: '/users', 
-        name: 'users', 
+        name: 'Users', 
         component: require('./components/Users.vue').default, 
         meta: {
             breadcrumb: 'Users'

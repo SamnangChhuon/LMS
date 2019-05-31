@@ -13,10 +13,10 @@ class Product extends Model
     use Dataviewer;
 
     protected $allowedFilters = [
-        'id' ,'name', 'code', 'status', 'created_at',
+        'id' ,'name', 'code', 'status', 'price', 'created_at',
     ];
 
     protected $orderable = [
-        'id' ,'name', 'code', 'status', 'created_at',
+        'id' ,'name', 'code', 'status', 'price', 'created_at',
     ];
 }
