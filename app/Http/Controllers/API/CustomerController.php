@@ -63,8 +63,9 @@ class CustomerController extends Controller
             if (empty($request['type'])) {
                 $request['type'] = 'active';
             }
-            if(Customer::create($request->all())){
-                return response()->json(['success' => 'Customer\'s added in successfully.']);
+            if($customer = Customer::create($request->all())){
+                Storage::makeDirectory('/customers/' . $customer->id);
+                return response()->json(['success' => 'Customer\'s added in successfully.', 'id' => $customer->id]);
             } else {
                 return response()->json(['error' => 'Data can not insert.']);
             }
@@ -140,7 +141,6 @@ class CustomerController extends Controller
             } else {
                 $customer->update($request->all());
                 // return 'Customer\'s update in successfully...';
-
                 return response()->json(['success' => 'Customer\'s update in successfully.']);
             }
         }
@@ -155,7 +155,6 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         $customer = Customer::findOrFail($id);
-
         // Delete the user
         $customer->delete();
         return ['status' => 'Customer Deleted'];

@@ -79,7 +79,25 @@ let routes = [
         name: 'Customers',
         component: require('./components/customers/NewCustomer.vue').default, 
         meta: {
-            breadcrumb: 'Customer'
+            breadcrumb: 'Customers'
+        } 
+    },
+    // Customer > Create
+    { 
+        path: '/customer/create', 
+        name: 'CreateCustomer',
+        component: require('./components/customers/Form.vue').default, 
+        meta: {
+            breadcrumb: 'Create Customer'
+        } 
+    },
+    // Customer > :id > edit
+    { 
+        path: '/customer/:id/edit', 
+        name: 'UpdateCustomer',
+        component: require('./components/customers/Form.vue').default, 
+        meta: {
+            breadcrumb: 'Update Customer'
         } 
     },
     // Customer > View
@@ -185,7 +203,7 @@ let routes = [
     { 
         path: '/users', 
         name: 'Users', 
-        component: require('./components/Users.vue').default, 
+        component: require('./components/users/Users.vue').default, 
         meta: {
             breadcrumb: 'Users'
         } 
@@ -229,6 +247,11 @@ Vue.filter('formatSize', function (size) {
     }
     return size.toString() + ' B'
 });
+Vue.filter('phoneNumber', function (phone) {
+    if (phone != null) {
+        return phone.replace(/(\d{1,3})(\d{1,3})(\d{1,4})/g, '$1 $2 $3');
+    }
+});
 
 window.Fire = new Vue();
 
@@ -264,15 +287,6 @@ Vue.component(
     'not-found',
     require('./components/NotFound.vue').default
 );
-
-Vue.component('vuetable', require('./components/components/datatable/Vuetable.vue').default);
-Vue.component('vuetable-pagination', require('./components/components/datatable/VueTablePagination.vue').default);
-Vue.component('vuetable-pagination-dropdown', require('./components/components/datatable/VueTablePaginationDropDown.vue').default);
-Vue.component('vuetable-pagination-info', require('./components/components/datatable/VueTablePaginationInfo.vue').default);
-
-Vue.component('custom-actions', require('./components/components/datatable/CustomActions.vue').default);
-Vue.component('my-detail-row', require('./components/components/datatable/DetailRow.vue').default);
-Vue.component('customer-detail', require('./components/components/datatable/CustomerDetail.vue').default);
 
 
 const VueUploadComponent = require('vue-upload-component')

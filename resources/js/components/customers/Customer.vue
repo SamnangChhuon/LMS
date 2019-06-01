@@ -314,7 +314,6 @@ import moment from 'moment'
                         this.customers = response.data;
                     });
             },
-            
 
             loadCustomers() {
                 axios.get("api/customer").then(response => {

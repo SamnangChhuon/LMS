@@ -13,7 +13,7 @@
                     <span>of the following:</span>
                 </div>
                 <div class="card-tools mt-1">
-                    <button class="btn btn-success" @click="addNewCustomer() , collapseToggle()">Add New <i class="fas fa-user-plus fa-fw"></i></button>
+                    <slot name="addNew"></slot>
                 </div>
             </div>
             <div class="card-body">
@@ -232,7 +232,6 @@
                 this.applyChange()
             },
             exportToCSV() {
-                // next video
             },
             resetFilter() {
                 this.appliedFilters.splice(0)

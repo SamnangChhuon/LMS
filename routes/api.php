@@ -28,6 +28,7 @@ Route::apiResources([
     'income'  =>  'API\IncomeController',
     'expense'  =>  'API\ExpenseController'
     ]);
+
     
 Route::get('profile', 'API\UserController@profile');
 Route::get('findUser', 'API\UserController@search');
@@ -42,11 +43,8 @@ Route::put('customer/avatar', 'API\CustomerController@uploadAvatar');
 Route::get('getCustomers', 'API\CustomerController@getCustomers');
 Route::get('findCustomer', 'API\CustomerController@searchCustomer');
 Route::put('customerAvatar/{id}', 'API\CustomerController@avatarUpload');
+Route::put('customerAvatar/{id}', 'API\CustomerController@avatarUpload');
+
 
 Route::get('getProducts', 'API\ProductController@getProducts');
 Route::get('getProduct/{id}', 'API\ProductController@getProduct');
-
-
-
-
-
