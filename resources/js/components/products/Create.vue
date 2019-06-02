@@ -134,43 +134,39 @@
                                 </form>
                             </div>
                             <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col-md-12 mt-3">
-                                        <table style="width:100%">
-                                            <tr>
-                                                <td>
-                                                    <h5>Product Type Table</h5>
-                                                </td>
-                                                <td class="fa-pull-right">
-                                                    <button type="button" class="btn btn-success" id="btnCreateType" @click="createType()" data-toggle="modal" data-target="#createProductType">New Type <i class="fas fa-plus"></i></button>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <table class="table table-hover table-sm">
-                                            <thead class="thead-dark">
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th>Product Type</th>
-                                                    <th>Modified Time</th>
-                                                    <th>Modify</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="(type, index) in types.data" :key="type.id">
-                                                    <td>{{ index + 1 }}</td>
-                                                    <td>{{ type.type_name }}</td>
-                                                    <td>{{ type.created_at | myDate }}</td>
-                                                    <td>
-                                                        <a href="#" @click="editProductType(type)"><i class="fas fa-edit text-info"></i></a>
-                                                        |
-                                                        <a href="#" @click="deleteProductType(type.id)"><i class="fas fa-trash text-danger"></i></a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <pagination :data="types" @pagination-change-page="getTypes"></pagination>
-                                    </div>
-                                </div>
+                                <table style="width:100%">
+                                    <tr>
+                                        <td>
+                                            <h5>Product Type Table</h5>
+                                        </td>
+                                        <td class="fa-pull-right">
+                                            <button type="button" class="btn btn-success" id="btnCreateType" @click="createType()" data-toggle="modal" data-target="#createProductType">New Type <i class="fas fa-plus"></i></button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="table table-hover table-sm">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Product Type</th>
+                                            <th>Modified Time</th>
+                                            <th>Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(type, index) in types.data" :key="type.id">
+                                            <td>{{ index + 1 }}</td>
+                                            <td>{{ type.type_name }}</td>
+                                            <td>{{ type.created_at | myDate }}</td>
+                                            <td>
+                                                <a href="#" @click="editProductType(type)"><i class="fas fa-edit text-info"></i></a>
+                                                |
+                                                <a href="#" @click="deleteProductType(type.id)"><i class="fas fa-trash text-danger"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <pagination :data="types" @pagination-change-page="getTypes"></pagination>
                             </div>
                         </div>
                     </div>
@@ -186,7 +182,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Creating New Type Category</h5>
+                        <h5 class="modal-title">Creating New Product Type</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                         </button>
@@ -231,10 +227,8 @@
                 customer: {},
 
                 editModeProduct: false,
-                editModeProductCategory: false,
                 editModeProductType: false,
                 product: {},
-                categories: {},
                 types: {},
                 formProduct: new Form({
                     id:'',

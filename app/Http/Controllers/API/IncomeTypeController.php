@@ -9,13 +9,23 @@ use LandMS\Http\Controllers\Controller;
 class IncomeTypeController extends Controller
 {
     /**
+     * Create a new controller instance
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return Type::latest()->paginate(10);
     }
 
     /**
@@ -36,7 +46,17 @@ class IncomeTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name'  =>  'required|string|max:45',
+        ]);
+
+        $nameType = Type::where('name', '=', $request['name'] )->exists();
+        if ($nameType) {
+            return response()->json(['existed' => 'Name\'s Type already existed.']);
+        } else {
+            Type::create($request->all());
+            return response()->json(['success' => 'Type added in successfully.']);
+        }
     }
 
     /**
@@ -47,7 +67,7 @@ class IncomeTypeController extends Controller
      */
     public function show($id)
     {
-        //
+        return Type::find($id);
     }
 
     /**
@@ -70,7 +90,25 @@ class IncomeTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $type = Type::findOrFail($id);
+
+        $this->validate($request, [
+            'name'  =>  'required|string|max:45',
+        ]);
+
+        $name = Type::where('name', '=', $request['name'] )->exists();
+
+        if ($type->name == $request['name']) {
+            $type->update($request->all());
+            return response()->json(['success' => 'Type update in successfully.']);
+        } else {
+            if ($name) {
+                return response()->json(['existed' => 'Name\'s Type already existed.']);
+            } else {
+                $type->update($request->all());
+                return response()->json(['success' => 'Type update in successfully.']);
+            }
+        }
     }
 
     /**
@@ -81,6 +119,8 @@ class IncomeTypeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $type = Type::findOrFail($id);
+        $type->delete();
+        return ['status' => 'Type Deleted'];
     }
 }

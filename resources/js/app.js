@@ -156,11 +156,11 @@ let routes = [
     },
     // Income
     { 
-        path: '/income', 
-        name: 'Income',
-        component: require('./components/income/Income.vue').default, 
+        path: '/incomeexpense', 
+        name: 'IncomeExpense',
+        component: require('./components/income&expense/Index.vue').default, 
         meta: {
-            breadcrumb: 'Income'
+            breadcrumb: 'Income & Expense'
         } 
     },
     // Developer

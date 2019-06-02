@@ -122,7 +122,7 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="{name: 'Income'}" class="nav-link">
+            <router-link :to="{name: 'IncomeExpense'}" class="nav-link">
               <i class="nav-icon fas fa-coins"></i>
               <p>Income & Expense</p>
             </router-link>

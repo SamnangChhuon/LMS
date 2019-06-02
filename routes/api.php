@@ -26,9 +26,11 @@ Route::apiResources([
     'file'  =>  'API\FileController',
 
     'income'  =>  'API\IncomeController',
-    'expense'  =>  'API\ExpenseController'
-    ]);
+    'incomeType'    =>  'API\IncomeTypeController',
 
+    'expense'  =>  'API\ExpenseController',
+    'expenseType'    =>  'API\ExpenseTypeController',
+    ]);
     
 Route::get('profile', 'API\UserController@profile');
 Route::get('findUser', 'API\UserController@search');

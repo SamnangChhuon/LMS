@@ -4256,10 +4256,194 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income/Income.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/income/Income.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/Index.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/income&expense/Index.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _income_Income_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./income/Income.vue */ "./resources/js/components/income&expense/income/Income.vue");
+/* harmony import */ var _expense_Expense_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./expense/Expense.vue */ "./resources/js/components/income&expense/expense/Expense.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    Income: _income_Income_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    Expense: _expense_Expense_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      type: 'income'
+    };
+  },
+  methods: {},
+  created: function created() {
+    this.$Progress.start();
+  },
+  mounted: function mounted() {
+    this.$Progress.finish();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/expense/Expense.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/income&expense/expense/Expense.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      formExpense: new Form({
+        payment_id: '',
+        expense_type_id: '',
+        expense_date: '',
+        amount: '',
+        description: ''
+      })
+    };
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/income/Income.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/income&expense/income/Income.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4396,34 +4580,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      type: 'expense',
+      incomeEditMode: false,
       formIncome: new Form({
-        cid: ''
+        payment_id: '',
+        income_type_id: '',
+        income_date: '',
+        amount: '',
+        description: ''
       }),
-      formExpense: new Form({})
+      incomeTypeEditMode: false,
+      incomeTypes: {},
+      formIncomeType: new Form({
+        name: ''
+      })
     };
   },
   methods: {
+    //Income
     createIncome: function createIncome() {
       var _this = this;
 
@@ -4444,18 +4620,169 @@ __webpack_require__.r(__webpack_exports__);
             title: 'Income added in successfully'
           });
 
+          _this.$Progress.finish();
+
           _this.formIncome.clear();
 
           _this.formIncome.reset();
-
-          _this.$Progress.finish();
         }
       })["catch"](function () {
         _this.$Progress.fail();
       });
+    },
+    updateIncome: function updateIncome() {
+      var _this2 = this;
+
+      this.$Progress.start();
+      this.formIncome.put('/api/income/' + this.formIncome.id).then(function (response) {
+        if (response.data.existed) {
+          _this2.$Progress.fail();
+
+          Swal.fire({
+            title: 'Duplicate Data!!!',
+            text: 'Income\'s already existed',
+            type: 'error',
+            confirmButtonText: 'Close'
+          });
+        } else {
+          Swal.fire('Updated!', 'Income\'s name has been updated.', 'success');
+
+          _this2.$Progress.finish();
+
+          _this2.formIncome.clear();
+
+          _this2.formIncome.reset();
+        }
+      })["catch"](function () {
+        _this2.$Progress.fail();
+      });
+    },
+    // Type of Income
+    createType: function createType() {
+      this.incomeTypeEditMode = false;
+      this.formIncomeType.clear(); // Clear Errors Form
+
+      this.formIncomeType.reset(); // Clear Input Form
+
+      $('#createIncomeType').modal('show');
+    },
+    createIncomeType: function createIncomeType() {
+      var _this3 = this;
+
+      this.$Progress.start();
+      this.formType.post('/api/incomeType').then(function (response) {
+        if (response.data.existed) {
+          _this3.$Progress.fail();
+
+          Swal.fire({
+            title: 'Duplicate Data!!!',
+            text: 'Type\'s already existed',
+            type: 'error',
+            confirmButtonText: 'Close'
+          });
+          $('input[name=name]').addClass('is-invalid');
+          setTimeout(function () {
+            $('input[name=name]').removeClass('is-invalid');
+          }, 5000);
+        } else {
+          Fire.$emit('reloadTypes');
+          $('#createIncomeType').modal('hide');
+          toast.fire({
+            type: 'success',
+            title: 'Type added in successfully'
+          });
+
+          _this3.$Progress.finish();
+        }
+      })["catch"](function () {
+        _this3.$Progress.fail();
+      });
+    },
+    indexIncomeType: function indexIncomeType() {
+      var _this4 = this;
+
+      axios.get("/api/incomeType").then(function (_ref) {
+        var data = _ref.data;
+        return _this4.incomeTypes = data;
+      });
+    },
+    getIncomeTypes: function getIncomeTypes() {
+      var _this5 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get('/api/incomeType?page=' + page).then(function (response) {
+        _this5.incomeTypes = response.data;
+      });
+    },
+    editIncomeType: function editIncomeType(value) {
+      this.incomeTypeEditMode = true;
+      this.formIncomeType.reset(); // Reset the modal
+
+      this.formIncomeType.clear();
+      $('#createIncomeType').modal('show');
+      this.formIncomeType.fill(value); // Pass the data to the modal
+    },
+    updateIncomeType: function updateIncomeType() {
+      var _this6 = this;
+
+      this.$Progress.start();
+      this.formIncomeType.put('/api/productType/' + this.formIncomeType.id).then(function (response) {
+        if (response.data.existed) {
+          _this6.$Progress.fail();
+
+          Swal.fire({
+            title: 'Duplicate Data!!!',
+            text: 'Type\'s already existed',
+            type: 'error',
+            confirmButtonText: 'Close'
+          });
+          $('input[name=name]').addClass('is-invalid');
+          setTimeout(function () {
+            $('input[name=name]').addClass('is-invalid');
+          }, 4000);
+        } else {
+          Fire.$emit('reloadTypes');
+          $('#createIncomeType').modal('hide');
+          Swal.fire('Updated!', 'Type\'s has been updated.', 'success');
+
+          _this6.$Progress.finish();
+        }
+      })["catch"](function () {
+        _this6.$Progress.fail();
+      });
+    },
+    deleteIncomeType: function deleteIncomeType(id) {
+      var _this7 = this;
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        // Send requesst to the server
+        if (result.value) {
+          _this7.formIncomeType["delete"]('/api/productType/' + id).then(function () {
+            Swal.fire('Deleted!', 'Type\'s has been deleted.', 'success');
+            Fire.$emit('reloadTypes'); // Register new event "reloadData"
+          })["catch"](function () {
+            Swal.fire("Failed!", "There was something wrong.", "warning");
+          });
+        }
+      });
+    },
+    created: function created() {
+      var _this8 = this;
+
+      this.indexIncomeType();
+      Fire.$on('reloadTypes', function () {
+        _this8.indexIncomeType();
+      });
     }
-  },
-  created: function created() {}
+  }
 });
 
 /***/ }),
@@ -5464,10 +5791,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -5477,10 +5800,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       customer: {},
       editModeProduct: false,
-      editModeProductCategory: false,
       editModeProductType: false,
       product: {},
-      categories: {},
       types: {},
       formProduct: new Form({
         id: '',
@@ -74415,10 +74736,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income/Income.vue?vue&type=template&id=43cdcd98&":
-/*!****************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/income/Income.vue?vue&type=template&id=43cdcd98& ***!
-  \****************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/Index.vue?vue&type=template&id=70a65589&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/income&expense/Index.vue?vue&type=template&id=70a65589& ***!
+  \***********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -74431,759 +74752,432 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header d-flex" }, [
-            _c("h3", { staticClass: "card-title m-0" }, [
-              _vm._v(_vm._s(_vm.type == "expense" ? "Expense" : "Income"))
-            ]),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header d-flex" }, [
+        _c("h3", { staticClass: "card-title m-0" }, [
+          _vm._v(_vm._s(_vm.type == "expense" ? "Expense" : "Income"))
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "btn-toolbar ml-auto mb-2 mb-md-0" }, [
+          _c("div", { staticClass: "btn-group mr-2 nav nav-pills" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-secondary active",
+                attrs: {
+                  type: "button",
+                  id: "tabIncome",
+                  "data-toggle": "pill",
+                  href: "#pillIncome",
+                  role: "tab",
+                  "aria-controls": "pillIncome",
+                  "aria-selected": "false"
+                },
+                on: {
+                  click: function($event) {
+                    _vm.type = "income"
+                  }
+                }
+              },
+              [_vm._v("Income")]
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "btn-toolbar ml-auto mb-2 mb-md-0" }, [
-              _c("div", { staticClass: "btn-group mr-2 nav nav-pills" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-secondary active",
-                    attrs: {
-                      type: "button",
-                      id: "tabIncome",
-                      "data-toggle": "pill",
-                      href: "#pillIncome",
-                      role: "tab",
-                      "aria-controls": "pillIncome",
-                      "aria-selected": "false"
-                    },
-                    on: {
-                      click: function($event) {
-                        _vm.type = "income"
-                      }
-                    }
-                  },
-                  [_vm._v("Income")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-secondary",
-                    attrs: {
-                      type: "button",
-                      id: "tabExpense",
-                      "data-toggle": "pill",
-                      href: "#pillExpense",
-                      role: "tab",
-                      "aria-controls": "pillExpense",
-                      "aria-selected": "true"
-                    },
-                    on: {
-                      click: function($event) {
-                        _vm.type = "expense"
-                      }
-                    }
-                  },
-                  [_vm._v("Expense")]
-                )
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-md-5" }, [
-                _c("strong", [_vm._v("General")]),
-                _vm._v(" "),
-                _c("p", [_vm._v("Put data in here to create income profile")]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "tab-content", attrs: { id: "pillOptions" } },
-                  [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "tab-pane fade",
-                        attrs: {
-                          id: "pillExpense",
-                          role: "tabpanel",
-                          "aria-labelledby": "tabExpense"
-                        }
-                      },
-                      [
-                        _c("form", [
-                          _c("div", { staticClass: "row" }, [
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _vm._m(0),
-                                  _vm._v(" "),
-                                  _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.formIncome.cid,
-                                        expression: "formIncome.cid"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    class: {
-                                      "is-invalid": _vm.formIncome.errors.has(
-                                        "cid"
-                                      )
-                                    },
-                                    attrs: { type: "text", name: "cid" },
-                                    domProps: { value: _vm.formIncome.cid },
-                                    on: {
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          _vm.formIncome,
-                                          "cid",
-                                          $event.target.value
-                                        )
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: {
-                                      form: _vm.formIncome,
-                                      field: "cid"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c("div", { staticClass: "form-group" }, [
-                                _vm._m(1),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "input-group" },
-                                  [
-                                    _c(
-                                      "select",
-                                      {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.formIncome.type,
-                                            expression: "formIncome.type"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        class: {
-                                          "is-valid": _vm.formIncome.errors.has(
-                                            "type"
-                                          )
-                                        },
-                                        attrs: { name: "type", id: "type" },
-                                        on: {
-                                          change: function($event) {
-                                            var $$selectedVal = Array.prototype.filter
-                                              .call(
-                                                $event.target.options,
-                                                function(o) {
-                                                  return o.selected
-                                                }
-                                              )
-                                              .map(function(o) {
-                                                var val =
-                                                  "_value" in o
-                                                    ? o._value
-                                                    : o.value
-                                                return val
-                                              })
-                                            _vm.$set(
-                                              _vm.formIncome,
-                                              "type",
-                                              $event.target.multiple
-                                                ? $$selectedVal
-                                                : $$selectedVal[0]
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("option", { attrs: { value: "" } }, [
-                                          _vm._v("Select an option")
-                                        ])
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("has-error", {
-                                      attrs: {
-                                        form: _vm.formIncome,
-                                        field: "type"
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c(
-                                      "span",
-                                      { staticClass: "input-group-append" },
-                                      [
-                                        _c(
-                                          "button",
-                                          {
-                                            staticClass: "btn btn-success",
-                                            attrs: {
-                                              type: "button",
-                                              id: "btnCreateType",
-                                              "data-toggle": "modal",
-                                              "data-target":
-                                                "#createProductType"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.createType()
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("i", {
-                                              staticClass: "fas fa-plus"
-                                            })
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  ],
-                                  1
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _vm._m(2),
-                                  _vm._v(" "),
-                                  _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.formIncome.date,
-                                        expression: "formIncome.date"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    class: {
-                                      "is-invalid": _vm.formIncome.errors.has(
-                                        "date"
-                                      )
-                                    },
-                                    attrs: { type: "date", name: "date" },
-                                    domProps: { value: _vm.formIncome.date },
-                                    on: {
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          _vm.formIncome,
-                                          "date",
-                                          $event.target.value
-                                        )
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: {
-                                      form: _vm.formIncome,
-                                      field: "date"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _vm._m(3),
-                                  _vm._v(" "),
-                                  _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.formIncome.amount,
-                                        expression: "formIncome.amount"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    class: {
-                                      "is-invalid": _vm.formIncome.errors.has(
-                                        "amount"
-                                      )
-                                    },
-                                    attrs: { type: "text", name: "amount" },
-                                    domProps: { value: _vm.formIncome.amount },
-                                    on: {
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          _vm.formIncome,
-                                          "amount",
-                                          $event.target.value
-                                        )
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: {
-                                      form: _vm.formIncome,
-                                      field: "amount"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-12" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _c(
-                                    "label",
-                                    { attrs: { for: "description" } },
-                                    [_vm._v("Description")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("textarea", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.formIncome.description,
-                                        expression: "formIncome.description"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    class: {
-                                      "is-invalid": _vm.formIncome.errors.has(
-                                        "description"
-                                      )
-                                    },
-                                    attrs: {
-                                      name: "description",
-                                      id: "description",
-                                      rows: "4"
-                                    },
-                                    domProps: {
-                                      value: _vm.formIncome.description
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          _vm.formIncome,
-                                          "description",
-                                          $event.target.value
-                                        )
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: {
-                                      form: _vm.formIncome,
-                                      field: "description"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-primary",
-                              attrs: { type: "submit", name: "submit" }
-                            },
-                            [_vm._v("Submit")]
-                          )
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "tab-pane fade active show",
-                        attrs: {
-                          id: "pillIncome",
-                          role: "tabpanel",
-                          "aria-labelledby": "tabIncome"
-                        }
-                      },
-                      [
-                        _c("form", [
-                          _c("div", { staticClass: "row" }, [
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _vm._m(4),
-                                  _vm._v(" "),
-                                  _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.formExpense.cid,
-                                        expression: "formExpense.cid"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    class: {
-                                      "is-invalid": _vm.formExpense.errors.has(
-                                        "cid"
-                                      )
-                                    },
-                                    attrs: { type: "text", name: "cid" },
-                                    domProps: { value: _vm.formExpense.cid },
-                                    on: {
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          _vm.formExpense,
-                                          "cid",
-                                          $event.target.value
-                                        )
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: {
-                                      form: _vm.formExpense,
-                                      field: "cid"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c("div", { staticClass: "form-group" }, [
-                                _vm._m(5),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "input-group" },
-                                  [
-                                    _c(
-                                      "select",
-                                      {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.formExpense.type,
-                                            expression: "formExpense.type"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        class: {
-                                          "is-valid": _vm.formExpense.errors.has(
-                                            "type"
-                                          )
-                                        },
-                                        attrs: { name: "type", id: "type" },
-                                        on: {
-                                          change: function($event) {
-                                            var $$selectedVal = Array.prototype.filter
-                                              .call(
-                                                $event.target.options,
-                                                function(o) {
-                                                  return o.selected
-                                                }
-                                              )
-                                              .map(function(o) {
-                                                var val =
-                                                  "_value" in o
-                                                    ? o._value
-                                                    : o.value
-                                                return val
-                                              })
-                                            _vm.$set(
-                                              _vm.formExpense,
-                                              "type",
-                                              $event.target.multiple
-                                                ? $$selectedVal
-                                                : $$selectedVal[0]
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("option", { attrs: { value: "" } }, [
-                                          _vm._v("Select an option")
-                                        ])
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("has-error", {
-                                      attrs: {
-                                        form: _vm.formExpense,
-                                        field: "type"
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c(
-                                      "span",
-                                      { staticClass: "input-group-append" },
-                                      [
-                                        _c(
-                                          "button",
-                                          {
-                                            staticClass: "btn btn-success",
-                                            attrs: {
-                                              type: "button",
-                                              id: "btnCreateType",
-                                              "data-toggle": "modal",
-                                              "data-target":
-                                                "#createProductType"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.createType()
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("i", {
-                                              staticClass: "fas fa-plus"
-                                            })
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  ],
-                                  1
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _vm._m(6),
-                                  _vm._v(" "),
-                                  _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.formExpense.date,
-                                        expression: "formExpense.date"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    class: {
-                                      "is-invalid": _vm.formExpense.errors.has(
-                                        "date"
-                                      )
-                                    },
-                                    attrs: { type: "date", name: "date" },
-                                    domProps: { value: _vm.formExpense.date },
-                                    on: {
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          _vm.formExpense,
-                                          "date",
-                                          $event.target.value
-                                        )
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: {
-                                      form: _vm.formExpense,
-                                      field: "date"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c("div", { staticClass: "form-group" }, [
-                                _vm._m(7),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "input-group" },
-                                  [
-                                    _vm._m(8),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.formExpense.amount,
-                                          expression: "formExpense.amount"
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      class: {
-                                        "is-invalid": _vm.formExpense.errors.has(
-                                          "amount"
-                                        )
-                                      },
-                                      attrs: {
-                                        type: "text",
-                                        name: "amount",
-                                        placeholder: "0.00"
-                                      },
-                                      domProps: {
-                                        value: _vm.formExpense.amount
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.formExpense,
-                                            "amount",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c("has-error", {
-                                      attrs: {
-                                        form: _vm.formExpense,
-                                        field: "amount"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-12" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _c(
-                                    "label",
-                                    { attrs: { for: "description" } },
-                                    [_vm._v("Description")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("textarea", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.formExpense.description,
-                                        expression: "formExpense.description"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    class: {
-                                      "is-invalid": _vm.formExpense.errors.has(
-                                        "description"
-                                      )
-                                    },
-                                    attrs: {
-                                      name: "description",
-                                      id: "description",
-                                      rows: "4"
-                                    },
-                                    domProps: {
-                                      value: _vm.formExpense.description
-                                    },
-                                    on: {
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          _vm.formExpense,
-                                          "description",
-                                          $event.target.value
-                                        )
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: {
-                                      form: _vm.formExpense,
-                                      field: "description"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-primary",
-                              attrs: { type: "submit", name: "submit" }
-                            },
-                            [_vm._v("Submit")]
-                          )
-                        ])
-                      ]
-                    )
-                  ]
-                )
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-footer" })
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-secondary",
+                attrs: {
+                  type: "button",
+                  id: "tabExpense",
+                  "data-toggle": "pill",
+                  href: "#pillExpense",
+                  role: "tab",
+                  "aria-controls": "pillExpense",
+                  "aria-selected": "true"
+                },
+                on: {
+                  click: function($event) {
+                    _vm.type = "expense"
+                  }
+                }
+              },
+              [_vm._v("Expense")]
+            )
+          ])
         ])
-      ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c(
+          "div",
+          { staticClass: "tab-content", attrs: { id: "pillOptions" } },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "tab-pane fade active show",
+                attrs: {
+                  id: "pillIncome",
+                  role: "tabpanel",
+                  "aria-labelledby": "tabIncome"
+                }
+              },
+              [_c("Income")],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", {
+              staticClass: "tab-pane fade",
+              attrs: {
+                id: "pillExpense",
+                role: "tabpanel",
+                "aria-labelledby": "tabExpense"
+              }
+            })
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-footer" })
     ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/expense/Expense.vue?vue&type=template&id=c6e62fd0&":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/income&expense/expense/Expense.vue?vue&type=template&id=c6e62fd0& ***!
+  \*********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("form", [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("strong", [_vm._v("General")]),
+        _vm._v(" "),
+        _c("p", [_vm._v("Put data in here to create income profile")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-6" }, [
+            _c(
+              "div",
+              { staticClass: "form-group" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.formExpense.payment_id,
+                      expression: "formExpense.payment_id"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.formExpense.errors.has("payment_id")
+                  },
+                  attrs: { type: "text", name: "payment_id" },
+                  domProps: { value: _vm.formExpense.payment_id },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.formExpense,
+                        "payment_id",
+                        $event.target.value
+                      )
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("has-error", {
+                  attrs: { form: _vm.formExpense, field: "payment_id" }
+                })
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "input-group" },
+                [
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.formExpense.expense_type_id,
+                          expression: "formExpense.expense_type_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      class: {
+                        "is-valid": _vm.formExpense.errors.has(
+                          "expense_type_id"
+                        )
+                      },
+                      attrs: { name: "type" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.formExpense,
+                            "expense_type_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "" } }, [
+                        _vm._v("Select an option")
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("has-error", {
+                    attrs: { form: _vm.formExpense, field: "expense_type_id" }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "input-group-append" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        attrs: {
+                          type: "button",
+                          id: "btnCreateType",
+                          "data-toggle": "modal",
+                          "data-target": "#createProductType"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.createType()
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-plus" })]
+                    )
+                  ])
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-6" }, [
+            _c(
+              "div",
+              { staticClass: "form-group" },
+              [
+                _vm._m(2),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.formExpense.expense_date,
+                      expression: "formExpense.expense_date"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.formExpense.errors.has("expense_date")
+                  },
+                  attrs: { type: "date", name: "expense_date" },
+                  domProps: { value: _vm.formExpense.expense_date },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.formExpense,
+                        "expense_date",
+                        $event.target.value
+                      )
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("has-error", {
+                  attrs: { form: _vm.formExpense, field: "expense_date" }
+                })
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-6" }, [
+            _c(
+              "div",
+              { staticClass: "form-group" },
+              [
+                _vm._m(3),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.formExpense.amount,
+                      expression: "formExpense.amount"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: { "is-invalid": _vm.formExpense.errors.has("amount") },
+                  attrs: { type: "text", name: "amount" },
+                  domProps: { value: _vm.formExpense.amount },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.formExpense, "amount", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("has-error", {
+                  attrs: { form: _vm.formExpense, field: "amount" }
+                })
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-12" }, [
+            _c(
+              "div",
+              { staticClass: "form-group" },
+              [
+                _c("label", { attrs: { for: "description" } }, [
+                  _vm._v("Description")
+                ]),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.formExpense.description,
+                      expression: "formExpense.description"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.formExpense.errors.has("description")
+                  },
+                  attrs: { name: "description", rows: "4" },
+                  domProps: { value: _vm.formExpense.description },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.formExpense,
+                        "description",
+                        $event.target.value
+                      )
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("has-error", {
+                  attrs: { form: _vm.formExpense, field: "description" }
+                })
+              ],
+              1
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-md-6" },
+        [
+          _c("table", { staticStyle: { width: "100%" } }, [
+            _c("tr", [
+              _vm._m(4),
+              _vm._v(" "),
+              _c("td", { staticClass: "fa-pull-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    attrs: {
+                      type: "button",
+                      "data-toggle": "modal",
+                      "data-target": "#createExpenseType"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.createExpenseType()
+                      }
+                    }
+                  },
+                  [_vm._v("New Type "), _c("i", { staticClass: "fas fa-plus" })]
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _vm._m(5),
+          _vm._v(" "),
+          _c("pagination", {
+            attrs: { data: _vm.expenseTypes },
+            on: { "pagination-change-page": _vm.getExpenseType }
+          })
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary",
+        attrs: { type: "submit", name: "submit" }
+      },
+      [_vm._v("Submit")]
+    )
   ])
 }
 var staticRenderFns = [
@@ -75223,6 +75217,573 @@ var staticRenderFns = [
       _c("span", { staticClass: "text-danger" }, [_vm._v("*")])
     ])
   },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [_c("h5", [_vm._v("Expense Type Table")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("table", { staticClass: "table table-hover table-sm" }, [
+      _c("thead", { staticClass: "thead-dark" }, [
+        _c("tr", [
+          _c("th", [_vm._v("No.")]),
+          _vm._v(" "),
+          _c("th", [_vm._v("Expense Type")]),
+          _vm._v(" "),
+          _c("th", [_vm._v("Modified Time")]),
+          _vm._v(" "),
+          _c("th", [_vm._v("Modify")])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("tbody")
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/income/Income.vue?vue&type=template&id=3b9d5446&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/income&expense/income/Income.vue?vue&type=template&id=3b9d5446& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("form", [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("strong", [_vm._v("General")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("Put data in here to create income profile")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-6" }, [
+              _c(
+                "div",
+                { staticClass: "form-group" },
+                [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.formIncome.payment_id,
+                        expression: "formIncome.payment_id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.formIncome.errors.has("payment_id")
+                    },
+                    attrs: { type: "text", name: "payment_id" },
+                    domProps: { value: _vm.formIncome.payment_id },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.formIncome,
+                          "payment_id",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("has-error", {
+                    attrs: { form: _vm.formIncome, field: "payment_id" }
+                  })
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }, [
+              _c("div", { staticClass: "form-group" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "input-group" },
+                  [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.formIncome.income_type_id,
+                            expression: "formIncome.income_type_id"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        class: {
+                          "is-valid": _vm.formIncome.errors.has(
+                            "income_type_id"
+                          )
+                        },
+                        attrs: { name: "type" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.formIncome,
+                              "income_type_id",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }, [
+                          _vm._v("Select an option")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("has-error", {
+                      attrs: { form: _vm.formIncome, field: "income_type_id" }
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "input-group-append" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success",
+                          attrs: {
+                            type: "button",
+                            id: "btnCreateType",
+                            "data-toggle": "modal",
+                            "data-target": "#createProductType"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.createType()
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-plus" })]
+                      )
+                    ])
+                  ],
+                  1
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }, [
+              _c(
+                "div",
+                { staticClass: "form-group" },
+                [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.formIncome.income_date,
+                        expression: "formIncome.income_date"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.formIncome.errors.has("income_date")
+                    },
+                    attrs: { type: "date", name: "income_date" },
+                    domProps: { value: _vm.formIncome.income_date },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.formIncome,
+                          "income_date",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("has-error", {
+                    attrs: { form: _vm.formIncome, field: "income_date" }
+                  })
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }, [
+              _c("div", { staticClass: "form-group" }, [
+                _vm._m(3),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "input-group" },
+                  [
+                    _vm._m(4),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.formIncome.amount,
+                          expression: "formIncome.amount"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      class: {
+                        "is-invalid": _vm.formIncome.errors.has("amount")
+                      },
+                      attrs: {
+                        type: "text",
+                        name: "amount",
+                        placeholder: "0.00"
+                      },
+                      domProps: { value: _vm.formIncome.amount },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.formIncome,
+                            "amount",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("has-error", {
+                      attrs: { form: _vm.formIncome, field: "amount" }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-12" }, [
+              _c(
+                "div",
+                { staticClass: "form-group" },
+                [
+                  _c("label", { attrs: { for: "description" } }, [
+                    _vm._v("Description")
+                  ]),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.formIncome.description,
+                        expression: "formIncome.description"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.formIncome.errors.has("description")
+                    },
+                    attrs: { name: "description", rows: "4" },
+                    domProps: { value: _vm.formIncome.description },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.formIncome,
+                          "description",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("has-error", {
+                    attrs: { form: _vm.formIncome, field: "description" }
+                  })
+                ],
+                1
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "col-md-6" },
+          [
+            _c("table", { staticStyle: { width: "100%" } }, [
+              _c("tr", [
+                _vm._m(5),
+                _vm._v(" "),
+                _c("td", { staticClass: "fa-pull-right" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: {
+                        type: "button",
+                        "data-toggle": "modal",
+                        "data-target": "#createIncomeType"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.createIncomeType()
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("New Type "),
+                      _c("i", { staticClass: "fas fa-plus" })
+                    ]
+                  )
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("table", { staticClass: "table table-hover table-sm" }, [
+              _vm._m(6),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.incomeTypes.data, function(type, index) {
+                  return _c("tr", { key: type.id }, [
+                    _c("td", [_vm._v(_vm._s(index + 1))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(type.name))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(_vm._s(_vm._f("myDate")(type.created_at)))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              return _vm.editIncomeType(type)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-edit text-info" })]
+                      ),
+                      _vm._v(
+                        "\n                                |\n                                "
+                      ),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteIncomeType(type.id)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-trash text-danger" })]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ]),
+            _vm._v(" "),
+            _c("pagination", {
+              attrs: { data: _vm.incomeTypes },
+              on: { "pagination-change-page": _vm.getIncomeTypes }
+            })
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { type: "submit", name: "submit" }
+        },
+        [_vm._v("Submit")]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: { id: "createIncomeType", tabindex: "100", role: "dialog" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(7),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      _vm.incomeTypeEditMode
+                        ? _vm.updateIncomeType()
+                        : _vm.createIncomeType()
+                    },
+                    keydown: function($event) {
+                      return _vm.formIncomeType.onKeydown($event)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _vm._m(8),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.formIncomeType.name,
+                              expression: "formIncomeType.name"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.formIncomeType.errors.has("name")
+                          },
+                          attrs: { type: "text", name: "name" },
+                          domProps: { value: _vm.formIncomeType.name },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.formIncomeType,
+                                "name",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.formIncomeType, field: "name" }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-light",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Cancel")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.incomeTypeEditMode,
+                            expression: "incomeTypeEditMode"
+                          }
+                        ],
+                        staticClass: "btn btn-success",
+                        attrs: { type: "submit" }
+                      },
+                      [
+                        _vm._v("Update Type "),
+                        _c("i", { staticClass: "fas fa-pencil-alt fa-fw" })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.incomeTypeEditMode,
+                            expression: "!incomeTypeEditMode"
+                          }
+                        ],
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" }
+                      },
+                      [
+                        _vm._v("Add Type "),
+                        _c("i", { staticClass: "fas fa-plus fa-fw" })
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ])
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -75267,6 +75828,60 @@ var staticRenderFns = [
       _c("span", { staticClass: "input-group-text" }, [
         _c("i", { staticClass: "fa fa-dollar-sign" })
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [_c("h5", [_vm._v("Income Type Table")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead-dark" }, [
+      _c("tr", [
+        _c("th", [_vm._v("No.")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Income Type")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Modified Time")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Modify")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [
+        _vm._v("Creating New Income Type")
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "type_name" } }, [
+      _vm._v("Product Type "),
+      _c("span", { staticClass: "text-danger" }, [_vm._v("*")])
     ])
   }
 ]
@@ -76972,115 +77587,105 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-md-6" }, [
-                _c("div", { staticClass: "row" }, [
-                  _c(
-                    "div",
-                    { staticClass: "col-md-12 mt-3" },
-                    [
-                      _c("table", { staticStyle: { width: "100%" } }, [
-                        _c("tr", [
-                          _vm._m(9),
+              _c(
+                "div",
+                { staticClass: "col-md-6" },
+                [
+                  _c("table", { staticStyle: { width: "100%" } }, [
+                    _c("tr", [
+                      _vm._m(9),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "fa-pull-right" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success",
+                            attrs: {
+                              type: "button",
+                              id: "btnCreateType",
+                              "data-toggle": "modal",
+                              "data-target": "#createProductType"
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.createType()
+                              }
+                            }
+                          },
+                          [
+                            _vm._v("New Type "),
+                            _c("i", { staticClass: "fas fa-plus" })
+                          ]
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("table", { staticClass: "table table-hover table-sm" }, [
+                    _vm._m(10),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.types.data, function(type, index) {
+                        return _c("tr", { key: type.id }, [
+                          _c("td", [_vm._v(_vm._s(index + 1))]),
                           _vm._v(" "),
-                          _c("td", { staticClass: "fa-pull-right" }, [
+                          _c("td", [_vm._v(_vm._s(type.type_name))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(_vm._s(_vm._f("myDate")(type.created_at)))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
                             _c(
-                              "button",
+                              "a",
                               {
-                                staticClass: "btn btn-success",
-                                attrs: {
-                                  type: "button",
-                                  id: "btnCreateType",
-                                  "data-toggle": "modal",
-                                  "data-target": "#createProductType"
-                                },
+                                attrs: { href: "#" },
                                 on: {
                                   click: function($event) {
-                                    return _vm.createType()
+                                    return _vm.editProductType(type)
                                   }
                                 }
                               },
                               [
-                                _vm._v("New Type "),
-                                _c("i", { staticClass: "fas fa-plus" })
+                                _c("i", {
+                                  staticClass: "fas fa-edit text-info"
+                                })
+                              ]
+                            ),
+                            _vm._v(
+                              "\n                                            |\n                                            "
+                            ),
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deleteProductType(type.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-trash text-danger"
+                                })
                               ]
                             )
                           ])
                         ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "table",
-                        { staticClass: "table table-hover table-sm" },
-                        [
-                          _vm._m(10),
-                          _vm._v(" "),
-                          _c(
-                            "tbody",
-                            _vm._l(_vm.types.data, function(type, index) {
-                              return _c("tr", { key: type.id }, [
-                                _c("td", [_vm._v(_vm._s(index + 1))]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(type.type_name))]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v(
-                                    _vm._s(_vm._f("myDate")(type.created_at))
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "a",
-                                    {
-                                      attrs: { href: "#" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.editProductType(type)
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("i", {
-                                        staticClass: "fas fa-edit text-info"
-                                      })
-                                    ]
-                                  ),
-                                  _vm._v(
-                                    "\n                                                    |\n                                                    "
-                                  ),
-                                  _c(
-                                    "a",
-                                    {
-                                      attrs: { href: "#" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.deleteProductType(type.id)
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("i", {
-                                        staticClass: "fas fa-trash text-danger"
-                                      })
-                                    ]
-                                  )
-                                ])
-                              ])
-                            }),
-                            0
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("pagination", {
-                        attrs: { data: _vm.types },
-                        on: { "pagination-change-page": _vm.getTypes }
-                      })
-                    ],
-                    1
-                  )
-                ])
-              ])
+                      }),
+                      0
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("pagination", {
+                    attrs: { data: _vm.types },
+                    on: { "pagination-change-page": _vm.getTypes }
+                  })
+                ],
+                1
+              )
             ])
           ]),
           _vm._v(" "),
@@ -77374,7 +77979,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title" }, [
-        _vm._v("Creating New Type Category")
+        _vm._v("Creating New Product Type")
       ]),
       _vm._v(" "),
       _c(
@@ -98182,11 +98787,11 @@ var routes = [// Dasboard
   }
 }, // Income
 {
-  path: '/income',
-  name: 'Income',
-  component: __webpack_require__(/*! ./components/income/Income.vue */ "./resources/js/components/income/Income.vue")["default"],
+  path: '/incomeexpense',
+  name: 'IncomeExpense',
+  component: __webpack_require__(/*! ./components/income&expense/Index.vue */ "./resources/js/components/income&expense/Index.vue")["default"],
   meta: {
-    breadcrumb: 'Income'
+    breadcrumb: 'Income & Expense'
   }
 }, // Developer
 {
@@ -99292,17 +99897,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/income/Income.vue":
-/*!***************************************************!*\
-  !*** ./resources/js/components/income/Income.vue ***!
-  \***************************************************/
+/***/ "./resources/js/components/income&expense/Index.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/income&expense/Index.vue ***!
+  \**********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Income_vue_vue_type_template_id_43cdcd98___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Income.vue?vue&type=template&id=43cdcd98& */ "./resources/js/components/income/Income.vue?vue&type=template&id=43cdcd98&");
-/* harmony import */ var _Income_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Income.vue?vue&type=script&lang=js& */ "./resources/js/components/income/Income.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Index_vue_vue_type_template_id_70a65589___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=70a65589& */ "./resources/js/components/income&expense/Index.vue?vue&type=template&id=70a65589&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/components/income&expense/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -99312,9 +99917,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Income_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Income_vue_vue_type_template_id_43cdcd98___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Income_vue_vue_type_template_id_43cdcd98___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Index_vue_vue_type_template_id_70a65589___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_70a65589___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -99324,38 +99929,176 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/income/Income.vue"
+component.options.__file = "resources/js/components/income&expense/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/income/Income.vue?vue&type=script&lang=js&":
-/*!****************************************************************************!*\
-  !*** ./resources/js/components/income/Income.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************/
+/***/ "./resources/js/components/income&expense/Index.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/income&expense/Index.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Income.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income/Income.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/income/Income.vue?vue&type=template&id=43cdcd98&":
-/*!**********************************************************************************!*\
-  !*** ./resources/js/components/income/Income.vue?vue&type=template&id=43cdcd98& ***!
-  \**********************************************************************************/
+/***/ "./resources/js/components/income&expense/Index.vue?vue&type=template&id=70a65589&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/income&expense/Index.vue?vue&type=template&id=70a65589& ***!
+  \*****************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_template_id_43cdcd98___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Income.vue?vue&type=template&id=43cdcd98& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income/Income.vue?vue&type=template&id=43cdcd98&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_template_id_43cdcd98___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_70a65589___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=70a65589& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/Index.vue?vue&type=template&id=70a65589&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_70a65589___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_template_id_43cdcd98___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_70a65589___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/income&expense/expense/Expense.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/income&expense/expense/Expense.vue ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Expense_vue_vue_type_template_id_c6e62fd0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Expense.vue?vue&type=template&id=c6e62fd0& */ "./resources/js/components/income&expense/expense/Expense.vue?vue&type=template&id=c6e62fd0&");
+/* harmony import */ var _Expense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Expense.vue?vue&type=script&lang=js& */ "./resources/js/components/income&expense/expense/Expense.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Expense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Expense_vue_vue_type_template_id_c6e62fd0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Expense_vue_vue_type_template_id_c6e62fd0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/income&expense/expense/Expense.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/income&expense/expense/Expense.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/income&expense/expense/Expense.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Expense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Expense.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/expense/Expense.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Expense_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/income&expense/expense/Expense.vue?vue&type=template&id=c6e62fd0&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/income&expense/expense/Expense.vue?vue&type=template&id=c6e62fd0& ***!
+  \***************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Expense_vue_vue_type_template_id_c6e62fd0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Expense.vue?vue&type=template&id=c6e62fd0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/expense/Expense.vue?vue&type=template&id=c6e62fd0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Expense_vue_vue_type_template_id_c6e62fd0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Expense_vue_vue_type_template_id_c6e62fd0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/income&expense/income/Income.vue":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/income&expense/income/Income.vue ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Income_vue_vue_type_template_id_3b9d5446___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Income.vue?vue&type=template&id=3b9d5446& */ "./resources/js/components/income&expense/income/Income.vue?vue&type=template&id=3b9d5446&");
+/* harmony import */ var _Income_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Income.vue?vue&type=script&lang=js& */ "./resources/js/components/income&expense/income/Income.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Income_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Income_vue_vue_type_template_id_3b9d5446___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Income_vue_vue_type_template_id_3b9d5446___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/income&expense/income/Income.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/income&expense/income/Income.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/income&expense/income/Income.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Income.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/income/Income.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/income&expense/income/Income.vue?vue&type=template&id=3b9d5446&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/income&expense/income/Income.vue?vue&type=template&id=3b9d5446& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_template_id_3b9d5446___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Income.vue?vue&type=template&id=3b9d5446& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/income&expense/income/Income.vue?vue&type=template&id=3b9d5446&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_template_id_3b9d5446___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Income_vue_vue_type_template_id_3b9d5446___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

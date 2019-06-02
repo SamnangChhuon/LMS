@@ -9,13 +9,23 @@ use LandMS\Http\Controllers\Controller;
 class IncomeController extends Controller
 {
     /**
+     * Create a new controller instance
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        
+        return Income::latest()->paginate(10);
     }
 
     /**
@@ -36,7 +46,15 @@ class IncomeController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $this->validate($request, [
+            'payment_id'  =>  'required',
+            'income_type_id' =>  'required',
+            'income_date' =>  'required',
+            'amount' =>  'required|numeric|max:16',
+        ]);
+
+        Income::create($request->all());
+        return to_json(['success' => 'Income added in successfully.']);
     }
 
     /**
@@ -47,7 +65,7 @@ class IncomeController extends Controller
      */
     public function show(Income $income)
     {
-        //
+        return Income::find($income);
     }
 
     /**
@@ -70,7 +88,17 @@ class IncomeController extends Controller
      */
     public function update(Request $request, Income $income)
     {
-        //
+        $income = Income::findOrFail($income);
+
+        $this->validate($request, [
+            'payment_id'  =>  'required',
+            'income_type_id' =>  'required',
+            'income_date' =>  'required',
+            'amount' =>  'required|numeric|max:16',
+        ]);
+
+        $income->update($request->all());
+        return to_json(['success' => 'Income update in successfully.']);
     }
 
     /**
