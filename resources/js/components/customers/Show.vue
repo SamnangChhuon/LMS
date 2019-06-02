@@ -18,10 +18,8 @@
                 <div class="col-md-6">
                     <div class="widget-user-header bg-info-active">
                         <div class="widget-user-image">
-                            <img v-if="customer.photo == null || customer.photo == ''" class="img-customer img-circle elevation-2"
-                                :src="customerProfile()" alt="User Avatar">
-                            <img v-else class="img-customer img-circle elevation-2" :src="'/storage/customers/' + customer.id + '/' + customer.photo" alt="User Avatar">
-                            <span class="hover-image img-circle" @click="avatarModel"></span>
+                            <img class="img-customer img-circle elevation-2" :src="avatar" alt="User Avatar">
+                            <span class="hover-image img-circle" @click="toggleAvatarModal"></span>
                         </div>
                         <h3 class="widget-user-username">{{ customer.firstname + ' ' + customer.lastname }}</h3>
                         <h5 class="widget-user-desc">CID {{ customer.id }}</h5>
@@ -162,40 +160,33 @@
                         </div>
                     </div>
                     <div class="card-body p-2">
-                        <div class="row">
-                            <div class="col-md-2 bg-dark" style="height:400px;">
-
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <table class="table table-bordered">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Thumb</th>
-                                        <th>Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-if="customerFile == ''">
-                                        <td colspan="7">
-                                            <div class="text-center p-5">
-                                                <h4>Customer have no file or image.</h4>
-                                                <button type="button" class="btn btn-info text-white" @click="addFile()"><i class="fa fa-plus"></i> Select Files</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr v-for="(file, index) in customerFile" :key="file.id">
-                                        <td>{{index + 1}}</td>
-                                        <!-- <td><img v-if="file.file" :src="file.file" width="40" height="auto"></td> -->
-                                        <td><img v-if="file.file" :src="'/storage/app/customers/img/'  + file.cid +'/' + file.file" width="40" height="auto"></td>
-                                        <td>{{file.file}}</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Thumb</th>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="customerFile == ''">
+                                    <td colspan="7">
+                                        <div class="text-center p-5">
+                                            <h4>Customer have no file or image.</h4>
+                                            <button type="button" class="btn btn-info text-white" @click="addFile()"><i class="fa fa-plus"></i> Select Files</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr v-for="(file, index) in customerFile" :key="file.id">
+                                    <td>{{index + 1}}</td>
+                                    <!-- <td><img v-if="file.file" :src="file.file" width="40" height="auto"></td> -->
+                                    <td><img v-if="file.file" :src="'/storage/app/customers/img/'  + file.cid +'/' + file.file" width="40" height="auto"></td>
+                                    <td>{{file.file}}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="card-footer">
 
@@ -358,8 +349,7 @@
 
         <add-multi-file></add-multi-file>
 
-        <!-- Customer Upload Profile Model -->
-        <div class="modal fade" id="avatarCustomer" aria-hidden="true">
+        <div class="modal fade" id="avatarCustomer" >
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                     <form class="form-horizontal">
@@ -380,8 +370,8 @@
                             </div>
                         </div>
                         <div class="modal-footer d-block">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-                            <button type="submit" class="btn btn-success fa-pull-right" @click.prevent="updateInfo">Save</button>
+                            <button type="button" class="btn btn-light" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button type="submit" class="btn btn-success fa-pull-right" @click="saveAvatar">Upload</button>
                         </div>
                     </form>
                 </div>
@@ -407,34 +397,42 @@
                 formAvatar: new Form({
                     photo: ''
                 }),
+                avatar:''
             }
         },
         methods: {
-            avatarModel(){
+            customerProfile(){
+                if (this.customer.photo != null || this.customer.photo != '') {
+                    return this.customer.photo;
+                } else {
+                    console.log('errr')
+                    if (this.customer.sex == 'male') {
+                        return this.avatar = "/img/profile/none/male.png";
+                    } else {
+                        return this.avatar = "/img/profile/none/female.png";
+                    }
+                }
+            },
+
+            // Upload Avatar
+            toggleAvatarModal(){
                 $('#avatarCustomer').modal('show');
                 this.$refs.imageInput.value = null;
-            },
-            customerProfile(){
-                let profile = (this.customer.sex == 'male') ? '/img/profile/none/male.png' : '/img/profile/none/female.png';
-                return profile;
+                this.formAvatar.photo = '';
             },
             previewAvatar() {
                 this.$Progress.start();
-                let photo = (this.formAvatar.photo.length > 200) ? this.formAvatar.photo : "/img/profile/avatar.png";
+                let photo = (this.avatar.length > 200) ? this.avatar : "/img/profile/avatar.png";
                 this.$Progress.finish();
                 return photo;
             },
             updateProfile(e) {
                 this.$Progress.start();
-                // console.log('uploading');
                 let file = e.target.files[0];
-                // console.log(file);
                 let reader = new FileReader();
-
                 if (file['size'] < 2111775 ) {
                     reader.onloadend = (file) => {
-                        // console.log('RESULT', reader.result);
-                        this.formAvatar.photo = reader.result;
+                        this.avatar = reader.result;
                     }
                     reader.readAsDataURL(file);
                     this.$Progress.finish();
@@ -443,41 +441,30 @@
                         type: 'error',
                         title: 'Oops...',
                         text: "You are uploading a large file!",
-                    });
+                    })
                     this.$Progress.fail();
                 }
             },
-            updateInfo() {
-                this.$Progress.start();
-                if (this.formAvatar.photo == "") {
-                    Swal.fire({
-                        type: 'error',
-                        title: 'Oops...',
-                        text: "Please upload the picture!",
-                    });
-                    this.$Progress.fail();
-                } else {
-                    this.formAvatar.put('/api/customerAvatar/' + this.$route.params.id)
-                    .then(() => {
-                        $('#avatarCustomer').modal('hide');
-                        toast.fire({
-                            type: 'success',
-                            title: 'Customer profile updated in successfully'
-                        })
-                        Fire.$emit('reloadData'); 
-                        this.$Progress.finish();
-                    })
-                    .catch(() => {
-                        if (this.formAvatar.photo == "") {
-                            Swal.fire({
-                                type: 'error',
-                                title: 'Oops...',
-                                text: "There was something wrong.",
-                            })
-                        }
-                        this.$Progress.fail();
-                    });
-                }
+            
+            saveAvatar() {
+                // this.$Progress.start();
+                // this.formAvatar.post('/api/customerAvatar/' + this.$route.params.id)
+                // .then(() => {
+                //     $('#avatarCustomer').modal('hide');
+                //     toast.fire({
+                //         type: 'success',
+                //         title: 'Customer profile updated in successfully'
+                //     })
+                //     this.$Progress.finish();
+                // })
+                // .catch(() => {
+                //     Swal.fire({
+                //         type: 'error',
+                //         title: 'Oops...',
+                //         text: "There was something wrong.",
+                //     });
+                //     this.$Progress.fail();
+                // });
             },
 
             // Price for Format

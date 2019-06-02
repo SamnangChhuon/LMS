@@ -3823,16 +3823,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3846,37 +3836,46 @@ __webpack_require__.r(__webpack_exports__);
       },
       formAvatar: new Form({
         photo: ''
-      })
+      }),
+      avatar: ''
     };
   },
   methods: {
-    avatarModel: function avatarModel() {
+    customerProfile: function customerProfile() {
+      if (this.customer.photo != null || this.customer.photo != '') {
+        return this.customer.photo;
+      } else {
+        console.log('errr');
+
+        if (this.customer.sex == 'male') {
+          return this.avatar = "/img/profile/none/male.png";
+        } else {
+          return this.avatar = "/img/profile/none/female.png";
+        }
+      }
+    },
+    // Upload Avatar
+    toggleAvatarModal: function toggleAvatarModal() {
       $('#avatarCustomer').modal('show');
       this.$refs.imageInput.value = null;
-    },
-    customerProfile: function customerProfile() {
-      var profile = this.customer.sex == 'male' ? '/img/profile/none/male.png' : '/img/profile/none/female.png';
-      return profile;
+      this.formAvatar.photo = '';
     },
     previewAvatar: function previewAvatar() {
       this.$Progress.start();
-      var photo = this.formAvatar.photo.length > 200 ? this.formAvatar.photo : "/img/profile/avatar.png";
+      var photo = this.avatar.length > 200 ? this.avatar : "/img/profile/avatar.png";
       this.$Progress.finish();
       return photo;
     },
     updateProfile: function updateProfile(e) {
       var _this = this;
 
-      this.$Progress.start(); // console.log('uploading');
-
-      var file = e.target.files[0]; // console.log(file);
-
+      this.$Progress.start();
+      var file = e.target.files[0];
       var reader = new FileReader();
 
       if (file['size'] < 2111775) {
         reader.onloadend = function (file) {
-          // console.log('RESULT', reader.result);
-          _this.formAvatar.photo = reader.result;
+          _this.avatar = reader.result;
         };
 
         reader.readAsDataURL(file);
@@ -3890,40 +3889,24 @@ __webpack_require__.r(__webpack_exports__);
         this.$Progress.fail();
       }
     },
-    updateInfo: function updateInfo() {
-      var _this2 = this;
-
-      this.$Progress.start();
-
-      if (this.formAvatar.photo == "") {
-        Swal.fire({
-          type: 'error',
-          title: 'Oops...',
-          text: "Please upload the picture!"
-        });
-        this.$Progress.fail();
-      } else {
-        this.formAvatar.put('/api/customerAvatar/' + this.$route.params.id).then(function () {
-          $('#avatarCustomer').modal('hide');
-          toast.fire({
-            type: 'success',
-            title: 'Customer profile updated in successfully'
-          });
-          Fire.$emit('reloadData');
-
-          _this2.$Progress.finish();
-        })["catch"](function () {
-          if (_this2.formAvatar.photo == "") {
-            Swal.fire({
-              type: 'error',
-              title: 'Oops...',
-              text: "There was something wrong."
-            });
-          }
-
-          _this2.$Progress.fail();
-        });
-      }
+    saveAvatar: function saveAvatar() {// this.$Progress.start();
+      // this.formAvatar.post('/api/customerAvatar/' + this.$route.params.id)
+      // .then(() => {
+      //     $('#avatarCustomer').modal('hide');
+      //     toast.fire({
+      //         type: 'success',
+      //         title: 'Customer profile updated in successfully'
+      //     })
+      //     this.$Progress.finish();
+      // })
+      // .catch(() => {
+      //     Swal.fire({
+      //         type: 'error',
+      //         title: 'Oops...',
+      //         text: "There was something wrong.",
+      //     });
+      //     this.$Progress.fail();
+      // });
     },
     // Price for Format
     formatPrice: function formatPrice(value) {
@@ -3931,11 +3914,11 @@ __webpack_require__.r(__webpack_exports__);
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     loadCustomer: function loadCustomer() {
-      var _this3 = this;
+      var _this2 = this;
 
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.$route.params.id;
       axios.get("/api/customer/" + id).then(function (response) {
-        _this3.customer = response.data;
+        _this2.customer = response.data;
       });
     },
     editCustomer: function editCustomer(value) {
@@ -3947,7 +3930,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     deleteCustomer: function deleteCustomer(id) {
-      var _this4 = this;
+      var _this3 = this;
 
       Swal.fire({
         title: 'Are you sure?',
@@ -3959,43 +3942,43 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          _this4.$Progress.start();
+          _this3.$Progress.start();
 
           axios["delete"]('/api/customer/' + id).then(function () {
             Swal.fire('Deleted!', 'Customer\'s information has been deleted.', 'success');
 
-            _this4.$Progress.finish();
+            _this3.$Progress.finish();
 
-            _this4.$router.push({
+            _this3.$router.push({
               name: 'Customers'
             });
           })["catch"](function () {
             Swal.fire("Failed!", "There was something wrong.", "warning");
 
-            _this4.$Progress.fail();
+            _this3.$Progress.fail();
           });
         }
       });
     },
     // Get Product by Customer ID
     getProduct: function getProduct() {
-      var _this5 = this;
+      var _this4 = this;
 
       var cid = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.$route.params.id;
       axios.get('/api/product/' + cid).then(function (response) {
-        _this5.customerProduct = response.data;
+        _this4.customerProduct = response.data;
       })["catch"](function (error) {
         return 'Customer have no product.';
       });
     },
     // Get Type Name by typeid
     getType: function getType(value) {
-      var _this6 = this;
+      var _this5 = this;
 
       axios.get('/api/productType/' + value).then(function (response) {
-        _this6.productType = response.data[0].type_name;
+        _this5.productType = response.data[0].type_name;
         console.log(productType.data.id);
-        console.log(_this6.productType);
+        console.log(_this5.productType);
       })["catch"](function (error) {
         return 'Unit Type can not found!';
       });
@@ -4003,11 +3986,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     // Get File by Customer ID
     getCustomerFile: function getCustomerFile() {
-      var _this7 = this;
+      var _this6 = this;
 
       var cid = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.$route.params.id;
       axios.get('/api/showFile/' + cid).then(function (response) {
-        _this7.customerFile = response.data;
+        _this6.customerFile = response.data;
       })["catch"](function (error) {
         return 'File can not found.';
       });
@@ -70979,7 +70962,7 @@ var render = function() {
             {
               staticClass: "widget-user-header text-white",
               staticStyle: {
-                "background-image": "url('./img/background.jpeg')",
+                "background-image": "url('img/login/bg.jpg')",
                 height: "250px"
               }
             },
@@ -73388,26 +73371,14 @@ var render = function() {
           _c("div", { staticClass: "col-md-6" }, [
             _c("div", { staticClass: "widget-user-header bg-info-active" }, [
               _c("div", { staticClass: "widget-user-image" }, [
-                _vm.customer.photo == null || _vm.customer.photo == ""
-                  ? _c("img", {
-                      staticClass: "img-customer img-circle elevation-2",
-                      attrs: { src: _vm.customerProfile(), alt: "User Avatar" }
-                    })
-                  : _c("img", {
-                      staticClass: "img-customer img-circle elevation-2",
-                      attrs: {
-                        src:
-                          "/storage/customers/" +
-                          _vm.customer.id +
-                          "/" +
-                          _vm.customer.photo,
-                        alt: "User Avatar"
-                      }
-                    }),
+                _c("img", {
+                  staticClass: "img-customer img-circle elevation-2",
+                  attrs: { src: _vm.avatar, alt: "User Avatar" }
+                }),
                 _vm._v(" "),
                 _c("span", {
                   staticClass: "hover-image img-circle",
-                  on: { click: _vm.avatarModel }
+                  on: { click: _vm.toggleAvatarModal }
                 })
               ]),
               _vm._v(" "),
@@ -73613,82 +73584,69 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body p-2" }, [
-                  _vm._m(5),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-12" }, [
-                    _c("table", { staticClass: "table table-bordered" }, [
-                      _vm._m(6),
-                      _vm._v(" "),
-                      _c(
-                        "tbody",
-                        [
-                          _vm.customerFile == ""
-                            ? _c("tr", [
-                                _c("td", { attrs: { colspan: "7" } }, [
+                  _c("table", { staticClass: "table table-bordered" }, [
+                    _vm._m(5),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      [
+                        _vm.customerFile == ""
+                          ? _c("tr", [
+                              _c("td", { attrs: { colspan: "7" } }, [
+                                _c("div", { staticClass: "text-center p-5" }, [
+                                  _c("h4", [
+                                    _vm._v("Customer have no file or image.")
+                                  ]),
+                                  _vm._v(" "),
                                   _c(
-                                    "div",
-                                    { staticClass: "text-center p-5" },
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-info text-white",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.addFile()
+                                        }
+                                      }
+                                    },
                                     [
-                                      _c("h4", [
-                                        _vm._v(
-                                          "Customer have no file or image."
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "btn btn-info text-white",
-                                          attrs: { type: "button" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.addFile()
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c("i", {
-                                            staticClass: "fa fa-plus"
-                                          }),
-                                          _vm._v(" Select Files")
-                                        ]
-                                      )
+                                      _c("i", { staticClass: "fa fa-plus" }),
+                                      _vm._v(" Select Files")
                                     ]
                                   )
                                 ])
                               ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm._l(_vm.customerFile, function(file, index) {
-                            return _c("tr", { key: file.id }, [
-                              _c("td", [_vm._v(_vm._s(index + 1))]),
-                              _vm._v(" "),
-                              _c("td", [
-                                file.file
-                                  ? _c("img", {
-                                      attrs: {
-                                        src:
-                                          "/storage/app/customers/img/" +
-                                          file.cid +
-                                          "/" +
-                                          file.file,
-                                        width: "40",
-                                        height: "auto"
-                                      }
-                                    })
-                                  : _vm._e()
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(file.file))]),
-                              _vm._v(" "),
-                              _c("td")
                             ])
-                          })
-                        ],
-                        2
-                      )
-                    ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm._l(_vm.customerFile, function(file, index) {
+                          return _c("tr", { key: file.id }, [
+                            _c("td", [_vm._v(_vm._s(index + 1))]),
+                            _vm._v(" "),
+                            _c("td", [
+                              file.file
+                                ? _c("img", {
+                                    attrs: {
+                                      src:
+                                        "/storage/app/customers/img/" +
+                                        file.cid +
+                                        "/" +
+                                        file.file,
+                                      width: "40",
+                                      height: "auto"
+                                    }
+                                  })
+                                : _vm._e()
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(file.file))]),
+                            _vm._v(" "),
+                            _c("td")
+                          ])
+                        })
+                      ],
+                      2
+                    )
                   ])
                 ]),
                 _vm._v(" "),
@@ -73702,7 +73660,7 @@ var render = function() {
             { staticClass: "tab-pane fade", attrs: { id: "informationsTab" } },
             [
               _c("div", { staticClass: "card" }, [
-                _vm._m(7),
+                _vm._m(6),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body p-2" }, [
                   _c("div", { staticClass: "row" }, [
@@ -73776,7 +73734,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "card" }, [
-                _vm._m(8),
+                _vm._m(7),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body p-2" }, [
                   _c("div", { staticClass: "row" }, [
@@ -73840,7 +73798,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "card" }, [
-                _vm._m(9),
+                _vm._m(8),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body p-2" }, [
                   _c("div", { staticClass: "row" }, [
@@ -73893,10 +73851,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        {
-          staticClass: "modal fade",
-          attrs: { id: "avatarCustomer", "aria-hidden": "true" }
-        },
+        { staticClass: "modal fade", attrs: { id: "avatarCustomer" } },
         [
           _c(
             "div",
@@ -73907,7 +73862,7 @@ var render = function() {
             [
               _c("div", { staticClass: "modal-content" }, [
                 _c("form", { staticClass: "form-horizontal" }, [
-                  _vm._m(10),
+                  _vm._m(9),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
                     _c("div", { staticClass: "text-center" }, [
@@ -73932,14 +73887,14 @@ var render = function() {
                     _c(
                       "button",
                       {
-                        staticClass: "btn btn-danger",
+                        staticClass: "btn btn-light",
                         attrs: {
                           type: "button",
                           "data-dismiss": "modal",
                           "aria-label": "Close"
                         }
                       },
-                      [_vm._v("Close")]
+                      [_vm._v("Cancel")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -73947,14 +73902,9 @@ var render = function() {
                       {
                         staticClass: "btn btn-success fa-pull-right",
                         attrs: { type: "submit" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.updateInfo($event)
-                          }
-                        }
+                        on: { click: _vm.saveAvatar }
                       },
-                      [_vm._v("Save")]
+                      [_vm._v("Upload")]
                     )
                   ])
                 ])
@@ -74108,17 +74058,6 @@ var staticRenderFns = [
           ])
         ])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", {
-        staticClass: "col-md-2 bg-dark",
-        staticStyle: { height: "400px" }
-      })
     ])
   },
   function() {

@@ -12,7 +12,6 @@
   
   <link rel="icon" href="{{ asset('/img/logo.png') }}" type="image/png" sizes="16x16">
   <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
-  <link rel="stylesheet" href="{{ asset('/vendor/datatable/css/dataTables.bootstrap4.css') }}">
   <link rel="stylesheet" href="{{ asset('/vendor/cropperjs/css/cropper.css') }}">
 
 </head>
@@ -84,7 +83,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('/app/users/' . Auth::user()->id.'/'. Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('/img/profile/' . Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <router-link :to="{name: 'Profile'}" class="d-block">
@@ -233,8 +232,6 @@
 @endauth
 
 <script src="{{ asset('/js/app.js') }}"></script>
-<script src="{{ asset('/vendor/datatable/js/jquery.dataTables.js') }}"></script>
-<script src="{{ asset('/vendor/datatable/js/dataTables.bootstrap4.js') }}"></script>
 <script src="{{ asset('/vendor/cropperjs/js/cropper.js') }}"></script>
 
 </body>

@@ -159,28 +159,4 @@ class CustomerController extends Controller
         $customer->delete();
         return ['status' => 'Customer Deleted'];
     }
-
-    public function avatarUpload(Request $request, $id){
-        $customer = Customer::where('id', '=', $id)->first();
-
-        $currentPhoto = $customer->photo;
-        if ($request->photo != $currentPhoto) {
-            // Convert the name of photo to another unique name
-            $name = time() . '.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
-            // Put the photo to the folder in "public"
-            \Image::make($request->photo)->save(public_path('storage/customers/'). $customer->id.'/' .$name);
-
-            $request->merge(['photo' => $name]);
-
-            $customerPhoto = public_path('img/customers/'). $customer->id.'/' .$currentPhoto;
-            if (file_exists($customerPhoto)) {
-                @unlink($customerPhoto);
-            }
-
-            Customer::where('id', '=', $id)->update([
-                'photo' => $name
-            ]);
-            return ['status' => 'Updated Customer Profile!!'];
-        }
-    }
 }
