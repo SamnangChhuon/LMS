@@ -2,7 +2,7 @@
 
 namespace LandMS\Http\Controllers\API;
 
-use LandMS\Expense;
+use LandMS\Expense\Expense;
 use Illuminate\Http\Request;
 use LandMS\Http\Controllers\Controller;
 

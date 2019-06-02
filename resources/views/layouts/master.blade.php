@@ -133,20 +133,20 @@
               <p>Sale</p>
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link :to="{name: 'Staffs'}" class="nav-link">
+              <i class="fas fa-user-tie nav-icon"></i>
+              <p>Staffs</p>
+            </router-link>
+          </li>
 
-          @can('isAdmin')
+          {{-- @can('isAdmin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-cog"></i>
               <p>Management <i class="right fa fa-angle-left"></i></p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link :to="{name: 'Staffs'}" class="nav-link">
-                  <i class="fas fa-user-tie nav-icon"></i>
-                  <p>Staffs</p>
-                </router-link>
-              </li>
               <li class="nav-item">
                 <router-link :to="{name: 'Users'}" class="nav-link">
                   <i class="fas fa-users nav-icon"></i>
@@ -159,16 +159,15 @@
                   <p>Developer</p>
                 </router-link>
               </li>
-              {{-- <li class="nav-item">
+              <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Inactive Page</p>
                 </a>
-              </li> --}}
+              </li>
             </ul>
           </li>
-          
-          @endcan
+          @endcan --}}
           
           <li class="nav-item">
             <router-link :to="{name: 'Profile'}" class="nav-link">

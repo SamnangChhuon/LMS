@@ -2,11 +2,11 @@
 
 namespace LandMS\Http\Controllers\API;
 
-use LandMS\Income\Income;
+use LandMS\Income\Type;
 use Illuminate\Http\Request;
 use LandMS\Http\Controllers\Controller;
 
-class IncomeController extends Controller
+class IncomeTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class IncomeController extends Controller
      */
     public function index()
     {
-        
+        //
     }
 
     /**
@@ -36,16 +36,16 @@ class IncomeController extends Controller
      */
     public function store(Request $request)
     {
-        
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \LandMS\Income  $income
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Income $income)
+    public function show($id)
     {
         //
     }
@@ -53,10 +53,10 @@ class IncomeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \LandMS\Income  $income
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Income $income)
+    public function edit($id)
     {
         //
     }
@@ -65,10 +65,10 @@ class IncomeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \LandMS\Income  $income
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Income $income)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -76,10 +76,10 @@ class IncomeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \LandMS\Income  $income
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Income $income)
+    public function destroy($id)
     {
         //
     }
