@@ -39,7 +39,7 @@ Route::post('inputFile/{cid}', 'API\FileController@storeFileById');
 Route::get('showFile/{id}', 'API\FileController@showFile');
 
 Route::get('getCustomers', 'API\CustomerController@getCustomers');
-Route::get('findCustomer', 'API\CustomerController@searchCustomer');
+Route::post('customerAvatar/{id}', 'API\CustomerController@avatar');
 
 Route::get('getProducts', 'API\ProductController@getProducts');
 Route::get('getProduct/{id}', 'API\ProductController@getProduct');

@@ -5,6 +5,7 @@ namespace LandMS\Http\Controllers\API;
 use LandMS\Product;
 use Illuminate\Http\Request;
 use LandMS\Http\Controllers\Controller;
+use LandMS\Promotion;
 
 class ProductController extends Controller
 {

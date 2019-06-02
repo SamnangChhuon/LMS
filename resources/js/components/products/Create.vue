@@ -6,8 +6,7 @@
                     <div class="card-header">
                         <h3 class="card-title m-0"><small>Add Product</small></h3>
                         <div class="card-tools">
-                            <router-link v-show="customer!=''" :to="{name:'Viewcustomer'}" class="btn btn-dark btn-sm" title="Back to Customer Profile"><i class="fas fa-long-arrow-alt-right"></i></router-link>
-                            <router-link v-show="customer==''" :to="{name:'Products'}" class="btn btn-dark btn-sm" title="Back to Products Table"><i class="fas fa-long-arrow-alt-right"></i></router-link>
+                            <a class="btn btn-light" :href="urlBack()" title="Back"><i class="fas fa-arrow-left text-dark"></i> Back</a>
                         </div>
                     </div>
 
@@ -125,10 +124,8 @@
                                         </div>
                                         <div class="col-md-12">
                                             <hr>
-                                            <!-- <router-link v-if="customer!=''" :to="{name:'Viewcustomer'}" class="btn btn-secondary" title="Back to Customer">Cancel</router-link>
-                                            <router-link v-else :to="{name:'Products'}" class="btn btn-secondary" title="Back to Products">Cancel</router-link> -->
                                             <div class="float-right">
-                                                <button type="button" @click="resetProductForm()" class="btn btn-danger">Clear</button>
+                                                <a :href="urlBack()" class="btn btn-light">Cancel</a>
                                                 <button v-show="editModeProduct" type="submit" class="btn btn-success">Update <i class="fas fa-pencil-alt fa-fw"></i></button>
                                                 <button v-show="!editModeProduct" type="submit" class="btn btn-primary">Save <i class="fas fa-plus fa-fw"></i></button>
                                             </div>
@@ -259,6 +256,13 @@
             }
         },
         methods: {
+            urlBack(){
+                if (this.customer) {
+                    return '/customer/' + this.customer.id;
+                } else {
+                    return '/products';
+                }
+            },
             // Form File Input
             removeInputFile(index) {
                 this.formFile.file.splice(index, 1);
@@ -316,14 +320,6 @@
                 }
             },
 
-            resetProductForm(){
-                this.formProduct.reset();
-                this.formProduct.clear();
-                const input = this.$refs.imageProduct;
-                input.type = 'text';
-                input.type = 'file';
-                this.url = '';
-            },
             loadCustomer(id = this.$route.params.id) {
                 if (id!='') {
                     axios.get("/api/customer/" + id )

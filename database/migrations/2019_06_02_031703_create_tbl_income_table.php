@@ -15,12 +15,18 @@ class CreateTblIncomeTable extends Migration
     {
         Schema::create('tbl_income', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('cid')->index()->unsigned()->default('0');
-            $table->string('exin_typeid', 10);
-            $table->string('amount');
-            $table->string('date', 10);
+            $table->integer('payment_id')->unsigned();
+            $table->integer('income_type_id')->unsigned();
+            $table->string('income_date', 10);
+            $table->double('amount', 16, 2)->nullable()->unsigned();
             $table->text('description')->nullable();
             $table->string('status')->default('active');
+            $table->timestamps();
+        });
+
+        Schema::create('tbl_income_type', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }
@@ -33,5 +39,6 @@ class CreateTblIncomeTable extends Migration
     public function down()
     {
         Schema::dropIfExists('tbl_income');
+        Schema::dropIfExists('tbl_income_type');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblExpenseTable extends Migration
+class CreateTblProductImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateTblExpenseTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_expense', function (Blueprint $table) {
+        Schema::create('tbl_product_images', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('cid')->index()->unsigned()->default('0');
-            $table->string('exin_typeid', 10);
-            $table->string('amount');
-            $table->string('date', 10);
-            $table->text('description')->nullable();
+            $table->string('title');
+            $table->string('filename')->unique();
+            $table->string('extension');
+            $table->string('size');
+            $table->string('dimension');
             $table->string('status')->default('active');
             $table->timestamps();
         });
@@ -32,6 +32,6 @@ class CreateTblExpenseTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_expense');
+        Schema::dropIfExists('tbl_product_images');
     }
 }

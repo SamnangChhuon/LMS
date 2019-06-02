@@ -3843,6 +3843,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     customerProfile: function customerProfile() {
       if (this.customer.photo != null || this.customer.photo != '') {
+        console.log('errr');
         return this.customer.photo;
       } else {
         console.log('errr');
@@ -3889,25 +3890,26 @@ __webpack_require__.r(__webpack_exports__);
         this.$Progress.fail();
       }
     },
-    saveAvatar: function saveAvatar() {// this.$Progress.start();
-      // this.formAvatar.post('/api/customerAvatar/' + this.$route.params.id)
-      // .then(() => {
-      //     $('#avatarCustomer').modal('hide');
-      //     toast.fire({
-      //         type: 'success',
-      //         title: 'Customer profile updated in successfully'
-      //     })
-      //     this.$Progress.finish();
-      // })
-      // .catch(() => {
-      //     Swal.fire({
-      //         type: 'error',
-      //         title: 'Oops...',
-      //         text: "There was something wrong.",
-      //     });
-      //     this.$Progress.fail();
-      // });
-    },
+    // saveAvatar() {
+    //     this.$Progress.start();
+    //     this.formAvatar.post('/api/customerAvatar/' + this.$route.params.id)
+    //     .then(() => {
+    //         $('#avatarCustomer').modal('hide');
+    //         toast.fire({
+    //             type: 'success',
+    //             title: 'Customer profile updated in successfully'
+    //         })
+    //         this.$Progress.finish();
+    //     })
+    //     .catch(() => {
+    //         Swal.fire({
+    //             type: 'error',
+    //             title: 'Oops...',
+    //             text: "There was something wrong.",
+    //         });
+    //         this.$Progress.fail();
+    //     });
+    // },
     // Price for Format
     formatPrice: function formatPrice(value) {
       var val = (value / 1).toFixed(2).replace(',', '.');
@@ -3999,6 +4001,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.$Progress.start();
     this.loadCustomer();
+    this.customerProfile();
     this.getProduct();
     this.getCustomerFile();
   },
@@ -5465,9 +5468,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -5502,6 +5502,13 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    urlBack: function urlBack() {
+      if (this.customer) {
+        return '/customer/' + this.customer.id;
+      } else {
+        return '/products';
+      }
+    },
     // Form File Input
     removeInputFile: function removeInputFile(index) {
       this.formFile.file.splice(index, 1);
@@ -5562,14 +5569,6 @@ __webpack_require__.r(__webpack_exports__);
         // remove
         console.log('remove', oldFile);
       }
-    },
-    resetProductForm: function resetProductForm() {
-      this.formProduct.reset();
-      this.formProduct.clear();
-      var input = this.$refs.imageProduct;
-      input.type = 'text';
-      input.type = 'file';
-      this.url = '';
     },
     loadCustomer: function loadCustomer() {
       var _this = this;
@@ -5807,7 +5806,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
 //
 //
 //
@@ -73370,17 +73368,7 @@ var render = function() {
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-md-6" }, [
             _c("div", { staticClass: "widget-user-header bg-info-active" }, [
-              _c("div", { staticClass: "widget-user-image" }, [
-                _c("img", {
-                  staticClass: "img-customer img-circle elevation-2",
-                  attrs: { src: _vm.avatar, alt: "User Avatar" }
-                }),
-                _vm._v(" "),
-                _c("span", {
-                  staticClass: "hover-image img-circle",
-                  on: { click: _vm.toggleAvatarModal }
-                })
-              ]),
+              _vm._m(0),
               _vm._v(" "),
               _c("h3", { staticClass: "widget-user-username" }, [
                 _vm._v(
@@ -73397,9 +73385,9 @@ var render = function() {
           _c("div", { staticClass: "col-md-6" }, [
             _c("div", { staticClass: "fa-pull-right" }, [
               _c("div", { staticClass: "card-tools p-2" }, [
-                _vm._m(0),
-                _vm._v(" "),
                 _vm._m(1),
+                _vm._v(" "),
+                _vm._m(2),
                 _vm._v(" "),
                 _c("div", { staticClass: "dropdown-menu" }, [
                   _c(
@@ -73442,7 +73430,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(2),
+      _vm._m(3),
       _vm._v(" "),
       _c(
         "div",
@@ -73490,7 +73478,7 @@ var render = function() {
                   _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-md-12" }, [
                       _c("table", { staticClass: "table table-bordered" }, [
-                        _vm._m(3),
+                        _vm._m(4),
                         _vm._v(" "),
                         _c(
                           "tbody",
@@ -73542,7 +73530,7 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(4)
+              _vm._m(5)
             ]
           ),
           _vm._v(" "),
@@ -73585,7 +73573,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body p-2" }, [
                   _c("table", { staticClass: "table table-bordered" }, [
-                    _vm._m(5),
+                    _vm._m(6),
                     _vm._v(" "),
                     _c(
                       "tbody",
@@ -73660,7 +73648,7 @@ var render = function() {
             { staticClass: "tab-pane fade", attrs: { id: "informationsTab" } },
             [
               _c("div", { staticClass: "card" }, [
-                _vm._m(6),
+                _vm._m(7),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body p-2" }, [
                   _c("div", { staticClass: "row" }, [
@@ -73734,7 +73722,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "card" }, [
-                _vm._m(7),
+                _vm._m(8),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body p-2" }, [
                   _c("div", { staticClass: "row" }, [
@@ -73798,7 +73786,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "card" }, [
-                _vm._m(8),
+                _vm._m(9),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body p-2" }, [
                   _c("div", { staticClass: "row" }, [
@@ -73862,7 +73850,7 @@ var render = function() {
             [
               _c("div", { staticClass: "modal-content" }, [
                 _c("form", { staticClass: "form-horizontal" }, [
-                  _vm._m(9),
+                  _vm._m(10),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
                     _c("div", { staticClass: "text-center" }, [
@@ -73883,30 +73871,7 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "modal-footer d-block" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-light",
-                        attrs: {
-                          type: "button",
-                          "data-dismiss": "modal",
-                          "aria-label": "Close"
-                        }
-                      },
-                      [_vm._v("Cancel")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-success fa-pull-right",
-                        attrs: { type: "submit" },
-                        on: { click: _vm.saveAvatar }
-                      },
-                      [_vm._v("Upload")]
-                    )
-                  ])
+                  _vm._m(11)
                 ])
               ])
             ]
@@ -73918,6 +73883,19 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "widget-user-image" }, [
+      _c("img", {
+        staticClass: "img-customer img-circle elevation-2",
+        attrs: { src: "/img/profile/none/male.png", alt: "User Avatar" }
+      }),
+      _vm._v(" "),
+      _c("span", { staticClass: "hover-image img-circle" })
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -74157,6 +74135,25 @@ var staticRenderFns = [
           }
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer d-block" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-light",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_vm._v("Cancel")]
       )
     ])
   }
@@ -76368,52 +76365,19 @@ var render = function() {
           _c("div", { staticClass: "card-header" }, [
             _vm._m(0),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "card-tools" },
-              [
-                _c(
-                  "router-link",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.customer != "",
-                        expression: "customer!=''"
-                      }
-                    ],
-                    staticClass: "btn btn-dark btn-sm",
-                    attrs: {
-                      to: { name: "Viewcustomer" },
-                      title: "Back to Customer Profile"
-                    }
-                  },
-                  [_c("i", { staticClass: "fas fa-long-arrow-alt-right" })]
-                ),
-                _vm._v(" "),
-                _c(
-                  "router-link",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.customer == "",
-                        expression: "customer==''"
-                      }
-                    ],
-                    staticClass: "btn btn-dark btn-sm",
-                    attrs: {
-                      to: { name: "Products" },
-                      title: "Back to Products Table"
-                    }
-                  },
-                  [_c("i", { staticClass: "fas fa-long-arrow-alt-right" })]
-                )
-              ],
-              1
-            )
+            _c("div", { staticClass: "card-tools" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-light",
+                  attrs: { href: _vm.urlBack(), title: "Back" }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-arrow-left text-dark" }),
+                  _vm._v(" Back")
+                ]
+              )
+            ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
@@ -76952,17 +76916,12 @@ var render = function() {
                         _vm._v(" "),
                         _c("div", { staticClass: "float-right" }, [
                           _c(
-                            "button",
+                            "a",
                             {
-                              staticClass: "btn btn-danger",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.resetProductForm()
-                                }
-                              }
+                              staticClass: "btn btn-light",
+                              attrs: { href: _vm.urlBack() }
                             },
-                            [_vm._v("Clear")]
+                            [_vm._v("Cancel")]
                           ),
                           _vm._v(" "),
                           _c(
@@ -77486,8 +77445,6 @@ var render = function() {
                       }
                     },
                     [
-                      _c("td", [_vm._v(_vm._s(item.index + 1))]),
-                      _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(item.id))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(item.name))]),
@@ -77518,10 +77475,18 @@ var render = function() {
           false
         ),
         [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: { slot: "addNew", to: { name: "AddProduct" } },
+              slot: "addNew"
+            },
+            [_vm._v("Add New "), _c("i", { staticClass: "fas fa-plus fa-fw" })]
+          ),
+          _vm._v(" "),
           _c("thead", { attrs: { slot: "thead" }, slot: "thead" }, [
             _c("tr", [
-              _c("th", [_vm._v("No.")]),
-              _vm._v(" "),
               _c("th", [_vm._v("Product ID")]),
               _vm._v(" "),
               _c("th", [_vm._v("Product Name")]),
@@ -77535,7 +77500,8 @@ var render = function() {
               _c("th", [_vm._v("Modified Time")])
             ])
           ])
-        ]
+        ],
+        1
       )
     ],
     1

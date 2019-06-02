@@ -1,9 +1,9 @@
 <template>
     <div class="container-fluid">
         <filterable v-bind="filterable">
+            <router-link class="btn btn-success" :to="{name:'AddProduct'}" slot="addNew">Add New <i class="fas fa-plus fa-fw"></i></router-link>
             <thead slot="thead">
                 <tr>
-                    <th>No.</th>
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Product Code</th>
@@ -13,7 +13,6 @@
                 </tr>
             </thead>
             <tr slot-scope="{item}" @click="ViewProduct(item.id)">
-                <td>{{item.index + 1}}</td>
                 <td>{{item.id}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>

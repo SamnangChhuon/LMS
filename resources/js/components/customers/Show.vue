@@ -18,8 +18,8 @@
                 <div class="col-md-6">
                     <div class="widget-user-header bg-info-active">
                         <div class="widget-user-image">
-                            <img class="img-customer img-circle elevation-2" :src="avatar" alt="User Avatar">
-                            <span class="hover-image img-circle" @click="toggleAvatarModal"></span>
+                            <img class="img-customer img-circle elevation-2" src="/img/profile/none/male.png" alt="User Avatar">
+                            <span class="hover-image img-circle" ></span>
                         </div>
                         <h3 class="widget-user-username">{{ customer.firstname + ' ' + customer.lastname }}</h3>
                         <h5 class="widget-user-desc">CID {{ customer.id }}</h5>
@@ -371,7 +371,7 @@
                         </div>
                         <div class="modal-footer d-block">
                             <button type="button" class="btn btn-light" data-dismiss="modal" aria-label="Close">Cancel</button>
-                            <button type="submit" class="btn btn-success fa-pull-right" @click="saveAvatar">Upload</button>
+                            <!-- <button type="submit" class="btn btn-success fa-pull-right" @click.prevent="saveAvatar">Upload</button> -->
                         </div>
                     </form>
                 </div>
@@ -403,6 +403,7 @@
         methods: {
             customerProfile(){
                 if (this.customer.photo != null || this.customer.photo != '') {
+                    console.log('errr')
                     return this.customer.photo;
                 } else {
                     console.log('errr')
@@ -446,26 +447,26 @@
                 }
             },
             
-            saveAvatar() {
-                // this.$Progress.start();
-                // this.formAvatar.post('/api/customerAvatar/' + this.$route.params.id)
-                // .then(() => {
-                //     $('#avatarCustomer').modal('hide');
-                //     toast.fire({
-                //         type: 'success',
-                //         title: 'Customer profile updated in successfully'
-                //     })
-                //     this.$Progress.finish();
-                // })
-                // .catch(() => {
-                //     Swal.fire({
-                //         type: 'error',
-                //         title: 'Oops...',
-                //         text: "There was something wrong.",
-                //     });
-                //     this.$Progress.fail();
-                // });
-            },
+            // saveAvatar() {
+            //     this.$Progress.start();
+            //     this.formAvatar.post('/api/customerAvatar/' + this.$route.params.id)
+            //     .then(() => {
+            //         $('#avatarCustomer').modal('hide');
+            //         toast.fire({
+            //             type: 'success',
+            //             title: 'Customer profile updated in successfully'
+            //         })
+            //         this.$Progress.finish();
+            //     })
+            //     .catch(() => {
+            //         Swal.fire({
+            //             type: 'error',
+            //             title: 'Oops...',
+            //             text: "There was something wrong.",
+            //         });
+            //         this.$Progress.fail();
+            //     });
+            // },
 
             // Price for Format
             formatPrice(value) {
@@ -546,6 +547,7 @@
         created() {
             this.$Progress.start();
             this.loadCustomer();
+            this.customerProfile();
             this.getProduct();
             this.getCustomerFile();
         },

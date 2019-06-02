@@ -159,4 +159,26 @@ class CustomerController extends Controller
         $customer->delete();
         return ['status' => 'Customer Deleted'];
     }
+
+    public function avatar(Request $request, $id){
+        $customer = Customer::findOrFail($id);
+        $currentPhoto = $customer->photo;
+
+        if ($request->photo) {
+            $extension = $request->photo->getClientOriginalExtension();
+            $name = str_random(32).'.'.$extension;
+
+            $path = $file->storeAs(
+                'customers/'. $customer->id, $name
+            );
+
+            $request->merge(['photo' => $name]);
+
+            if (Storage::exists($currentPhoto)) {
+                Storage::delete('customers/'.$customer->id.'/'.$currentPhoto);
+            }
+            $customer->update($request->all());
+            return ['status' => 'Customer Avatar upload in successfully.'];
+        }
+    }
 }
