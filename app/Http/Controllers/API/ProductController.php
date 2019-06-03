@@ -57,15 +57,14 @@ class ProductController extends Controller
     {
         $this->validate($request, [
             'name'  =>  'required|string|max:191',
-            'price' =>  'required|numeric|max:16'
+            // 'price' =>  'required|numeric|max:16'
         ]);
 
-        if ($request->cid != '') {
-            Product::create($request->all());
-            return response()->json(['success' => 'Product\'s added in successfully.']);
-        } else {
-            return response()->json(['error' => 'Product\'s can not insert.']);
-        }
+        Product::create($request->all());
+        return response()->json(['success' => 'Product\'s added in successfully.']);
+        // } else {
+        //     return response()->json(['error' => 'Product\'s can not insert.']);
+        // }
 
         // $name = Product::where('name', '=', $request['name'] )->exists();
         // if ($name) {

@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // Auth::routes();
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -22,8 +22,8 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::get('/{any}', 'HomeController@index')->name('home');
 
-Route::get('/invoice', function () {
-    return view('invoice');
-});
+// Route::get('/invoice', function () {
+//     return view('invoice');
+// });
 
 Route::get('{path}', 'HomeController@index')->where( 'path' , '([A-z\d\-\/_.]+)?' );
